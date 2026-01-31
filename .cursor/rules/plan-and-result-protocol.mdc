@@ -1,0 +1,143 @@
+---
+description: Plan & Result 프로토콜 (PRD/plans 동일 폴더) — 코드 수정 시 구조화된 워크플로우 적용
+globs:
+alwaysApply: true
+---
+
+# Protocol: Cursor 및 Anti-Gravity Plan & Result (Smart Workflow)
+
+> **File:** `plan-and-result-protocol.mdc`
+> **Purpose:** To enforce a structured workflow for code modifications while allowing flexibility for simple tasks.
+> **Role:** Cursor 및 Anti-Gravity Agent (Advanced AI Developer)
+
+---
+
+## 🚀 MASTER RULE: The Smart Protocol
+
+For requests involving code generation, modification, or refactoring, follow this decision logic to determine if a formal Plan & Result process is required.
+
+### 🧠 Decision Logic (Trigger & Skip)
+
+1.  **Explicit Command (Highest Priority)**:
+    *   **"이슈 생성해", "이슈 만들어"**: MUST create a Plan/Result.
+    *   **"플랜 만들지 마", "단순 수정이야"**: Document changes in chat only (Skip Plan/Result).
+
+2.  **Complexity Check (If no explicit command)**:
+    *   **CREATE Plan/Result if**:
+        *   Modifying multiple files.
+        *   Structural/Architectural changes.
+        *   High impact or risky changes.
+        *   Unsure about the complexity.
+    *   **SKIP Plan/Result if**:
+        *   Single file modification (Simple fix).
+        *   Typo fixes, comment updates.
+        *   Straightforward refactoring without logic change.
+
+---
+
+### 📁 Directory Structure
+
+The agent must automatically create these directories relative to the workspace root if they do not exist. **플랜과 결과는 같은 폴더에 생성**하며, **플랜 폴더는 PRD 안에 둡니다.**
+
+```
+PRD/
+└── plans/
+    └── YYYY-MM-DD/
+        ├── {Seq}_{Type}_{Keyword}_PLAN.md
+        └── {Seq}_{Type}_{Keyword}_RESULT.md
+```
+
+*별도 results/ 폴더는 사용하지 않습니다. RESULT 파일은 해당 일자의 plans 폴더에 PLAN과 함께 둡니다.*
+
+### 🏷️ Identifiers & Types
+
+*   **Format**: `{Seq}_{Type}_{Keyword}`
+*   **{Seq}**: Sequence number (001, 002...) for the day.
+*   **{Type}**:
+    *   `UPDATE`: Feature implementation, refactoring, general changes.
+    *   `ERROR`: Bug fixes, error resolution.
+*   **{Keyword}**: PascalCase English keyword (e.g., `FixLogin`).
+
+---
+
+## STEP 1: PLAN (Before Coding)
+
+**Only if triggered by the logic above.**
+
+1.  **Preparation**: Analyze requirements and context.
+2.  **Create Plan File**:
+    *   **Path**: `./PRD/plans/{YYYY-MM-DD}/{Seq}_{Type}_{Keyword}_PLAN.md`
+    *   **Template**:
+        ```markdown
+        # PLAN: [Title]
+        > **Date:** YYYY-MM-DD
+        > **Task ID:** {Seq}_{Type}_{Keyword}
+        > **Language:** Korean (Required)
+
+        ## 1. Objective
+        (Summary of the goal)
+
+        ## 2. Context Analysis
+        - **Target Files:** ...
+        - **Current Issue:** ...
+
+        ## 3. Strategy
+        (Technical approach, logic, patterns)
+
+        ## 4. Impact Analysis
+        - **Affected Files:** ...
+        - **Side Effects:** ...
+
+        ## 5. Task List
+        - [ ] ...
+
+        ## 6. Verification Plan
+        (Verification steps)
+        ```
+3.  **Approval**: Ask: **"마스터, `[ {Seq}_{Type}_{Keyword}_PLAN.md ]` 계획을 수립했습니다. 진행하겠습니까?"**
+
+---
+
+## STEP 2: EXECUTION
+
+1.  **Wait for Approval** (if Plan was created).
+2.  **Execute**: Follow the task list.
+3.  **Error Handling**: If `ERROR` type, ensure the root cause is addressed.
+
+---
+
+## STEP 3: RESULT (After Coding)
+
+**Only if a Plan was created.**
+
+1.  **Verify Result**.
+2.  **Create Result File** (플랜과 같은 폴더에 생성):
+    *   **Path**: `./PRD/plans/{YYYY-MM-DD}/{Seq}_{Type}_{Keyword}_RESULT.md`
+    *   **Template**:
+        ```markdown
+        # RESULT: [Title]
+        > **Date:** YYYY-MM-DD
+        > **Task ID:** {Seq}_{Type}_{Keyword}
+        > **Status:** ✅ SUCCESS / ❌ FAILURE
+        > **Language:** Korean
+
+        ## 1. Execution Summary
+        ...
+
+        ## 2. Modified Files
+        - [Modified] ...
+
+        ## 3. Key Changes
+        - ...
+
+        ## 4. Verification Results
+        ...
+        ```
+3.  **Final Report**: Notify the user of completion.
+
+---
+
+## 🧠 Guidelines
+
+*   **Language**: Korean for Plans/Results/Comments. English for filenames.
+*   **Proactiveness**: Verify assumptions before planning.

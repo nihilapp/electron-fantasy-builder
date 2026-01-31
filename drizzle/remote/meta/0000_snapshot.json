@@ -1,0 +1,50 @@
+{
+  "id": "e491648a-b370-4836-87a2-cdad0ec6a5c8",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.example": {
+      "name": "example",
+      "schema": "",
+      "columns": {
+        "ex_no": {
+          "name": "ex_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ex_name": {
+          "name": "ex_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ex_desc": {
+          "name": "ex_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

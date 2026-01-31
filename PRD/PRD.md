@@ -1,0 +1,195 @@
+# PRD (Product Requirements Document) — Fantasy Builder
+
+**작성일**: 2026-01-31  
+**버전**: 1.0  
+**프로젝트 상태**: Electron + Vue + Hono 기반 구현
+
+---
+
+## 1. Project Overview
+
+### Goal
+창작자(작가, 게임 기획자, 만화가, 시나리오 작가 등)가 창작 과정에서 필요한 세계관 설정을 체계적으로 정리하고 기록할 수 있는 World Building Tool을 **Electron 데스크톱 앱**으로 제공합니다. 각 프로젝트별로 독립적인 설정 공간을 제공하며, 전역 풀과 프로젝트 종속 특성/어빌리티를 통해 유연한 설정 관리가 가능합니다.
+
+### Target User
+- **주요 사용자**: 창작자 (작가, 게임 기획자, 만화가, 시나리오 작가 등)
+- **사용 목적**: 작품/세계관 설정의 체계적 관리 및 기록
+- **핵심 니즈**:
+  - 프로젝트별 독립적인 설정 공간
+  - 특성(Traits)과 어빌리티(Abilities)를 통한 설정의 특색 파악
+  - 엔티티 간 관계 설정 및 관리
+
+### Key Value
+1. **프로젝트별 독립 관리**: 각 작품/세계관을 프로젝트 단위로 완전히 분리하여 관리
+2. **전역 풀 + 프로젝트 종속 구조**: 범용 특성/어빌리티와 프로젝트 고유 특성/어빌리티를 모두 지원
+3. **체계적인 데이터 구조화**: DB 스키마(Drizzle) 기반의 구조화된 데이터 입력 및 관리
+4. **관계 시각화**: 엔티티 간 다대다 관계 설정 및 탐색
+
+---
+
+## 2. Tech Stack & Environment (Specific Versions)
+
+### Runtime & Build
+- **Node.js**: 18+
+- **Electron**: v40
+- **electron-vite**: v5 (Main / Preload / Renderer 분리 빌드)
+
+### Language & Framework
+- **TypeScript**: 5.9+
+- **Vue**: 3.5+ (Composition API)
+- **Vue Router**: 5 (Hash 모드)
+
+### Main Process (API·DB)
+- **Hono**: v4 (HTTP API)
+- **@hono/node-server**: Hono 서버 기동
+- **Drizzle ORM**: 0.45+ (스키마·마이그레이션)
+- **better-sqlite3**: 로컬 SQLite
+- **pg**: 원격 PostgreSQL
+- **Axios**: API 클라이언트
+
+### Database
+- **로컬**: SQLite (better-sqlite3). 스키마·마이그레이션: `src/main/server/schema/local/`, `drizzle/local/`
+- **원격**: PostgreSQL. 스키마·마이그레이션: `src/main/server/schema/remote/`, `drizzle/remote/`
+- **전환**: `config/app.json`의 `db.mode` (`"local"` | `"remote"`)로 전환. 앱 재시작 시 적용.
+
+### State / UI / Validation
+- **Pinia**: Vue 상태 관리
+- **Tailwind CSS**: 4. 커스텀 스타일: `renderer/assets/styles/`
+- **Zod**, **Luxon**, **UUID**: 검증·유틸
+
+### Infra
+- **개발**: `pnpm dev` (electron-vite dev)
+- **빌드 산출물**: `out/` (Main/Preload), `dist/` (Renderer)
+
+---
+
+## 3. System Architecture & Features
+
+### 3.1. User Flow (Core Scenarios)
+
+#### Flow 1: 사용자 등록 및 프로젝트 생성
+1. 사용자 회원가입 (이메일, 비밀번호)
+2. 로그인 (JWT 토큰 발급 — 향후 구현)
+3. 프로젝트 생성 (프로젝트명, 장르, 설명 등)
+4. 프로젝트별 설정 공간 접근
+
+#### Flow 2: 특성/어빌리티 관리 및 매칭
+1. 전역 특성/어빌리티 풀에서 검색 및 선택
+2. 프로젝트 종속 특성/어빌리티 생성
+3. 설정 엔티티(인물, 종족, 아이템 등)에 특성/어빌리티 매칭
+4. 매칭된 특성/어빌리티를 통한 설정의 특색 파악
+
+#### Flow 3: 설정 엔티티 생성 및 관계 설정
+1. 프로젝트 내에서 설정 엔티티 생성 (인물, 종족, 아이템, 지역, 국가, 조직, 사건, 전승 등)
+2. 엔티티 간 관계 설정 (인물-인물, 인물-조직, 국가-조직 등)
+3. 관계 탐색 및 시각화
+
+### 3.2. Core Features (Detailed)
+
+#### Feature A: 사용자 인증 및 권한 관리
+- **Logic**: JWT 기반 인증, 비밀번호 bcrypt 해싱, 이메일 인증(향후), 계정 잠금
+- **Validation**: 이메일 형식, 비밀번호 강도, 중복 이메일 검증
+
+#### Feature B: 프로젝트 관리
+- **Logic**: 프로젝트 CRUD(소프트 삭제), 프로젝트별 설정 공간, 메타데이터 관리
+- **Validation**: 프로젝트명 필수, 소유자 권한 검증
+
+#### Feature C: 전역 특성/어빌리티 관리 ⭐ 최우선
+- **Logic**: 전역 풀 관리, 키워드·대분류·중분류·적용 대상별 검색, 상충 관계, 사용 현황 추적
+- **Validation**: 특성명/어빌리티명 필수, 전역 풀 내 중복 검증
+
+#### Feature D: 프로젝트 종속 특성/어빌리티 관리 ⭐ 최우선
+- **Logic**: 프로젝트별 고유 특성/어빌리티 CRUD, 전역과 동일 구조
+- **Validation**: 프로젝트 소유자/편집자 권한, 프로젝트 내 중복 검증
+
+#### Feature E: 특성/어빌리티 통합 검색
+- **Logic**: 전역 + 프로젝트 종속 풀 통합 검색, 타입 구분(GLOBAL | PROJECT), 키워드·카테고리 필터
+
+#### Feature F: 설정 엔티티 관리
+- **Logic**: 코어 설정, 생물/종족, 인물, 아이템, 지역, 국가, 조직, 사건, 전승 CRUD, 페이징·검색
+
+#### Feature G: 특성/어빌리티 매칭
+- **Logic**: 설정 엔티티에 전역/프로젝트 종속 특성·어빌리티 매칭, 매핑 테이블 다대다 관리
+
+#### Feature H: 엔티티 간 관계 관리
+- **Logic**: 인물-인물, 인물-조직, 국가-조직 관계, 관계 유형·상세, 다형 참조
+
+### 3.3. 아키텍처 (Electron + Hono)
+
+- **Main Process**: Hono HTTP API(Controller → Service → Mapper), DB context(`getDb()`), IPC·API 레이어
+- **Renderer (Vue)**: `window.electron.api.*`로 Hono API 호출, `window.electron.ipc.*`로 설정·앱 통신
+- **IPC vs API**: 엔드포인트 통신 = API(HTTP). 설정·DB 모드·base URL = IPC
+
+---
+
+## 4. Data Structure (Schema)
+
+### 4.1. 공통 필드 (CommonEntity)
+
+모든 엔티티 테이블에 포함되는 공통 컬럼:
+
+- **useYn**, **shrnYn**, **delYn**: 사용/공유/삭제 여부 (기본값 'Y'/'N'/'N')
+- **crtNo**, **crtDt**: 생성자 번호, 생성 일시
+- **updtNo**, **updtDt**: 수정자 번호, 수정 일시
+- **delNo**, **delDt**: 삭제자 번호, 삭제 일시
+
+정의 위치: `src/main/server/schema/local/common.columns.ts`, `schema/remote/common.columns.ts`
+
+### 4.2. 주요 테이블 (Drizzle 스키마)
+
+- **users**: user_no(PK), user_eml, user_nm, user_role, enpswd, resh_token, acnt_lck_yn, lgn_fail_nmtm 등
+- **projects**: prj_no(PK), user_no(FK), prj_nm, genre_type, prj_desc, cvr_img_url, prj_expln, prj_ver
+- **traits**: trait_no(PK), trait_nm, trait_expln, trait_lcls, trait_mcls, aply_trgt, cnfl_trait_no(자기참조)
+- **project_traits**: trait_no(PK), prj_no(FK), trait_nm, cnfl_trait_no, cnfl_trait_type(GLOBAL|PROJECT)
+- **abilities**: ability_no(PK), ability_nm, ability_type, ability_lcls, ability_expln, trgt_type, dmg_type 등
+- **project_abilities**: ability_no(PK), prj_no(FK), ability_nm 등
+- **characters**: char_no(PK), prj_no(FK), char_nm, alias_nm, role_type, logline, race_no, ntn_no, org_no 등
+- **creatures**, **items**, **regions**, **nations**, **organizations**, **events**, **lores**, **core_rules**: 프로젝트 FK + 도메인 필드
+- **char_trait_maps**, **char_ability_maps**: 복합 PK(char_no, trait_no/ability_no, trait_type/ability_type)
+- **creature_trait_maps**, **creature_ability_maps**: map_no(PK), creature_no(FK), trait_no/ability_no, trait_type/ability_type
+
+스키마 파일: `src/main/server/schema/local/*.table.ts`, `schema/remote/*.table.ts`  
+마이그레이션: `drizzle/local/`, `drizzle/remote/`
+
+### 4.3. 엔티티 관계 (요약)
+
+- User (1) ──< (N) Project
+- Project (1) ──< (N) ProjectTrait, ProjectAbility, Character, Creature, Item, Region, Nation, Organization, Event, Lore
+- Trait / ProjectTrait ──< CharTraitMap, CreatureTraitMap ──> Character / Creature
+- Ability / ProjectAbility ──< CharAbilityMap, CreatureAbilityMap ──> Character / Creature
+
+---
+
+## 5. Non-Functional Requirements & Risks
+
+### Performance
+- API 응답: 목록 200ms 이내, 상세 100ms 이내 목표
+- 페이징: 기본 20건, 최대 100건
+- 인덱스: 검색 필드·외래키·복합키에 인덱스 활용
+
+### Security
+- 인증: JWT Access/Refresh Token (향후)
+- 비밀번호: bcrypt 해싱
+- Context Isolation·Node Integration 비활성화, Preload를 통해서만 `window.electron` 노출
+
+### Data Integrity
+- 소프트 삭제: del_yn = 'Y'로 표시
+- 트랜잭션: Drizzle/Service 레이어에서 관리
+
+### Risks
+- 전역 풀 권한 정책 결정 필요
+- 대량 데이터 시 페이징·인덱스·캐싱 고려
+- 복합 키 매핑 테이블 설계·유지보수
+
+---
+
+## 6. API 설계 원칙
+
+- **RESTful**: 리소스 중심, 복수형, GET/POST/PATCH/DELETE
+- **패스**: PK는 no 형식 (예: :traitNo, :abilityNo, :charNo, :prjNo)
+- **응답**: 표준 래퍼 `{ data, error, code, message }` (Hono Controller에서 c.json()으로 통일)
+- **인증**: Public(로그인·회원가입) / Authenticated(대부분). 공유 여부(shrn_yn) 기반 접근 제어
+
+---
+
+*문서 끝*
