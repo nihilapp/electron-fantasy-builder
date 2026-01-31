@@ -1,5 +1,5 @@
 {
-  "name": "fantasy-builder",
+  "name": "electron-fantasy-builder",
   "version": "1.0.0",
   "description": "",
   "main": "./out/main/index.js",
