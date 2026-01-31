@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { ExampleDto } from '@app-types/dto';
+import type { ListResponseType } from '@app-types/response.types';
 import { onMounted, ref } from 'vue';
-
-import type { ExampleDto } from '@/types/dto';
 
 const examples = ref<ExampleDto[]>([]);
 const isLoading = ref(false);
@@ -17,8 +17,14 @@ const loadExample = async () => {
   error.value = null;
 
   try {
-    const data = await window.electron.api.getExample();
-    examples.value = data;
+    const response: ListResponseType<ExampleDto> = await window.electron.api.getExample();
+
+    if (response.error) {
+      error.value = response.message || 'Example 목록 조회 실패';
+      return;
+    }
+
+    examples.value = response.data.list;
   }
   catch (err) {
     error.value = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';

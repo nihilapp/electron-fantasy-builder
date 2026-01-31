@@ -6,7 +6,8 @@ export {
   closeDb,
   getDb,
   getDbMode,
-  initDbContext
+  initDbContext,
+  runWithDbMode
 } from './context';
 export type { Db, DbMode } from './context';
 export { HealthMapper } from './mapper';

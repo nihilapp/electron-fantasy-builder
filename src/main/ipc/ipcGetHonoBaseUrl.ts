@@ -1,7 +1,7 @@
+import type { AppConfig } from '@app-types/config';
 import { ipcMain } from 'electron';
 
 import appConfig from '@config/app.json';
-import type { AppConfig } from '@config/types';
 
 /**
  * Hono(메인 프로세스 내부 서버) base URL 반환.

@@ -1,4 +1,5 @@
-import type { ExampleDto, HealthDto } from '@/types/dto';
+import type { ExampleDto, HealthDto } from '@app-types/dto';
+import type { ListResponseType, ResponseType } from '@app-types/response.types';
 
 /**
  * Electron API 타입 정의
@@ -25,18 +26,19 @@ interface ElectronAPI {
 
   /**
    * API 요청 함수들. Vue에서는 API 호출 시 반드시 window.electron.api 로 접근.
+   * 모든 API는 HTTP 200 + ResponseType 구조. ResponseType 전체를 반환.
    */
   api: {
     /**
      * Health 상태 조회
-     * @returns { status, timestamp }
+     * @returns ResponseType<HealthDto> (data, error, code, message)
      */
-    getHealth: () => Promise<HealthDto>;
+    getHealth: () => Promise<ResponseType<HealthDto>>;
     /**
      * Example 목록 조회
-     * @returns Example DTO 목록
+     * @returns ListResponseType<ExampleDto> (data(list·totalCnt·페이징), error, code, message)
      */
-    getExample: () => Promise<ExampleDto[]>;
+    getExample: () => Promise<ListResponseType<ExampleDto>>;
   };
 }
 

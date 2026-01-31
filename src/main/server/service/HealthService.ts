@@ -1,4 +1,4 @@
-import type { HealthDto } from '@/types/dto';
+import type { HealthDto } from '@app-types/dto';
 
 import { HealthMapper } from '../db/mapper/HealthMapper';
 

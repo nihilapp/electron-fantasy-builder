@@ -10,10 +10,13 @@
   "db": {
     "mode": "local",
     "local": {
-      "path": "./data/app.db"
+      "path": "./src/data/app.db"
     },
     "remote": {
       "connectionUrl": ""
     }
+  },
+  "pagination": {
+    "pageSize": 10
   }
 }

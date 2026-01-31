@@ -28,7 +28,7 @@ export function createMainWindow(): BrowserWindow {
     // 필요에 따라 아래 옵션 중 하나를 선택하여 주석을 해제하세요:
     //
     // 1. 메뉴바 자동 숨김 (Windows/Linux): Alt 키로 표시 가능
-    // autoHideMenuBar: true,
+    autoHideMenuBar: true,
     //
     // 2. 메뉴바 완전 제거: 아래 코드를 createMainWindow 함수 내부에 추가
     // import { Menu } from 'electron';

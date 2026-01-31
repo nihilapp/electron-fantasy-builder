@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../fonts/pretendard/pretendard.css";
 @import "./colors.css";
 @import "./size/dvh.css";
 @import "./size/dvw.css";
@@ -17,7 +18,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Noto Sans KR", sans-serif;
+  --font-pretendard: "Pretendard", "Noto Sans KR", sans-serif;
   --font-fa: "Font Awesome 5 Free", sans-serif;
   --font-code: "Cascadia Code", sans-serif;
 
@@ -57,7 +58,7 @@
 
 @layer base {
   * {
-    @apply p-0 m-0 box-border font-sans;
+    @apply p-0 m-0 box-border font-pretendard;
   }
 
   body {

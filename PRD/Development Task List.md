@@ -8,7 +8,7 @@
 ## Phase 1: 환경 및 기반
 
 - [x] **Init**: 프로젝트 생성, 의존성 설치 (`pnpm install`), Git·`.gitignore` 확인
-- [x] **Config**: `config/app.json` — api.baseURL, server(port/hostname), db.mode/local/remote
+- [x] **Config**: `src/config/app.json` — api.baseURL, server(port/hostname), db.mode/local/remote
 - [x] **Schema**: Fantasy Builder 테이블 구조 반영 (Drizzle local/remote)
   - [x] 공통 컬럼 (common.columns)
   - [x] users, projects, traits, project_traits, abilities, project_abilities
@@ -21,11 +21,11 @@
 
 ## Phase 2: 공통 인프라 및 타입
 
-- [ ] **ApiResponse 래퍼**: `{ data, error, code, message }` 표준 응답 구조 (types/dto 또는 server 공통)
+- [ ] **ApiResponse 래퍼**: `{ data, error, code, message }` 표준 응답 구조 (src/types 또는 server 공통)
 - [ ] **ListType**: 목록 응답용 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast`
 - [ ] **GlobalExceptionHandler**: Hono 미들웨어 또는 onError에서 표준 에러 응답
-- [ ] **types/table.ts**: Drizzle 스키마 기반 InferSelectModel/InferInsertModel (users, projects, traits 등)
-- [ ] **types/dto.ts**: API 요청/응답 DTO (UserDto, ProjectDto, TraitDto 등)
+- [ ] **src/types/table.ts**: Drizzle 스키마 기반 InferSelectModel/InferInsertModel (users, projects, traits 등)
+- [ ] **src/types/dto.ts**: API 요청/응답 DTO (UserDto, ProjectDto, TraitDto 등)
 
 ---
 

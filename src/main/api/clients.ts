@@ -1,3 +1,4 @@
+import type { AppConfig } from '@app-types/config';
 import axios, {
   type AxiosInstance,
   type AxiosResponse,
@@ -5,7 +6,6 @@ import axios, {
 } from 'axios';
 
 import appConfig from '@config/app.json';
-import type { AppConfig } from '@config/types';
 import { createTaggedLogger } from '@main/logger';
 
 const app = appConfig as AppConfig;

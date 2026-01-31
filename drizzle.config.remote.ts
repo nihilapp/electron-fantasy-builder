@@ -8,6 +8,6 @@ import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
   dialect: 'postgresql',
   schema: './src/main/server/schema/remote/index.ts',
-  out: './drizzle/remote',
+  out: './src/drizzle/remote',
   dbCredentials: { url: process.env.DATABASE_URL ?? '', },
 });

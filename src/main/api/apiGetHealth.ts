@@ -1,16 +1,16 @@
+import type { HealthDto } from '@app-types/dto';
+import type { ResponseType } from '@app-types/response.types';
 import { ipcMain } from 'electron';
-
-import type { HealthDto } from '@/types/dto';
 
 import { apiClient } from './clients';
 
 /**
- * Health 상태 조회 API 함수
- * Hono /health 엔드포인트를 axios(apiClient)로 호출합니다.
- * @returns Health DTO
+ * Health 상태 조회 API 함수.
+ * Hono /health 는 ResponseType<HealthDto> 로 200 반환. ResponseType 전체를 그대로 반환.
  */
-export async function apiGetHealth(): Promise<HealthDto> {
-  const response = await apiClient.get<HealthDto>('/health');
+export async function apiGetHealth(): Promise<ResponseType<HealthDto>> {
+  const response = await apiClient.get<ResponseType<HealthDto>>('/health');
+
   return response.data;
 }
 

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 
-import type { HealthDto } from '@/types/dto';
+import type { HealthDto } from '@app-types/dto';
+import type { ResponseType } from '@app-types/response.types';
+import { onMounted, ref } from 'vue';
 
 const health = ref<HealthDto | null>(null);
 const isLoading = ref(false);
@@ -18,8 +19,14 @@ const loadHealth = async () => {
   health.value = null;
 
   try {
-    const data = await window.electron.api.getHealth();
-    health.value = data;
+    const response: ResponseType<HealthDto> = await window.electron.api.getHealth();
+
+    if (response.error) {
+      error.value = response.message || 'Health 조회 실패';
+      return;
+    }
+
+    health.value = response.data;
   }
   catch (err) {
     error.value = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';

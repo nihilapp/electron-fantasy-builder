@@ -1,7 +1,8 @@
+import type { AppConfig } from '@app-types/config';
+import type { DbMode } from '@app-types/db';
 import { ipcMain } from 'electron';
 
 import appConfig from '@config/app.json';
-import type { AppConfig, DbMode } from '@config/types';
 
 /**
  * DB 모드(로컬/리모트) 조회 IPC 핸들러.

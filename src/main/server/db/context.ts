@@ -1,22 +1,26 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
+import type { AppConfig } from '@app-types/config';
+import type { DbConfig, DbMode } from '@app-types/db';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 import type { Pool } from 'pg';
 
 import appConfig from '@config/app.json';
-import type { AppConfig } from '@config/types';
 import { createTaggedLogger } from '@main/logger';
 
 import { createLocalDb, type LocalDb } from './client/local';
 import { createRemoteDb, type RemoteDb } from './client/remote';
-import type { DbConfig, DbMode } from './client/types';
 
 export type { DbMode };
 export type Db = LocalDb | RemoteDb;
 
-let cachedDb: Db | null = null;
-let cachedMode: DbMode | null = null;
+/** 요청 스코프에서 사용할 DB 모드. 미들웨어에서 X-Db-Target 또는 db 쿼리로 설정. */
+const dbTargetStorage = new AsyncLocalStorage<DbMode | undefined>();
+
+let cachedLocalDb: LocalDb | null = null;
+let cachedRemoteDb: RemoteDb | null = null;
 
 /** pg Pool은 close()로 종료. better-sqlite3 Database는 .close() */
 let remotePool: Pool | null = null;
@@ -38,67 +42,86 @@ export function getDbMode(): DbMode {
 }
 
 /**
- * 현재 설정에 따라 DB 연결을 생성·캐시하고 반환합니다.
- * Mapper는 이 함수로 연결을 취득해 쿼리합니다.
+ * 요청 스코프에서 사용할 DB 모드를 반환합니다.
+ * 1) 인자 mode 2) AsyncLocalStorage(요청별) 3) config 기본값 순.
  */
-export function getDb(): Db {
-  const mode = getDbMode();
+function resolveDbMode(mode?: DbMode): DbMode {
+  if (mode === 'local' || mode === 'remote') return mode;
+  const requestMode = dbTargetStorage.getStore();
+  if (requestMode === 'local' || requestMode === 'remote') return requestMode;
+  return getDbMode();
+}
 
-  if (cachedDb !== null && cachedMode === mode) {
-    return cachedDb;
-  }
-
-  // 모드가 바뀌었으면 기존 연결 정리
-  closeDb();
-
+function getOrCreateLocalDb(): LocalDb {
+  if (cachedLocalDb !== null) return cachedLocalDb;
   const config = getDbConfig();
-
-  if (mode === 'remote') {
-    const url = config.remote?.connectionUrl?.trim();
-    if (!url) {
-      throw new Error(
-        '[db] mode가 remote인데 db.remote.connectionUrl이 비어 있습니다. config/app.json을 확인하세요.'
-      );
-    }
-    const db = createRemoteDb(url);
-    cachedDb = db;
-    cachedMode = 'remote';
-    remotePool = (db as { $client: Pool }).$client;
-    return db;
-  }
-
-  const dbPath = config.local?.path ?? './data/app.db';
+  const dbPath = config.local?.path ?? './src/data/app.db';
   const dbDir = dirname(dbPath);
   if (!existsSync(dbDir)) {
     mkdirSync(dbDir, { recursive: true, });
   }
   const db = createLocalDb(dbPath);
-  cachedDb = db;
-  cachedMode = 'local';
+  cachedLocalDb = db;
   localClient = (db as { $client: import('better-sqlite3').Database }).$client;
-
-  // 로컬 DB 스키마 마이그레이션 적용 (drizzle/local 폴더에 SQL이 있어야 함)
   try {
-    const migrationsFolder = join(process.cwd(), 'drizzle', 'local');
+    const migrationsFolder = join(process.cwd(), 'src', 'drizzle', 'local');
     migrate(db as unknown as Parameters<typeof migrate>[0], { migrationsFolder, });
   }
   catch (e) {
     createTaggedLogger('db').warn('Local migration skipped or failed:', (e as Error).message);
   }
+  return db;
+}
 
+function getOrCreateRemoteDb(): RemoteDb {
+  if (cachedRemoteDb !== null) return cachedRemoteDb;
+  const config = getDbConfig();
+  const url = config.remote?.connectionUrl?.trim();
+  if (!url) {
+    throw new Error(
+      '[db] remote DB를 사용하려면 src/config/app.json의 db.remote.connectionUrl을 설정하세요.'
+    );
+  }
+  const db = createRemoteDb(url);
+  cachedRemoteDb = db;
+  remotePool = (db as { $client: Pool }).$client;
   return db;
 }
 
 /**
- * 캐시된 DB 연결을 해제합니다. 앱 종료 시 호출합니다.
+ * 현재 설정 또는 요청 스코프에 따라 DB 연결을 반환합니다.
+ * - mode를 넘기면 해당 DB 사용 (로컬/원격 둘 다 캐시되어 동시 사용 가능).
+ * - mode 없이 호출 시: 요청 내부면 X-Db-Target / db 쿼리로 정한 값, 아니면 config.db.mode.
+ * Mapper/Service는 getDb()만 호출하면 됩니다.
+ */
+export function getDb(mode?: DbMode): Db {
+  const effective = resolveDbMode(mode);
+  if (effective === 'remote') return getOrCreateRemoteDb();
+  return getOrCreateLocalDb();
+}
+
+/**
+ * 요청 컨텍스트 없이(예: IPC) 특정 DB 모드로 코드를 실행할 때 사용합니다.
+ * @example
+ * await runWithDbMode('remote', async () => { ... getDb()는 remote 반환 ... });
+ */
+export async function runWithDbMode<T>(mode: DbMode | undefined, fn: () => Promise<T>): Promise<T> {
+  if (mode === 'local' || mode === 'remote') {
+    return dbTargetStorage.run(mode, fn);
+  }
+  return fn();
+}
+
+/**
+ * 캐시된 DB 연결(로컬·원격 모두)을 해제합니다. 앱 종료 시 호출합니다.
  */
 export function closeDb(): void {
   const pool = remotePool;
   const sqlite = localClient;
   remotePool = null;
   localClient = null;
-  cachedDb = null;
-  cachedMode = null;
+  cachedLocalDb = null;
+  cachedRemoteDb = null;
   if (pool) {
     pool.end().catch(() => {});
   }

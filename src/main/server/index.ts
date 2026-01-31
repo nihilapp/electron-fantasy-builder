@@ -1,8 +1,8 @@
+import type { AppConfig } from '@app-types/config';
 import type { ServerType } from '@hono/node-server';
 import { serve } from '@hono/node-server';
 
 import appConfig from '@config/app.json';
-import type { AppConfig } from '@config/types';
 import { createTaggedLogger } from '@main/logger';
 
 import { honoApp } from './honoApp';

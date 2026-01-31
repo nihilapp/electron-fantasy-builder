@@ -1,16 +1,16 @@
+import type { ExampleDto } from '@app-types/dto';
+import type { ListResponseType } from '@app-types/response.types';
 import { ipcMain } from 'electron';
-
-import type { ExampleDto } from '@/types/dto';
 
 import { apiClient } from './clients';
 
 /**
- * Example 목록 조회 API 함수
- * Hono /example 엔드포인트를 axios(apiClient)로 호출합니다.
- * @returns Example DTO 목록
+ * Example 목록 조회 API 함수.
+ * Hono /example 은 ListResponseType<ExampleDto> 로 200 반환. ResponseType 전체를 그대로 반환.
  */
-export async function apiGetExample(): Promise<ExampleDto[]> {
-  const response = await apiClient.get<ExampleDto[]>('/example');
+export async function apiGetExample(): Promise<ListResponseType<ExampleDto>> {
+  const response = await apiClient.get<ListResponseType<ExampleDto>>('/example');
+
   return response.data;
 }
 

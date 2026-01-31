@@ -54,9 +54,9 @@
 - **Axios**: API 클라이언트
 
 ### Database
-- **로컬**: SQLite (better-sqlite3). 단일 사용자 가정으로 **users 테이블 없음**. 스키마·마이그레이션: `src/main/server/schema/local/`, `drizzle/local/`
-- **원격**: PostgreSQL. users·멀티유저·온라인 프로젝트. 스키마·마이그레이션: `src/main/server/schema/remote/`, `drizzle/remote/`
-- **전환**: `config/app.json`의 `db.mode` (`"local"` | `"remote"`)로 전환. 앱 재시작 시 적용.
+- **로컬**: SQLite (better-sqlite3). 단일 사용자 가정으로 **users 테이블 없음**. 스키마·마이그레이션: `src/main/server/schema/local/`, `src/drizzle/local/`
+- **원격**: PostgreSQL. users·멀티유저·온라인 프로젝트. 스키마·마이그레이션: `src/main/server/schema/remote/`, `src/drizzle/remote/`
+- **전환**: `src/config/app.json`의 `db.mode` (`"local"` | `"remote"`)로 전환. 앱 재시작 시 적용.
 
 ### State / UI / Validation
 - **Pinia**: Vue 상태 관리
@@ -157,7 +157,7 @@
 - **creature_trait_maps**, **creature_ability_maps**: map_no(PK), creature_no(FK), trait_no/ability_no, trait_type/ability_type
 
 스키마 파일: `src/main/server/schema/local/*.table.ts`, `schema/remote/*.table.ts`  
-마이그레이션: `drizzle/local/`, `drizzle/remote/`
+마이그레이션: `src/drizzle/local/`, `src/drizzle/remote/`
 
 ### 4.3. 엔티티 관계 (요약)
 
@@ -196,7 +196,10 @@
 
 - **RESTful**: 리소스 중심, 복수형, GET/POST/PATCH/DELETE
 - **패스**: PK는 no 형식 (예: :traitNo, :abilityNo, :charNo, :prjNo)
-- **응답**: 표준 래퍼 `{ data, error, code, message }` (Hono Controller에서 c.json()으로 통일)
+- **응답**: 모든 API는 **HTTP 200**으로 반환. 성공/실패는 본문의 **error**, **code** 로 구분.
+- **응답 구조**: `src/types/response.types.ts` 의 **ResponseType&lt;TData&gt;** 사용 (`{ data, error, code, message }`).
+- **목록 응답**: **ResponseType&lt;ListType&lt;TData&gt;&gt;** (즉 ListResponseType&lt;TData&gt;). data 안에 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast` 포함.
+- **페이징**: 목록 API는 항상 페이징을 갖는 것은 아님. 렌더러에서 쿼리스트링 `page`(선택 `pageSize`)를 넘기면 Hono에서 페이징 계산 후 내려줌. 기본 pageSize는 `src/config/app.json`의 `pagination.pageSize`(기본 10). 사용자가 `pageSize` 쿼리로 넘기면 그 값을 사용.
 - **인증**: Public(로그인·회원가입) / Authenticated(대부분). 공유 여부(shrn_yn) 기반 접근 제어
 
 ---

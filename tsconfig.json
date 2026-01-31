@@ -32,7 +32,19 @@
         "src/preload/*"
       ],
       "@config/*": [
-        "config/*"
+        "src/config/*"
+      ],
+      "@app-types/*": [
+        "src/types/*"
+      ],
+      "@drizzle/*": [
+        "src/drizzle/*"
+      ],
+      "@data/*": [
+        "src/data/*"
+      ],
+      "@constants/*": [
+        "src/constants/*"
       ],
       "@/*": [
         "./*"
@@ -40,11 +52,7 @@
     }
   },
   "include": [
-    "src/main/**/*",
-    "src/preload/**/*",
-    "src/renderer/**/*",
-    "config/**/*",
-    "types/**/*",
+    "src/**/*",
     "electron.vite.config.ts"
   ],
   "exclude": [

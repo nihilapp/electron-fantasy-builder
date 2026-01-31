@@ -8,6 +8,6 @@ export type RemoteDb = ReturnType<typeof createRemoteDb>;
  * @param connectionUrl postgres://user:password@host:5432/dbname
  */
 export function createRemoteDb(connectionUrl: string) {
-  const pool = new Pool({ connectionString: connectionUrl });
-  return drizzle({ client: pool });
+  const pool = new Pool({ connectionString: connectionUrl, });
+  return drizzle({ client: pool, });
 }
