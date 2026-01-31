@@ -6,6 +6,7 @@ import type { Pool } from 'pg';
 
 import appConfig from '@config/app.json';
 import type { AppConfig } from '@config/types';
+import { createTaggedLogger } from '@main/logger';
 
 import { createLocalDb, type LocalDb } from './client/local';
 import { createRemoteDb, type RemoteDb } from './client/remote';
@@ -82,7 +83,7 @@ export function getDb(): Db {
     migrate(db as unknown as Parameters<typeof migrate>[0], { migrationsFolder, });
   }
   catch (e) {
-    console.warn('[db] Local migration skipped or failed:', (e as Error).message);
+    createTaggedLogger('db').warn('Local migration skipped or failed:', (e as Error).message);
   }
 
   return db;

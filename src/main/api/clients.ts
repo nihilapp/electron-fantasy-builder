@@ -6,8 +6,10 @@ import axios, {
 
 import appConfig from '@config/app.json';
 import type { AppConfig } from '@config/types';
+import { createTaggedLogger } from '@main/logger';
 
 const app = appConfig as AppConfig;
+const log = createTaggedLogger('API');
 
 /** Hono(메인 내부 서버) API용 axios 인스턴스. config.api.baseURL = Hono 주소. */
 export const apiClient: AxiosInstance = axios.create({
@@ -31,11 +33,7 @@ apiClient.interceptors.request.use(
       ? JSON.stringify(config.data)
       : undefined;
 
-    console.log('[API Request]', {
-      endpoint,
-      query,
-      body,
-    });
+    log.log('Request', { endpoint, query, body, });
 
     return config;
   },
@@ -55,11 +53,7 @@ apiClient.interceptors.response.use(
       ? JSON.stringify(response.data)
       : undefined;
 
-    console.log('[API Response]', {
-      endpoint,
-      statusCode,
-      body,
-    });
+    log.log('Response', { endpoint, statusCode, body, });
 
     return response;
   },
@@ -71,23 +65,14 @@ apiClient.interceptors.response.use(
         ? JSON.stringify(error.response.data)
         : undefined;
 
-      console.error('[API Error Response]', {
-        endpoint,
-        statusCode,
-        body,
-      });
+      log.error('Error Response', { endpoint, statusCode, body, });
     }
     else if (error.request) {
       const endpoint = `${error.config?.method?.toUpperCase()} ${error.config?.url || ''}`;
-      console.error('[API Error]', {
-        endpoint,
-        message: 'No response received',
-      });
+      log.error('Error', { endpoint, message: 'No response received', });
     }
     else {
-      console.error('[API Error]', {
-        message: error.message,
-      });
+      log.error('Error', { message: error.message, });
     }
     return Promise.reject(error);
   }

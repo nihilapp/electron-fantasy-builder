@@ -6,8 +6,10 @@ import { closeDb, initDbContext } from './server/db';
 import {
   createMainWindow,
   handleAppActivate,
-  handleWindowAllClosed
+  handleWindowAllClosed,
+  setQuittingFlag
 } from './window/mainWindow';
+import { createTray } from './window/tray';
 
 app.whenReady().then(() => {
   // DB context 초기화 (연결은 getDb() 호출 시 지연 생성)
@@ -22,6 +24,9 @@ app.whenReady().then(() => {
   // 메인 윈도우 생성
   createMainWindow();
 
+  // 시스템 트레이 생성 (창 닫기 시 트레이에 유지)
+  createTray();
+
   // 앱 활성화 이벤트 핸들러
   app.on('activate', handleAppActivate);
 });
@@ -35,6 +40,7 @@ app.on('before-quit', (event) => {
   if (isQuitting) return;
   event.preventDefault();
   isQuitting = true;
+  setQuittingFlag(true);
   closeDb();
   closeHonoServer().then(() => {
     app.exit(0);

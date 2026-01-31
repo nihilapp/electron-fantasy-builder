@@ -25,6 +25,12 @@
 3. **체계적인 데이터 구조화**: DB 스키마(Drizzle) 기반의 구조화된 데이터 입력 및 관리
 4. **관계 시각화**: 엔티티 간 다대다 관계 설정 및 탐색
 
+### 오프라인 우선 · 온라인 프로젝트
+- **기본 동작**: 앱은 평소 **오프라인**으로 동작하며, 모든 데이터는 **로컬 DB**에만 쌓인다.
+- **로그인**: 로그인 기능을 붙이며, 로그인 시에만 **온라인 프로젝트**를 생성·관리할 수 있다.
+- **로컬 DB**: 단일 사용자 환경이므로 **사용자(users) 테이블은 로컬 스키마에 두지 않는다.** 로컬에는 “나” 한 명만 있으므로 사용자 구분이 필요 없다.
+- **원격 DB**: 로그인·멀티유저를 지원할 때는 **원격(PostgreSQL)** 스키마에 users 테이블을 두고, 온라인 프로젝트는 사용자 소유로 관리한다.
+
 ---
 
 ## 2. Tech Stack & Environment (Specific Versions)
@@ -48,8 +54,8 @@
 - **Axios**: API 클라이언트
 
 ### Database
-- **로컬**: SQLite (better-sqlite3). 스키마·마이그레이션: `src/main/server/schema/local/`, `drizzle/local/`
-- **원격**: PostgreSQL. 스키마·마이그레이션: `src/main/server/schema/remote/`, `drizzle/remote/`
+- **로컬**: SQLite (better-sqlite3). 단일 사용자 가정으로 **users 테이블 없음**. 스키마·마이그레이션: `src/main/server/schema/local/`, `drizzle/local/`
+- **원격**: PostgreSQL. users·멀티유저·온라인 프로젝트. 스키마·마이그레이션: `src/main/server/schema/remote/`, `drizzle/remote/`
 - **전환**: `config/app.json`의 `db.mode` (`"local"` | `"remote"`)로 전환. 앱 재시작 시 적용.
 
 ### State / UI / Validation
@@ -137,8 +143,10 @@
 
 ### 4.2. 주요 테이블 (Drizzle 스키마)
 
-- **users**: user_no(PK), user_eml, user_nm, user_role, enpswd, resh_token, acnt_lck_yn, lgn_fail_nmtm 등
-- **projects**: prj_no(PK), user_no(FK), prj_nm, genre_type, prj_desc, cvr_img_url, prj_expln, prj_ver
+- **로컬 스키마**: 사용자 테이블(users) 없음. 단일 사용자이므로 프로젝트·설정 데이터만 로컬에 저장.
+- **원격 스키마**: 사용자·멀티유저·온라인 프로젝트 지원.
+- **users** (원격 전용): user_no(PK), user_eml, user_nm, user_role, enpswd, resh_token, acnt_lck_yn, lgn_fail_nmtm 등
+- **projects**: prj_no(PK), (원격 시) user_no(FK), prj_nm, genre_type, prj_desc, cvr_img_url, prj_expln, prj_ver
 - **traits**: trait_no(PK), trait_nm, trait_expln, trait_lcls, trait_mcls, aply_trgt, cnfl_trait_no(자기참조)
 - **project_traits**: trait_no(PK), prj_no(FK), trait_nm, cnfl_trait_no, cnfl_trait_type(GLOBAL|PROJECT)
 - **abilities**: ability_no(PK), ability_nm, ability_type, ability_lcls, ability_expln, trgt_type, dmg_type 등
@@ -153,7 +161,8 @@
 
 ### 4.3. 엔티티 관계 (요약)
 
-- User (1) ──< (N) Project
+- **로컬**: User 없음. Project 및 하위 엔티티만 단일 사용자 기준으로 관리.
+- **원격**: User (1) ──< (N) Project (온라인 프로젝트 소유)
 - Project (1) ──< (N) ProjectTrait, ProjectAbility, Character, Creature, Item, Region, Nation, Organization, Event, Lore
 - Trait / ProjectTrait ──< CharTraitMap, CreatureTraitMap ──> Character / Creature
 - Ability / ProjectAbility ──< CharAbilityMap, CreatureAbilityMap ──> Character / Creature

@@ -3,8 +3,11 @@ import { serve } from '@hono/node-server';
 
 import appConfig from '@config/app.json';
 import type { AppConfig } from '@config/types';
+import { createTaggedLogger } from '@main/logger';
 
 import { honoApp } from './honoApp';
+
+const log = createTaggedLogger('Hono');
 
 let serverInstance: ServerType | null = null;
 
@@ -24,7 +27,7 @@ export function startHonoServer(): ServerType {
       hostname,
     },
     (info) => {
-      console.log(`[Hono] Listening on http://${info.address}:${info.port}`);
+      log.log(`Listening on http://${info.address}:${info.port}`);
     }
   );
 
@@ -42,7 +45,7 @@ export function closeHonoServer(): Promise<void> {
     }
     serverInstance.close(() => {
       serverInstance = null;
-      console.log('[Hono] Server closed');
+      log.log('Server closed');
       resolve();
     });
   });

@@ -4,7 +4,6 @@
  */
 export { exampleTable } from './example.table';
 export { commonColumnsSqlite } from './common.columns';
-export { usersTable } from './users.table';
 export { projectsTable } from './projects.table';
 export { traitsTable } from './traits.table';
 export { projectTraitsTable } from './project_traits.table';

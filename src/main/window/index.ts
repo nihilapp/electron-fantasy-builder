@@ -4,5 +4,7 @@ export {
   openMainWindow,
   closeMainWindow,
   handleWindowAllClosed,
-  handleAppActivate
+  handleAppActivate,
+  setQuittingFlag
 } from './mainWindow';
+export { createTray, destroyTray, getTray } from './tray';
