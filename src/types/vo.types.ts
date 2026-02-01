@@ -4,8 +4,9 @@
  * - ProjectVo: projectSchema(ProjectType)와 동일. 요청/응답 TData에 사용.
  */
 
-import type { searchSchema } from '@zod-schema/search.schema';
 import { z } from 'zod';
+
+import type { searchSchema } from '@zod-schema/search.schema';
 
 import type { abilitySchema } from '../zod-schema/ability.schema';
 import type { projectSchema } from '../zod-schema/project.schema';

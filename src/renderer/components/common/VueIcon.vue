@@ -20,6 +20,7 @@ const cssVariants = cva(
   [
     'inline-block shrink-0 select-none',
     'align-[-0.125em] leading-[1em] fill-current',
+    'size-5',
   ],
   {
     variants: {},

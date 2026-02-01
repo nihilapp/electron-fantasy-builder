@@ -1,26 +1,23 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
-import DbMode from '~/views/DbMode.vue';
-import Health from '~/views/Health.vue';
-import Home from '~/views/Home.vue';
+import CreateProjectView from '~/views/CreateProjectView.vue';
+import MainView from '~/views/MainView.vue';
+import ProjectListView from '~/views/ProjectListView.vue';
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home,
+      component: MainView,
     },
     {
-      path: '/health',
-      name: 'Health',
-      component: Health,
+      path: '/create-project',
+      component: CreateProjectView,
     },
     {
-      path: '/db-mode',
-      name: 'DbMode',
-      component: DbMode,
+      path: '/project-list',
+      component: ProjectListView,
     },
   ],
 });

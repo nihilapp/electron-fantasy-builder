@@ -4,9 +4,9 @@ import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'electron-vite';
 import type { UserConfig } from 'electron-vite';
+import AutoImport from 'unplugin-auto-import/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
-import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 
 export default defineConfig({
@@ -68,7 +68,14 @@ export default defineConfig({
       vue(),
       tailwindcss(),
       AutoImport({
-        imports: [ 'vue', 'vue-router', ],
+        imports: [
+          'vue',
+          'vue-router',
+          {
+            from: 'pinia',
+            imports: [ 'defineStore', 'storeToRefs', ],
+          },
+        ],
         dts: 'auto-imports.d.ts',
         eslintrc: {
           enabled: true,
