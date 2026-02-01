@@ -1,5 +1,29 @@
 // 모든 API 함수를 import하고 export하는 통합 역할
-export { apiGetExample, ipcGetExample } from './apiGetExample';
-export { apiGetHealth, ipcGetHealth } from './apiGetHealth';
-export type { ExampleDto, HealthDto } from '@app-types/dto';
-// 새로운 API 함수를 추가할 때마다 여기에 export 추가
+export {
+  apiDeleteProject,
+  apiGetProjectByNo,
+  apiGetProjectList,
+  apiPatchProject,
+  apiPostProject,
+  ipcGetProject
+} from './apiProject';
+
+export {
+  apiDeleteTrait,
+  apiGetTraitByNo,
+  apiGetTraitList,
+  apiPatchTrait,
+  apiPostTrait,
+  ipcGetTrait
+} from './apiTrait';
+
+export {
+  apiDeleteAbility,
+  apiGetAbilityByNo,
+  apiGetAbilityList,
+  apiPatchAbility,
+  apiPostAbility,
+  ipcGetAbility
+} from './apiAbility';
+
+export { apiGetHealth, ipcGetHealth } from './apiHealth';

@@ -1,8 +1,14 @@
-import { ipcGetExample, ipcGetHealth } from '../api';
+import {
+  ipcGetAbility,
+  ipcGetHealth,
+  ipcGetProject,
+  ipcGetTrait
+} from '../api';
 
 import { ipcGetDbMode } from './ipcGetDbMode';
 import { ipcGetHonoBaseUrl } from './ipcGetHonoBaseUrl';
 import { ipcGetPing } from './ipcGetPing';
+import { ipcWindowControl } from './ipcWindowControl';
 
 /**
  * 모든 IPC 핸들러를 등록합니다.
@@ -16,6 +22,9 @@ export function setupIpcHandlers() {
   ipcGetPing();
   ipcGetHonoBaseUrl();
   ipcGetDbMode();
+  ipcWindowControl();
   ipcGetHealth();
-  ipcGetExample();
+  ipcGetProject();
+  ipcGetTrait();
+  ipcGetAbility();
 }

@@ -1,4 +1,4 @@
-import type { DbConfig } from './db';
+import type { DbConfig } from './db.types';
 
 /**
  * config/app.json 구조 타입.

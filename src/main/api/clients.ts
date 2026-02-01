@@ -1,12 +1,14 @@
-import type { AppConfig } from '@app-types/config';
 import axios, {
   type AxiosInstance,
   type AxiosResponse,
   type InternalAxiosRequestConfig
 } from 'axios';
 
+import type { AppConfig } from '@app-types/config.types';
 import appConfig from '@config/app.json';
 import { createTaggedLogger } from '@main/logger';
+
+import { getVoSchemaForUrl, normalizeResponseData } from './normalizeVoResponse';
 
 const app = appConfig as AppConfig;
 const log = createTaggedLogger('API');
@@ -43,10 +45,16 @@ apiClient.interceptors.request.use(
 );
 
 /**
- * 응답 인터셉터
+ * 응답 인터셉터.
+ * VO 응답(/projects, /traits, /abilities)은 해당 스키마로 parse해 없는 필드를 null로 채움.
  */
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
+    const schema = getVoSchemaForUrl(response.config.url);
+    if (schema) {
+      response.data = normalizeResponseData(response.data, schema) as AxiosResponse['data'];
+    }
+
     const endpoint = `${response.config.method?.toUpperCase()} ${response.config.url || ''}`;
     const statusCode = response.status;
     const body = response.data
@@ -69,11 +77,13 @@ apiClient.interceptors.response.use(
     }
     else if (error.request) {
       const endpoint = `${error.config?.method?.toUpperCase()} ${error.config?.url || ''}`;
+
       log.error('Error', { endpoint, message: 'No response received', });
     }
     else {
       log.error('Error', { message: error.message, });
     }
+
     return Promise.reject(error);
   }
 );

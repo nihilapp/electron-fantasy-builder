@@ -139,10 +139,28 @@ fantasy-builder-exe/
 
 ## 5. Fantasy Builder 특화 규칙
 
-- **소프트 삭제**: `del_yn = 'Y'`로 표시. 조회 시 `del_yn = 'N'` 조건 필수.
-- **공유 여부**: `shrn_yn = 'Y'`인 경우 접근 제어 정책에 따라 조회 허용.
+### VO (Value Object) 패턴
+- **Single Source of Truth**: `src/zod-schema/` 의 Zod 스키마를 기반으로 `z.infer`를 사용하여 타입을 생성함.
+- **스키마 확장**: 모든 도메인 VO 스키마는 반드시 `commonSchema`와 `searchSchema`를 확장(`extend`)하여 생성해야 합니다.
+- **모든 필드는 선택값**: VO의 모든 필드는 **반드시 선택적(optional)**이어야 합니다. (`z.string().nullable().optional()` 등). 이는 VO가 검색 조건, 부분 업데이트, 생성 등 다양한 상황에서 유연하게 재사용되기 위함입니다.
+- **검색 필드 포함**: 위 확장을 통해 자동으로 `page`, `pageSize`, `searchKeyword`, `searchType` 등 검색 및 페이징 필드를 포함하게 됩니다.
+
+### 목록 조회 및 검색 처리
+- **Controller**: 쿼리 스트링을 VO 스키마로 파싱하여 서비스로 전달합니다. (예: `projectSchema.parse({ ...query, page, pageSize })`)
+- **Service**: VO를 매퍼의 `selectList` 메서드에 통째로 전달합니다.
+- **Mapper**: 
+    - `selectList(params: VO)` 형태로 정의합니다.
+    - `params`에서 `searchKeyword`와 `searchType`을 추출하여 Drizzle의 `and`, `or`, `like` 연산자로 동적 `WHERE` 절을 생성합니다.
+    - `params`의 `page`와 `pageSize`를 이용해 `limit`와 `offset`을 계산합니다.
+    - **소프트 삭제**: 모든 조회 시 `del_yn = 'N'` 조건을 기본으로 포함합니다.
+
+### 응답 규격
 - **목록 응답**: `ResponseType<ListType<TData>>` (ListResponseType) 사용. data 안에 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast` 유지.
-- **페이징**: 쿼리 `page`, `pageSize`로 전달. 기본 pageSize는 `config/app.json`의 `pagination.pageSize`(기본 10). 사용자 쿼리 `pageSize`가 있으면 해당 값 사용.
+- **페이징**: 기본 `pageSize`는 10이며, 사용자 요청이 있을 경우 해당 값을 우선합니다.
+
+### 기타 규칙
+- **소프트 삭제**: `del_yn = 'Y'`로 표시.
+- **공유 여부**: `shrn_yn = 'Y'`인 경우 접근 제어 정책에 따라 조회 허용.
 - **Vue에서 API**: 반드시 `window.electron.api.*` 로만 접근. IPC는 설정·ping 등 비엔드포인트 통신용.
 
 ---

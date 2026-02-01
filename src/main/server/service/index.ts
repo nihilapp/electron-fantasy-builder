@@ -1,2 +1,3 @@
 export { HealthService } from './HealthService';
-export type { HealthDto } from '@app-types/dto';
+export { ProjectService } from './ProjectService';
+export type { HealthDto } from '@app-types/dto.types';

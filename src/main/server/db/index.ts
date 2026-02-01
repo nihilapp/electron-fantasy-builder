@@ -6,6 +6,7 @@ export {
   closeDb,
   getDb,
   getDbMode,
+  getSqliteVersion,
   initDbContext,
   runWithDbMode
 } from './context';

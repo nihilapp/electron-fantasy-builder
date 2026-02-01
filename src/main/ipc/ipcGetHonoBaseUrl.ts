@@ -1,6 +1,6 @@
-import type { AppConfig } from '@app-types/config';
 import { ipcMain } from 'electron';
 
+import type { AppConfig } from '@app-types/config.types';
 import appConfig from '@config/app.json';
 
 /**

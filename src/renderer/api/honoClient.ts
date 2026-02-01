@@ -1,4 +1,4 @@
-import type { HealthDto } from '@app-types/dto';
+import type { HealthDto } from '@app-types/dto.types';
 import type { ResponseType } from '@app-types/response.types';
 
 /**

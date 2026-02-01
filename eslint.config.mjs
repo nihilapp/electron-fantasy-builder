@@ -1,7 +1,20 @@
 // eslint.config.mjs
+import { readFileSync, existsSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 
 import js from '@eslint/js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+let autoImportGlobals = { };
+try {
+  const path = resolve(__dirname, 'src/renderer/.eslintrc-auto-import.json');
+  if (existsSync(path)) {
+    autoImportGlobals = JSON.parse(readFileSync(path, 'utf8')).globals ?? { };
+  }
+} catch {
+  // 오토 임포트 생성 전이면 무시
+}
 import stylistic from '@stylistic/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
@@ -43,15 +56,9 @@ export default [
     },
   },
 
-  // 공통 규칙 및 예외 처리
+  // 공통 규칙 및 예외 처리 (배열/객체 newline 등 .vue, .mjs 포함)
   {
-    files: ['**/*.{js,ts}'],
-    ignores: [
-      '**/eslint.config.{js,mjs,ts}',
-      'eslint.config.{js,mjs,ts}',
-      '**/eslint.config.{js,mjs,ts}',
-      'eslint.config.mjs',
-    ],
+    files: [ '**/*.{js,mjs,ts,vue}', ],
     languageOptions: {
       parserOptions: {
         project: false,
@@ -64,10 +71,10 @@ export default [
       'no-unexpected-multiline': 'off',
       'no-use-before-define': 'off',
       'spaced-comment': 'off',
-      'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 0 }],
+      'no-multiple-empty-lines': [ 'error', { max: 1, maxBOF: 0, maxEOF: 0, }, ],
       'no-irregular-whitespace': 'error',
       'no-param-reassign': 'off',
-      'eol-last': ['warn', 'always'],
+      'eol-last': [ 'warn', 'always', ],
       'no-plusplus': 'off',
       'no-restricted-syntax': 'off',
       'array-callback-return': 'off',
@@ -93,14 +100,14 @@ export default [
       'function-paren-newline': 'off',
 
       // stylistic 규칙
-      '@stylistic/multiline-ternary': ['warn', 'always'],
-      '@stylistic/arrow-parens': ['error', 'always'],
+      '@stylistic/multiline-ternary': [ 'warn', 'always', ],
+      '@stylistic/arrow-parens': [ 'error', 'always', ],
       '@stylistic/quotes': [
         'error',
         'single',
-        { allowTemplateLiterals: 'always' },
+        { allowTemplateLiterals: 'always', },
       ],
-      '@stylistic/semi': ['error', 'always'],
+      '@stylistic/semi': [ 'error', 'always', ],
       '@stylistic/array-bracket-spacing': [
         'warn',
         'always',
@@ -111,20 +118,22 @@ export default [
         },
       ],
       '@stylistic/computed-property-spacing': 'off',
-      '@stylistic/object-curly-spacing': ['warn', 'always'],
+      '@stylistic/object-curly-spacing': [ 'warn', 'always', ],
       '@stylistic/object-curly-newline': [
         'error',
         {
-          ObjectExpression: { multiline: true, consistent: true },
-          ObjectPattern: { multiline: true, consistent: true },
-          ImportDeclaration: { multiline: true, consistent: true },
-          ExportDeclaration: { multiline: true, consistent: true },
+          ObjectExpression: { multiline: true, consistent: true, },
+          ObjectPattern: { multiline: true, consistent: true, },
+          ImportDeclaration: { multiline: true, consistent: true, },
+          ExportDeclaration: { multiline: true, consistent: true, },
         },
       ],
-      // 한 줄 전체 또는 항목마다 줄바꿈만 허용 (혼합 금지)
-      '@stylistic/array-element-newline': ['warn', 'consistent'],
-      '@stylistic/array-bracket-newline': ['warn', 'consistent'],
-      '@stylistic/object-property-newline': ['warn', { allowAllPropertiesOnSameLine: true }],
+      // 배열/객체: 유효 옵션 — array* 는 "always" | "never" | "consistent"
+      // consistent = 한 줄 전체 또는 항목마다 줄바꿈만 허용 (혼합 금지)
+      '@stylistic/array-element-newline': [ 'warn', 'consistent', ],
+      '@stylistic/array-bracket-newline': [ 'warn', 'consistent', ],
+      // object-property-newline: allowAllPropertiesOnSameLine true = 한 줄 전체 또는 속성마다 줄바꿈 허용
+      '@stylistic/object-property-newline': [ 'warn', { allowAllPropertiesOnSameLine: true, }, ],
       '@stylistic/comma-dangle': [
         'warn',
         {
@@ -153,9 +162,9 @@ export default [
         'error',
         2,
         {
-          FunctionDeclaration: { parameters: 1 },
-          FunctionExpression: { parameters: 1 },
-          CallExpression: { arguments: 1 },
+          FunctionDeclaration: { parameters: 1, },
+          FunctionExpression: { parameters: 1, },
+          CallExpression: { arguments: 1, },
         },
       ],
 
@@ -169,20 +178,20 @@ export default [
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_' },
+        { argsIgnorePattern: '^_', },
       ],
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-shadow': 'warn',
       '@typescript-eslint/no-use-before-define': [
         'error',
-        { functions: false, classes: true, variables: true },
+        { functions: false, classes: true, variables: true, },
       ],
     },
   },
 
   // ts 파일에만 적용되는 파서
   {
-    files: ['**/*.ts'],
+    files: [ '**/*.ts', ],
     languageOptions: {
       parser: tseslint.parser,
     },
@@ -190,8 +199,8 @@ export default [
 
   // 사용자 플러그인/룰 병합
   {
-    files: ['**/*.{js,mjs,ts,vue}', 'eslint.config.{js,mjs,ts}'],
-    ignores: ['eslint.config.js'],
+    files: [ '**/*.{js,mjs,ts,vue}', 'eslint.config.{js,mjs,ts}', ],
+    ignores: [ 'eslint.config.js', ],
     plugins: {
       'vue': vue,
       'import-x': importX,
@@ -204,7 +213,7 @@ export default [
         tsconfigRootDir: fileURLToPath(new URL('.', import.meta.url)),
         project: false,
         parser: tsParser, // ✅ TypeScript 문법 파싱
-        extraFileExtensions: ['.vue'],
+        extraFileExtensions: [ '.vue', ],
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
@@ -302,6 +311,8 @@ export default [
         onNuxtReady: 'readonly',
         useNuxtData: 'readonly',
         clearNuxtState: 'readonly',
+
+        ...autoImportGlobals,
       },
     },
     settings: {
@@ -320,11 +331,11 @@ export default [
       'import-x/no-unresolved': 'off', // TS 별칭/가상 모듈 환경이면 off 유지
       'import-x/no-dynamic-require': 'off',
       'import-x/prefer-default-export': 'off',
-      'import-x/order': ['warn', {
-        'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+      'import-x/order': [ 'warn', {
+        'groups': [ 'builtin', 'external', 'internal', 'parent', 'sibling', 'index', ],
         'newlines-between': 'always',
-        'alphabetize': { order: 'asc', caseInsensitive: true },
-      }],
+        'alphabetize': { order: 'asc', caseInsensitive: true, },
+      }, ],
       'import-x/no-cycle': 'off',
       'import-x/no-self-import': 'error',
       'import-x/no-useless-path-segments': 'warn',
@@ -332,33 +343,36 @@ export default [
       // ===== TS(Vue 전용) =====
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-shadow': 'warn',
-      '@typescript-eslint/no-use-before-define': ['warn', { functions: false, classes: true, variables: true }],
+      '@typescript-eslint/no-use-before-define': [ 'warn', { functions: false, classes: true, variables: true, }, ],
 
       // ===== Vue 템플릿 스타일 =====
-      // 모든 HTML 속성에 작은따옴표 사용 강제 (내부에 큰따옴표 있으면 유연하게 처리)
-      'vue/html-quotes': ['error', 'single', { avoidEscape: true }],
+      // 템플릿 표현식 내 객체 괄호 공백 (예: :class='fn({ size })' — { size } O, {size } X)
+      'vue/object-curly-spacing': [ 'warn', 'always', ],
+
+      // Vue 템플릿 속성은 큰따옴표, JS는 작은따옴표 → :class="cn([ '', '' ])" 패턴으로 표현식 안에 작은따옴표 사용
+      'vue/html-quotes': [ 'error', 'double', { avoidEscape: true, }, ],
 
       // 속성명 케밥케이스 강제 (my-prop)
-      'vue/attribute-hyphenation': ['error', 'always'],
+      'vue/attribute-hyphenation': [ 'error', 'always', ],
 
       // 컴포넌트명 PascalCase 강제
-      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+      'vue/component-name-in-template-casing': [ 'error', 'PascalCase', ],
 
       // HTML 태그 닫는 괄호 위치 - 완전히 비활성화
       'vue/html-closing-bracket-newline': 'off',
 
       // HTML 태그 닫는 괄호 공백
-      'vue/html-closing-bracket-spacing': ['error', {
+      'vue/html-closing-bracket-spacing': [ 'error', {
         startTag: 'never',
         endTag: 'never',
         selfClosingTag: 'always',
-      }],
+      }, ],
 
       // HTML 들여쓰기
-      'vue/html-indent': ['error', 2],
+      'vue/html-indent': [ 'error', 2, ],
 
       // 자체 닫는 태그 규칙
-      'vue/html-self-closing': ['error', {
+      'vue/html-self-closing': [ 'error', {
         html: {
           void: 'never', // <input>, <br> 등은 자체 닫기 금지
           normal: 'always', // <div></div> → <div />
@@ -366,23 +380,23 @@ export default [
         },
         svg: 'always',
         math: 'always',
-      }],
+      }, ],
 
       // 한 줄당 최대 속성 개수
       // 단일 라인은 제한 없이 허용, 한 번 줄바꿈이 생기면 모두 한 줄에 하나씩
-      'vue/max-attributes-per-line': ['error', {
-        singleline: { max: 100 },
-        multiline: { max: 1 },
-      }],
+      'vue/max-attributes-per-line': [ 'error', {
+        singleline: { max: 100, },
+        multiline: { max: 1, },
+      }, ],
 
       // 멀티라인 요소 내용 개행
-      'vue/multiline-html-element-content-newline': ['error', {
+      'vue/multiline-html-element-content-newline': [ 'error', {
         ignoreWhenEmpty: true,
-        ignores: ['pre', 'textarea'],
-      }],
+        ignores: [ 'pre', 'textarea', ],
+      }, ],
 
       // 머스태시 보간 공백
-      'vue/mustache-interpolation-spacing': ['error', 'always'],
+      'vue/mustache-interpolation-spacing': [ 'error', 'always', ],
 
       // 다중 공백 금지
       'vue/no-multi-spaces': 'error',
@@ -391,7 +405,7 @@ export default [
       'vue/no-spaces-around-equal-signs-in-attribute': 'error',
 
       // prop 이름 camelCase 강제
-      'vue/prop-name-casing': ['error', 'camelCase'],
+      'vue/prop-name-casing': [ 'error', 'camelCase', ],
 
       // 기본 prop 필수 여부 (off)
       'vue/require-default-prop': 'off',
@@ -400,20 +414,20 @@ export default [
       'vue/require-explicit-emits': 'error',
 
       // 한 줄 요소 내용 개행
-      'vue/singleline-html-element-content-newline': ['error', {
+      'vue/singleline-html-element-content-newline': [ 'error', {
         ignoreWhenNoAttributes: true,
         ignoreWhenEmpty: true,
-        ignores: ['pre', 'textarea'],
-      }],
+        ignores: [ 'pre', 'textarea', ],
+      }, ],
 
       // v-bind 단축 문법 강제 (:prop)
-      'vue/v-bind-style': ['error', 'shorthand'],
+      'vue/v-bind-style': [ 'error', 'shorthand', ],
 
       // v-on 단축 문법 강제 (@event)
-      'vue/v-on-style': ['error', 'shorthand'],
+      'vue/v-on-style': [ 'error', 'shorthand', ],
 
       // v-slot 단축 문법 강제 (#slot)
-      'vue/v-slot-style': ['error', 'shorthand'],
+      'vue/v-slot-style': [ 'error', 'shorthand', ],
 
       // ===== Vue a11y =====
       'vuejs-accessibility/alt-text': 'error',
@@ -421,11 +435,11 @@ export default [
       'vuejs-accessibility/aria-props': 'error',
       'vuejs-accessibility/aria-role': 'error',
       'vuejs-accessibility/heading-has-content': 'warn',
-      'vuejs-accessibility/label-has-for': ['warn', {
-        components: ['Label'],
-        controlComponents: ['Input'],
-        required: { every: ['id'] },
-      }],
+      'vuejs-accessibility/label-has-for': [ 'warn', {
+        components: [ 'Label', ],
+        controlComponents: [ 'Input', ],
+        required: { every: [ 'id', ], },
+      }, ],
       'vuejs-accessibility/no-autofocus': 'warn',
       'vuejs-accessibility/tabindex-no-positive': 'warn',
     },
@@ -448,6 +462,8 @@ export default [
       '**/.git/**',
       '**/.cursor/**',
       '**/public/**',
+      // 코드젠 파일: 3만 줄 이상이라 ESLint 시 20초+ 걸려 성능 경고 발생
+      '**/icon-name.generated.ts',
     ],
   },
 ];

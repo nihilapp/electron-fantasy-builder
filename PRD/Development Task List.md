@@ -1,7 +1,7 @@
 # Development Task List — Fantasy Builder (Electron + Vue + Hono)
 
-**작성일**: 2026-01-31  
-**버전**: 1.0
+**작성일**: 2026-02-01  
+**버전**: 1.1 (Updated: Project CRUD 완료 및 상세 태스크 분할)
 
 ---
 
@@ -15,61 +15,119 @@
   - [x] characters, creatures, items, regions, nations, organizations, events, lores, core_rules
   - [x] char_trait_maps, char_ability_maps, creature_trait_maps, creature_ability_maps
 - [x] **Migration**: `pnpm db:generate`(로컬), `pnpm db:generate:remote`(원격)로 마이그레이션 생성
-- [ ] **Base Architecture**: Controller/Service/Mapper 패턴 유지. 새 라우트·API·IPC는 명명 규칙 준수
+- [x] **Base Architecture**: Controller/Service/Mapper 패턴 유지. 새 라우트·API·IPC는 명명 규칙 준수
 
 ---
 
 ## Phase 2: 공통 인프라 및 타입
 
-- [ ] **ApiResponse 래퍼**: `{ data, error, code, message }` 표준 응답 구조 (src/types 또는 server 공통)
-- [ ] **ListType**: 목록 응답용 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast`
+- [x] **ApiResponse 래퍼**: `{ data, error, code, message }` 표준 응답 구조 (`src/types/response.types.ts`)
+- [x] **ListType**: 목록 응답용 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast`
 - [ ] **GlobalExceptionHandler**: Hono 미들웨어 또는 onError에서 표준 에러 응답
-- [ ] **src/types/table.ts**: Drizzle 스키마 기반 InferSelectModel/InferInsertModel (users, projects, traits 등)
-- [ ] **src/types/dto.ts**: API 요청/응답 DTO (UserDto, ProjectDto, TraitDto 등)
+- [x] **src/types/vo.types.ts**: Zod 스키마 기반 VO 타입 정의 (ProjectVo 등)
+- [ ] **src/types/table.ts**: Drizzle 스키마 기반 InferSelectModel/InferInsertModel (필요 시 보강)
 
 ---
 
 ## Phase 3: 인증 및 사용자 관리
 
-- [ ] **User Mapper/Service/Controller**: users 테이블 CRUD, 페이징·검색
+- [ ] **Users Domain** (users)
+  - [ ] Mapper (CRUD, 검색)
+  - [ ] Service
+  - [ ] Controller
 - [ ] **비밀번호 해싱**: bcrypt (또는 동일 수준) 유틸
 - [ ] **JWT 토큰**: Access/Refresh 생성·검증 유틸
-- [ ] **Auth Service/Controller**: 로그인, 로그아웃, 토큰 갱신, 비밀번호 재설정(향후)
-- [ ] **API·IPC**: 회원가입, 로그인 엔드포인트 및 IPC 노출
+- [ ] **Auth Domain**
+  - [ ] Service (Login, Logout, Refresh)
+  - [ ] Controller (API/IPC 엔드포인트)
 
 ---
 
 ## Phase 4: 전역 풀 및 프로젝트 도메인
 
 ### 4.1. 전역 특성/어빌리티
-- [ ] **Trait Mapper/Service/Controller**: traits CRUD, 검색·페이징, 사용 현황(매핑 테이블 연동 후)
-- [ ] **Ability Mapper/Service/Controller**: abilities CRUD, 검색·페이징, 사용 현황
+- [ ] **Traits Domain** (traits)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Abilities Domain** (abilities)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
 
-### 4.2. 프로젝트
-- [ ] **Project Mapper/Service/Controller**: projects CRUD, 소유자 권한 검증
-- [ ] **ProjectTrait Mapper/Service/Controller**: project_traits CRUD (prj_no 스코프)
-- [ ] **ProjectAbility Mapper/Service/Controller**: project_abilities CRUD (prj_no 스코프)
+### 4.2. 프로젝트 (완료)
+- [x] **Projects Domain** (projects)
+  - [x] Mapper (CRUD, 페이징, 동적 검색, 로컬/원격 분기)
+  - [x] Service (VO 기반 처리)
+  - [x] Controller (Zod 검증, REST API)
+- [ ] **Project Traits Domain** (project_traits)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Project Abilities Domain** (project_abilities)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
 
 ### 4.3. 통합 검색
 - [ ] **Trait/Ability 통합 검색**: 전역 + 프로젝트 종속 풀 통합 검색, 타입(GLOBAL|PROJECT) 필터
 
 ---
 
-## Phase 5: 설정 엔티티
+## Phase 5: 설정 엔티티 (prj_no 스코프)
 
-- [ ] **CoreRule**: core_rules CRUD (prj_no 스코프)
-- [ ] **Creature**: creatures CRUD
-- [ ] **Character**: characters CRUD (race_no, ntn_no, org_no FK)
-- [ ] **Item, Region, Nation, Organization, Event, Lore**: 각 도메인 CRUD (prj_no 스코프)
+- [ ] **Core Rules** (core_rules)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Creatures** (creatures)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Characters** (characters)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Items** (items)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Regions** (regions)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Nations** (nations)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Organizations** (organizations)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Events** (events)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
+- [ ] **Lores** (lores)
+  - [ ] Mapper
+  - [ ] Service
+  - [ ] Controller
 
 ---
 
 ## Phase 6: 매핑 테이블 및 관계
 
-- [ ] **CharTraitMap / CharAbilityMap**: 인물-특성/어빌리티 매칭 CRUD
-- [ ] **CreatureTraitMap / CreatureAbilityMap**: 종족-특성/어빌리티 매칭 CRUD
-- [ ] **CharRelation, CharGroupRelation 등**: 인물-인물, 인물-조직 관계 (스키마 확장 후)
-- [ ] **Trait/Ability 사용 현황 조회**: 매핑 테이블 기반 사용 현황 API 완성
+- [ ] **Char-Trait Maps** (char_trait_maps)
+  - [ ] Mapper/Service/Controller
+- [ ] **Char-Ability Maps** (char_ability_maps)
+  - [ ] Mapper/Service/Controller
+- [ ] **Creature-Trait Maps** (creature_trait_maps)
+  - [ ] Mapper/Service/Controller
+- [ ] **Creature-Ability Maps** (creature_ability_maps)
+  - [ ] Mapper/Service/Controller
+- [ ] **Relationships** (char_relations, group_relations 등)
+  - [ ] Mapper/Service/Controller
+- [ ] **Trait/Ability 사용 현황 조회 API**
 
 ---
 
@@ -87,17 +145,6 @@
 - [ ] **Build**: `pnpm build` 정상 동작
 - [ ] **수동 검증**: `pnpm dev` 후 Home/Health/DB 모드 및 새 API·뷰 동작 확인
 - [ ] **문서**: PRD·IPC 가이드·README 필요 시 갱신
-
----
-
-## 우선순위 가이드
-
-1. **Phase 1**: 환경·스키마·마이그레이션 (완료)
-2. **Phase 2**: 공통 응답·타입·에러 처리
-3. **Phase 3**: 인증·사용자
-4. **Phase 4**: 전역 특성/어빌리티, 프로젝트, 통합 검색
-5. **Phase 5~6**: 설정 엔티티, 매핑 테이블
-6. **Phase 7~8**: 권한, 검증·문서
 
 ---
 

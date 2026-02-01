@@ -1,6 +1,7 @@
-import type { HealthDto } from '@app-types/dto';
-import type { ResponseType } from '@app-types/response.types';
 import { ipcMain } from 'electron';
+
+import type { HealthDto } from '@app-types/dto.types';
+import type { ResponseType } from '@app-types/response.types';
 
 import { apiClient } from './clients';
 

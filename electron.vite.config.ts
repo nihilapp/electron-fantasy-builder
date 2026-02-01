@@ -4,6 +4,10 @@ import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'electron-vite';
 import type { UserConfig } from 'electron-vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import Icons from 'unplugin-icons/vite';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
 
 export default defineConfig({
   main: {
@@ -17,6 +21,7 @@ export default defineConfig({
         '@drizzle': resolve(__dirname, 'src/drizzle'),
         '@data': resolve(__dirname, 'src/data'),
         '@constants': resolve(__dirname, 'src/constants'),
+        '@zod-schema': resolve(__dirname, 'src/zod-schema'),
         '@': resolve(__dirname),
       },
     },
@@ -42,6 +47,7 @@ export default defineConfig({
         '@drizzle': resolve(__dirname, 'src/drizzle'),
         '@data': resolve(__dirname, 'src/data'),
         '@constants': resolve(__dirname, 'src/constants'),
+        '@zod-schema': resolve(__dirname, 'src/zod-schema'),
         '@': resolve(__dirname),
       },
     },
@@ -58,7 +64,44 @@ export default defineConfig({
   } as UserConfig['preload'],
   renderer: {
     root: 'src/renderer',
-    plugins: [ vue(), tailwindcss(), ],
+    plugins: [
+      vue(),
+      tailwindcss(),
+      AutoImport({
+        imports: [ 'vue', 'vue-router', ],
+        dts: 'auto-imports.d.ts',
+        eslintrc: {
+          enabled: true,
+          filepath: '.eslintrc-auto-import.json',
+          globalsPropValue: true,
+        },
+      }),
+      Components({
+        dirs: [ 'components', ],
+        dts: 'components.d.ts',
+        resolvers: [
+          IconsResolver({
+            prefix: 'icon',
+            enabledCollections: [
+              'mdi',
+              'lucide',
+              'ph',
+              'tabler',
+              'carbon',
+              'heroicons',
+              'bx',
+              'ri',
+              'game-icons',
+              'fa6-solid',
+            ],
+          }),
+        ],
+      }),
+      Icons({
+        autoInstall: true,
+        compiler: 'vue3',
+      }),
+    ],
     server: {
       port: 3000,
     },
@@ -72,6 +115,7 @@ export default defineConfig({
         '@drizzle': resolve(__dirname, 'src/drizzle'),
         '@data': resolve(__dirname, 'src/data'),
         '@constants': resolve(__dirname, 'src/constants'),
+        '@zod-schema': resolve(__dirname, 'src/zod-schema'),
         '@': resolve(__dirname),
       },
     },

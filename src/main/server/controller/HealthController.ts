@@ -1,6 +1,7 @@
+import { Hono } from 'hono';
+
 import type { ResponseType } from '@app-types/response.types';
 import { RESPONSE_CODE } from '@constants/response-code.const';
-import { Hono } from 'hono';
 
 import { HealthService } from '../service/HealthService';
 

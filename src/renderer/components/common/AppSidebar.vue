@@ -17,7 +17,7 @@ const cssVariants = cva(
     variants: {},
     defaultVariants: {},
     compoundVariants: [],
-  },
+  }
 );
 </script>
 

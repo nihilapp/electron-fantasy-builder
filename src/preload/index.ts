@@ -1,6 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import type { HealthDto } from '@main/api';
+import type { AbilityVo, ProjectVo, TraitVo } from '@app-types/vo.types';
+
+/** 목록 조회 공통 파라미터 (페이징·검색) */
+type ListParams = {
+  page?: number;
+  pageSize?: number;
+  searchKeyword?: string;
+  searchType?: string;
+};
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
@@ -9,37 +17,44 @@ contextBridge.exposeInMainWorld('electron', {
    * IPC 통신 함수들 (설정 조회, ping 등).
    */
   ipc: {
-    /**
-     * ping을 보내고 pong 응답을 받습니다.
-     * @returns Promise<string> 'pong' 문자열을 반환합니다.
-     */
     ping: () => ipcRenderer.invoke('ipc:ping'),
-    /**
-     * Hono 서버 base URL (설정 조회). 실제 /health 등 호출은 honoClient에서 fetch로.
-     * @returns 예: http://localhost:3456
-     */
     getHonoBaseUrl: () => ipcRenderer.invoke('hono:get-base-url') as Promise<string>,
-    /**
-     * DB 모드 조회 (참고용). config/app.json의 db.mode.
-     * @returns 'local' | 'remote'
-     */
     getDbMode: () => ipcRenderer.invoke('ipc:get-db-mode') as Promise<'local' | 'remote'>,
+    windowMinimize: () => ipcRenderer.invoke('window:minimize'),
+    windowMaximizeRestore: () => ipcRenderer.invoke('window:maximize-restore'),
+    windowClose: () => ipcRenderer.invoke('window:close'),
   },
 
   /**
-   * API 요청 함수들. Vue에서는 API 호출 시 반드시 window.electron.api 로 접근합니다.
+   * API 요청 함수들. Vue에서는 window.electron.api 로 접근.
+   * 모든 API는 ResponseType/ListResponseType 구조로 반환.
    */
   api: {
-    /**
-     * Health 상태 조회
-     * @returns { status, timestamp }
-     */
-    getHealth: (): Promise<HealthDto> => ipcRenderer.invoke('api:get-health'),
-    /**
-     * Example 목록 조회
-     * @returns Example DTO 목록
-     */
-    getExample: () => ipcRenderer.invoke('api:get-example'),
+    getHealth: () => ipcRenderer.invoke('api:get-health'),
+
+    // --- 프로젝트 ---
+    getProjectList: (params?: ListParams) => ipcRenderer.invoke('api:get-project-list', params),
+    getProjectByNo: (prjNo: number) => ipcRenderer.invoke('api:get-project-by-no', prjNo),
+    postProject: (body: ProjectVo) => ipcRenderer.invoke('api:post-project', body),
+    patchProject: (prjNo: number, body: Partial<ProjectVo>) =>
+      ipcRenderer.invoke('api:patch-project', { prjNo, body, }),
+    deleteProject: (prjNo: number) => ipcRenderer.invoke('api:delete-project', prjNo),
+
+    // --- 트레잇 ---
+    getTraitList: (params?: ListParams) => ipcRenderer.invoke('api:get-trait-list', params),
+    getTraitByNo: (traitNo: number) => ipcRenderer.invoke('api:get-trait-by-no', traitNo),
+    postTrait: (body: TraitVo) => ipcRenderer.invoke('api:post-trait', body),
+    patchTrait: (traitNo: number, body: Partial<TraitVo>) =>
+      ipcRenderer.invoke('api:patch-trait', { traitNo, body, }),
+    deleteTrait: (traitNo: number) => ipcRenderer.invoke('api:delete-trait', traitNo),
+
+    // --- 어빌리티 ---
+    getAbilityList: (params?: ListParams) => ipcRenderer.invoke('api:get-ability-list', params),
+    getAbilityByNo: (abilityNo: number) => ipcRenderer.invoke('api:get-ability-by-no', abilityNo),
+    postAbility: (body: AbilityVo) => ipcRenderer.invoke('api:post-ability', body),
+    patchAbility: (abilityNo: number, body: Partial<AbilityVo>) =>
+      ipcRenderer.invoke('api:patch-ability', { abilityNo, body, }),
+    deleteAbility: (abilityNo: number) => ipcRenderer.invoke('api:delete-ability', abilityNo),
   },
 });
 

@@ -1,7 +1,7 @@
-import type { AppConfig } from '@app-types/config';
-import type { DbMode } from '@app-types/db';
 import { ipcMain } from 'electron';
 
+import type { AppConfig } from '@app-types/config.types';
+import type { DbMode } from '@app-types/db.types';
 import appConfig from '@config/app.json';
 
 /**

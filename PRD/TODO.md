@@ -1,6 +1,6 @@
 # TODO — Fantasy Builder (Electron + Vue + Hono)
 
-**작성일**: 2026-01-31  
+**작성일**: 2026-02-01  
 **상태**: 진행 중인 작업 및 향후 개선 사항
 
 ---
@@ -24,9 +24,10 @@
 
 ## 개선 사항
 
-### 4. 검증 강화
-- [ ] Zod 스키마로 요청 body/query 검증
-- [ ] 이메일 형식, 비밀번호 강도, 필수 필드 검증
+### 4. 검증 강화 (진행 중)
+- [x] Zod 스키마로 요청 body/query 검증 (Project 등 주요 도메인 적용 완료)
+- [x] VO(Value Object) 패턴 적용하여 타입 안전성 확보
+- [ ] 이메일 형식, 비밀번호 강도, 필수 필드 검증 (User 도메인 구현 시)
 
 ### 5. 에러 코드 통일
 - [ ] NOT_FOUND, VALIDATION_ERROR, ACCOUNT_LOCKED 등 코드 상수화
@@ -40,9 +41,9 @@
 
 ## Phase별 미완료
 
-- **Phase 2**: 공통 ApiResponse, ListType, GlobalExceptionHandler, types 확장
+- **Phase 2**: GlobalExceptionHandler, types 일부 보강
 - **Phase 3**: User/Auth Mapper·Service·Controller, JWT·bcrypt
-- **Phase 4**: Trait, Ability, Project, ProjectTrait, ProjectAbility, 통합 검색
+- **Phase 4**: Trait, Ability, ProjectTrait, ProjectAbility, 통합 검색 (**Projects 완료**)
 - **Phase 5~6**: 설정 엔티티 CRUD, 매핑 테이블 CRUD
 - **Phase 7~8**: 권한, 테스트, 문서화
 

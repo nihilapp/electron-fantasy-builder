@@ -73,3 +73,13 @@
     }
   }
 }
+
+@utility titlebar-drag {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+@utility titlebar-btn {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}

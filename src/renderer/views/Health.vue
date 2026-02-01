@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
-import type { HealthDto } from '@app-types/dto';
-import type { ResponseType } from '@app-types/response.types';
 import { onMounted, ref } from 'vue';
+
+import type { HealthDto } from '@app-types/dto.types';
+import type { ResponseType } from '@app-types/response.types';
 
 const health = ref<HealthDto | null>(null);
 const isLoading = ref(false);

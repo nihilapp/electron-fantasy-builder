@@ -46,6 +46,9 @@
       "@constants/*": [
         "src/constants/*"
       ],
+      "@zod-schema/*": [
+        "src/zod-schema/*"
+      ],
       "@/*": [
         "./*"
       ]
