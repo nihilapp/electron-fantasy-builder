@@ -4,6 +4,7 @@ import { cors } from 'hono/cors';
 import { createControllerApp } from './controller';
 import { runWithDbMode } from './db';
 import type { DbMode } from './db';
+import { globalExceptionHandler } from './globalExceptionHandler';
 
 /**
  * 메인 프로세스 내부에서 동작하는 Hono 앱.
@@ -11,6 +12,9 @@ import type { DbMode } from './db';
  * 요청별 DB: X-Db-Target 헤더 또는 db 쿼리(remote | local)로 외부/로컬 DB 선택.
  */
 const app = new Hono();
+
+// 미처리 예외 → 표준 응답(ResponseType)으로 변환, HTTP 200 반환
+app.onError(globalExceptionHandler);
 
 // 렌더러(localhost:3000 등)에서 fetch 시 CORS 허용
 app.use(

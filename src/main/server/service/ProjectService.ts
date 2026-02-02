@@ -64,7 +64,7 @@ export const ProjectService = {
     };
   },
 
-  async update(prjNo: number, vo: ProjectVo): Promise<ResponseType<ProjectVo | null>> {
+  async update(prjNo: number, vo: Partial<ProjectVo>): Promise<ResponseType<ProjectVo | null>> {
     const row = await ProjectMapper.update(prjNo, vo);
 
     if (row === null) {

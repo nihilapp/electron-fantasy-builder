@@ -1,9 +1,10 @@
-import { projectSchema } from '@zod-schema/project.schema';
 import { Hono } from 'hono';
 
 import type { AppConfig } from '@app-types/config.types';
+import type { ProjectVo } from '@app-types/vo.types';
 import appConfig from '@config/app.json';
 import { RESPONSE_CODE } from '@constants/response-code.const';
+import { projectSchema } from '@zod-schema/project.schema';
 
 import { ProjectService } from '../service/ProjectService';
 
@@ -21,8 +22,12 @@ projects.get('/', async (context) => {
   const query = context.req.query();
   const params = projectSchema.parse({
     ...query,
-    page: query.page ? Number(query.page) : null,
-    pageSize: query.pageSize ? Number(query.pageSize) : null,
+    page: query.page
+      ? Number(query.page)
+      : null,
+    pageSize: query.pageSize
+      ? Number(query.pageSize)
+      : DEFAULT_PAGE_SIZE,
   });
 
   const body = await ProjectService.getList(params);
@@ -116,7 +121,8 @@ projects.patch('/:prjNo', async (context) => {
     );
   }
 
-  const result = await ProjectService.update(prjNo, parsed.data ?? {});
+  const payload = parsed.data ?? {};
+  const result = await ProjectService.update(prjNo, payload as Partial<ProjectVo>);
 
   return context.json(result, 200);
 });

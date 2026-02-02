@@ -1,7 +1,7 @@
-import { projectSchema } from '@zod-schema/project.schema';
 import { and, count, desc, eq, like, or } from 'drizzle-orm';
 
 import type { ProjectVo } from '@app-types/vo.types';
+import { projectSchema } from '@zod-schema/project.schema';
 
 import { projectsTable as localProjectsTable } from '../../schema/local/projects.table';
 import { projectsTable as remoteProjectsTable } from '../../schema/remote/projects.table';
@@ -192,7 +192,7 @@ export const ProjectMapper = {
   },
 
   /** 수정. */
-  async update(prjNo: number, vo: ProjectVo): Promise<ProjectVo | null> {
+  async update(prjNo: number, vo: Partial<ProjectVo>): Promise<ProjectVo | null> {
     const db = getDb();
     const mode = getDbMode();
     const now = mode === 'local'

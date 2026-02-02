@@ -87,12 +87,25 @@ onMounted(() => {
           <li
             v-for="p in projectList"
             :key="p.prjNo ?? p.prjNm ?? ''"
-            role="button"
-            class="rounded-2 px-2 py-1.5 text-left text-sm transition-colors cursor-pointer hover:bg-gray-100"
-            :class="selectedPrjNo === p.prjNo ? 'bg-gray-100 font-medium' : ''"
-            @click="selectProject(p.prjNo)"
+            class="flex items-center gap-1 rounded-2 px-2 py-1.5 text-sm transition-colors group"
+            :class="selectedPrjNo === p.prjNo ? 'bg-gray-100' : ''"
           >
-            {{ p.prjNm ?? '(이름 없음)' }}
+            <button
+              type="button"
+              class="min-w-0 flex-1 cursor-pointer text-left hover:bg-gray-100 rounded-2 -mx-1 px-1 py-0.5"
+              :class="selectedPrjNo === p.prjNo ? 'font-medium' : ''"
+              @click="selectProject(p.prjNo)"
+            >
+              {{ p.prjNm ?? '(이름 없음)' }}
+            </button>
+            <RouterLink
+              v-if="p.prjNo != null"
+              :to="{ name: 'project-detail', params: { prjNo: String(p.prjNo) } }"
+              class="shrink-0 rounded-2 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200 hover:text-gray-900"
+              @click.stop
+            >
+              관리
+            </RouterLink>
           </li>
         </ul>
       </template>
@@ -106,32 +119,52 @@ onMounted(() => {
             <h2 class="text-h4 font-medium">
               {{ selectedProject.prjNm ?? '(이름 없음)' }}
             </h2>
-            <dl class="mt-2 grid gap-1 text-sm">
-              <template v-if="selectedProject.prjNo != null">
-                <dt class="text-gray-500">
-                  프로젝트 번호
-                </dt>
-                <dd>
-                  {{ selectedProject.prjNo }}
-                </dd>
-              </template>
+            <dl class="mt-2 flex flex-col gap-3">
+              <!-- 1행: 프로젝트 번호, 장르 나란히 (1:1 비율) -->
+              <div class="flex flex-row gap-x-4">
+                <template v-if="selectedProject.prjNo != null">
+                  <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                      프로젝트 번호
+                    </dt>
+                    <dd class="text-sm font-semibold text-gray-900">
+                      {{ selectedProject.prjNo }}
+                    </dd>
+                  </div>
+                </template>
+                <template v-if="selectedProject.genreType != null && selectedProject.genreType !== ''">
+                  <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                      장르
+                    </dt>
+                    <dd class="text-sm font-semibold text-gray-900">
+                      {{ selectedProject.genreType }}
+                    </dd>
+                  </div>
+                </template>
+              </div>
+              <!-- 2행: 설명 한 줄 -->
               <template v-if="selectedProject.prjDesc != null && selectedProject.prjDesc !== ''">
-                <dt class="text-gray-500">
-                  설명
-                </dt>
-                <dd>
-                  {{ selectedProject.prjDesc }}
-                </dd>
-              </template>
-              <template v-if="selectedProject.genreType != null && selectedProject.genreType !== ''">
-                <dt class="text-gray-500">
-                  장르
-                </dt>
-                <dd>
-                  {{ selectedProject.genreType }}
-                </dd>
+                <div class="flex flex-col gap-0.5">
+                  <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                    설명
+                  </dt>
+                  <dd class="text-sm font-semibold text-gray-900">
+                    {{ selectedProject.prjDesc }}
+                  </dd>
+                </div>
               </template>
             </dl>
+            <div class="mt-4 pt-3 border-t border-gray-200">
+              <RouterLink
+                v-if="selectedProject.prjNo != null"
+                :to="{ name: 'project-detail', params: { prjNo: String(selectedProject.prjNo) } }"
+                class="button-base inline-flex items-center justify-center gap-1.5 rounded-2 px-3 py-2 text-sm hover:bg-black-500"
+              >
+                <VueIcon icon-name="lucide:settings" class="size-4 shrink-0" />
+                관리
+              </RouterLink>
+            </div>
           </div>
         </template>
         <template v-else>

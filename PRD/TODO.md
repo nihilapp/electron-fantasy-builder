@@ -7,6 +7,54 @@
 
 ## 중요 (기능 완성)
 
+### 0. ProjectDetailView 상세 구현 (`src/renderer/views/ProjectDetailView.vue`)
+
+프로젝트 상세 화면의 사이드바·메인 영역을 아래 **순서대로** 구현한다.
+
+#### 0-1. 공통·기반
+- [ ] **사이드바 메뉴 정리**: 현재 `categoryItems`(기본 정보, 캐릭터, 세계관, 규칙)를 아래 **표시 순서**로 교체.
+  - 표시 순서(위→아래):  
+    1. **프로젝트 개요** (path: `overview`) — 현재 선택 시 강조(활성)  
+    2. **전체 설정** (path: `settings`)  
+    3. **특성/능력 관리** (path: `traits-abilities`)  
+    4. **코어 설정** (path: `core-rules`)  
+    5. **종족/생물** (path: `creatures`)  
+    6. **인물** (path: `characters`)  
+    7. **지역** (path: `regions`)  
+    8. **국가** (path: `nations`)  
+    9. **단체** (path: `organizations`)  
+    10. **도구** (path: `items`)  
+    11. **역사** (path: `events`)  
+    12. **신화/전설/설화** (path: `lores`)
+- [ ] **아이콘**: 이미지/디자인에 맞게 각 메뉴 아이콘 지정 (lucide 또는 기존 아이콘 세트).
+- [ ] **라우트·쿼리 연동**: `activeCategory`를 URL과 동기화 (예: `/project/:prjNo?section=overview` 또는 중첩 라우트). 목록으로 돌아가기 링크는 유지.
+- [ ] **메인 영역**: 카테고리별로 전환되는 메인 컨텐츠 영역 구조 (하나의 `<main>` 안에서 `section` 또는 라우트별 컴포넌트로 분기).
+
+#### 0-2. 카테고리별 메인 뷰 구현 (순서대로)
+- [ ] **1. 프로젝트 개요** (`overview`): 프로젝트 기본 정보 표시·수정 (이미 `project` 로드 있음). 요약 카드 또는 폼.
+- [ ] **2. 전체 설정** (`settings`): 프로젝트 메타·공통 설정 UI (필요 시 API/스키마 정의 후 연동).
+- [ ] **3. 특성/능력 관리** (`traits-abilities`): 전역·프로젝트 특성/어빌리티 목록·검색·CRUD. `/traits`, `/abilities`, `/project-traits`, `/project-abilities`, `/search` API 연동. (필요 시 store/composable 정리.)
+- [ ] **4. 코어 설정** (`core-rules`): 코어 규칙 목록·상세·CRUD. `/core-rules?prjNo=` API 연동.
+- [ ] **5. 종족/생물** (`creatures`): 생물/종족 목록·상세·CRUD. `/creatures?prjNo=` API 연동. (필요 시 creature-trait-maps, creature-ability-maps 연동.)
+- [ ] **6. 인물** (`characters`): 인물 목록·상세·CRUD. `/characters?prjNo=` API 연동. (필요 시 char-trait-maps, char-ability-maps 연동.)
+- [ ] **7. 지역** (`regions`): 지역 목록·상세·CRUD. `/regions?prjNo=` API 연동.
+- [ ] **8. 국가** (`nations`): 국가 목록·상세·CRUD. `/nations?prjNo=` API 연동.
+- [ ] **9. 단체** (`organizations`): 단체 목록·상세·CRUD. `/organizations?prjNo=` API 연동.
+- [ ] **10. 도구** (`items`): 아이템 목록·상세·CRUD. `/items?prjNo=` API 연동.
+- [ ] **11. 역사** (`events`): 사건 목록·상세·CRUD. `/events?prjNo=` API 연동.
+- [ ] **12. 신화/전설/설화** (`lores`): 전승/설화 목록·상세·CRUD. `/lores?prjNo=` API 연동.
+
+#### 0-3. 데이터·API 연동
+- [ ] **Store/Composable**: 프로젝트 상세용 `prjNo` 기반 API 호출을 공통화 (기존 projectStore 확장 또는 카테고리별 composable).
+- [ ] **에러·로딩**: 각 목록/상세 요청에 대한 로딩 상태·에러 메시지 표시.
+- [ ] **목록 공통**: 페이징·검색(엔티티별 searchKeyword/searchType) UI 및 API 파라미터 연동.
+
+#### 0-4. UI·UX
+- [ ] **반응형**: 사이드바 260px 등 레이아웃이 작은 창에서도 동작하도록 조정 (필요 시 토글/접기).
+- [ ] **접근성**: 포커스·키보드 이동·ARIA 등 필요 시 보강.
+
+---
+
 ### 1. 사용 현황 조회 기능
 - **위치**: Trait/Ability Service (또는 전용 SearchService)
 - **상태**: 매핑 테이블(char_trait_maps, char_ability_maps, creature_trait_maps, creature_ability_maps) 구현 후 사용 현황 조회 로직 완성
