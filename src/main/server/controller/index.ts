@@ -23,10 +23,9 @@ import { SearchController } from './SearchController';
 import { TraitController } from './TraitController';
 
 /**
- * 모든 컨트롤러를 하나의 Hono 앱으로 묶어 반환합니다.
- * 설정 엔티티는 개별 엔티티 접두어(/project-traits, /core-rules 등), prjNo는 쿼리/바디로 전달.
+ * @description 모든 컨트롤러를 하나의 Hono 앱으로 묶어 반환. 설정 엔티티는 개별 접두어(/project-traits, /core-rules 등), prjNo는 쿼리/바디로 전달.
  */
-export function createControllerApp(): Hono {
+export function createControllerApp() {
   const app = new Hono();
 
   app.route('/', HomeController);

@@ -12,15 +12,22 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 종족 VO.
+ * @param row DB 결과 한 행
+ */
 function creatureRowToVo(row: Record<string, unknown>): CreatureVo {
   return rowToVo(row, creatureSchema);
 }
 
-/** 로컬/원격 creatures 테이블 공통 타입 (eq/like 등에 넘기기 위함) */
 type CreaturesTable = typeof localCreaturesTable | typeof remoteCreaturesTable;
 
 export const CreatureMapper = {
-  /** 목록 조회 (prjNo 스코프, del_yn = 'N', creature_no 내림차순, 페이징, 검색) */
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', creature_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(
     prjNo: number,
     params: CreatureVo
@@ -73,8 +80,8 @@ export const CreatureMapper = {
       }
 
       const rows = await query;
-      const list = rows.map((r) =>
-        creatureRowToVo(r as unknown as Record<string, unknown>)
+      const list = rows.map((row) =>
+        creatureRowToVo(row as unknown as Record<string, unknown>)
       );
 
       return { list, totalCnt, };
@@ -103,14 +110,18 @@ export const CreatureMapper = {
     }
 
     const rows = await query;
-    const list = rows.map((r) =>
-      creatureRowToVo(r as unknown as Record<string, unknown>)
+    const list = rows.map((row) =>
+      creatureRowToVo(row as unknown as Record<string, unknown>)
     );
 
     return { list, totalCnt, };
   },
 
-  /** 상세 조회 (prjNo + creatureNo) */
+  /**
+   * @description 상세 조회 (prjNo + creatureNo).
+   * @param prjNo 프로젝트 번호
+   * @param creatureNo 종족 번호
+   */
   async selectByNo(prjNo: number, creatureNo: number): Promise<CreatureVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -140,7 +151,10 @@ export const CreatureMapper = {
       : null;
   },
 
-  /** 생성 (prjNo 필수) */
+  /**
+   * @description 생성 (prjNo 필수).
+   * @param vo 생성할 VO
+   */
   async insert(vo: CreatureVo): Promise<CreatureVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -179,7 +193,12 @@ export const CreatureMapper = {
     return creatureRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
-  /** 수정 (prjNo + creatureNo) */
+  /**
+   * @description 수정 (prjNo + creatureNo).
+   * @param prjNo 프로젝트 번호
+   * @param creatureNo 종족 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(
     prjNo: number,
     creatureNo: number,
@@ -231,7 +250,11 @@ export const CreatureMapper = {
       : null;
   },
 
-  /** 삭제 (Soft Delete, prjNo + creatureNo) */
+  /**
+   * @description 소프트 삭제 (prjNo + creatureNo).
+   * @param prjNo 프로젝트 번호
+   * @param creatureNo 종족 번호
+   */
   async delete(prjNo: number, creatureNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

@@ -12,6 +12,10 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 조직 VO.
+ * @param row DB 결과 한 행
+ */
 function organizationRowToVo(row: Record<string, unknown>): OrganizationVo {
   return rowToVo(row, organizationSchema);
 }
@@ -19,6 +23,11 @@ function organizationRowToVo(row: Record<string, unknown>): OrganizationVo {
 type OrganizationsTable = typeof localOrganizationsTable | typeof remoteOrganizationsTable;
 
 export const OrganizationMapper = {
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', org_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(prjNo: number, params: OrganizationVo): Promise<{ list: OrganizationVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
@@ -42,7 +51,7 @@ export const OrganizationMapper = {
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.orgNo)).$dynamic();
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
       const rows = await query;
-      return { list: rows.map((r) => organizationRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+      return { list: rows.map((row) => organizationRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
     const table = remoteOrganizationsTable;
     const dbRemote = db as RemoteDb;
@@ -52,9 +61,14 @@ export const OrganizationMapper = {
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.orgNo)).$dynamic();
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
     const rows = await query;
-    return { list: rows.map((r) => organizationRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+    return { list: rows.map((row) => organizationRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
+  /**
+   * @description 상세 조회 (prjNo + orgNo).
+   * @param prjNo 프로젝트 번호
+   * @param orgNo 조직 번호
+   */
   async selectByNo(prjNo: number, orgNo: number): Promise<OrganizationVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -70,6 +84,10 @@ export const OrganizationMapper = {
       : null;
   },
 
+  /**
+   * @description 조직 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: OrganizationVo): Promise<OrganizationVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -108,6 +126,12 @@ export const OrganizationMapper = {
     return organizationRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 조직 수정 (prjNo + orgNo).
+   * @param prjNo 프로젝트 번호
+   * @param orgNo 조직 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(prjNo: number, orgNo: number, vo: Partial<OrganizationVo>): Promise<OrganizationVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -147,6 +171,11 @@ export const OrganizationMapper = {
       : null;
   },
 
+  /**
+   * @description 소프트 삭제 (prjNo + orgNo).
+   * @param prjNo 프로젝트 번호
+   * @param orgNo 조직 번호
+   */
   async delete(prjNo: number, orgNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

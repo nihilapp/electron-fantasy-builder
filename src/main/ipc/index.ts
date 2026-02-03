@@ -11,12 +11,7 @@ import { ipcGetPing } from './ipcGetPing';
 import { ipcWindowControl } from './ipcWindowControl';
 
 /**
- * 모든 IPC 핸들러를 등록합니다.
- * 각 IPC 통신은 별도 파일로 분리되어 책임 소재를 명확하게 합니다.
- *
- * 파일명 및 함수명 규칙: ipc<행위><대상>
- * 예: ipcGetUser, ipcPostData, ipcDeleteFile, ipcUpdateConfig
- * 함수명은 파일명과 동일합니다.
+ * @description 모든 IPC 핸들러 등록. 각 IPC 통신은 별도 파일로 분리해 책임 소재를 명확히 함. 파일명·함수명 규칙: ipc<행위><대상> (예: ipcGetUser, ipcPostData). 함수명은 파일명과 동일.
  */
 export function setupIpcHandlers() {
   ipcGetPing();

@@ -12,13 +12,19 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
-/** DB row → 프로젝트 VO (공용 rowToVo + projectSchema) */
+/**
+ * @description DB row → 프로젝트 VO.
+ * @param row DB 결과 한 행
+ */
 function projectRowToVo(row: Record<string, unknown>): ProjectVo {
   return rowToVo(row, projectSchema);
 }
 
 export const ProjectMapper = {
-  /** 목록 조회 (del_yn = 'N', prj_no 내림차순, 페이징, 검색) */
+  /**
+   * @description 목록 조회 (del_yn = 'N', prj_no 내림차순, 페이징, 검색).
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(params: ProjectVo): Promise<{ list: ProjectVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
@@ -63,7 +69,9 @@ export const ProjectMapper = {
       }
 
       const rows = await query;
-      const list = rows.map((r) => projectRowToVo(r as unknown as Record<string, unknown>));
+      const list = rows.map((row) =>
+        projectRowToVo(row as unknown as Record<string, unknown>)
+      );
 
       return { list, totalCnt, };
     }
@@ -105,12 +113,17 @@ export const ProjectMapper = {
     }
 
     const rows = await query;
-    const list = rows.map((r) => projectRowToVo(r as unknown as Record<string, unknown>));
+    const list = rows.map((row) =>
+      projectRowToVo(row as unknown as Record<string, unknown>)
+    );
 
     return { list, totalCnt, };
   },
 
-  /** 상세 조회 (prj_no). 삭제 여부 무관. */
+  /**
+   * @description 상세 조회 (prj_no). 삭제 여부 무관.
+   * @param prjNo 프로젝트 번호
+   */
   async selectByNo(prjNo: number): Promise<ProjectVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -136,7 +149,10 @@ export const ProjectMapper = {
       : null;
   },
 
-  /** 생성. 로컬은 prjNo 생략, 원격은 userNo 필요 시 body에서. */
+  /**
+   * @description 생성. 로컬은 prjNo 생략, 원격은 userNo 필요 시 body에서.
+   * @param vo 생성할 VO
+   */
   async insert(vo: ProjectVo): Promise<ProjectVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -191,7 +207,11 @@ export const ProjectMapper = {
     return projectRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
-  /** 수정. */
+  /**
+   * @description 프로젝트 수정.
+   * @param prjNo 프로젝트 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(prjNo: number, vo: Partial<ProjectVo>): Promise<ProjectVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -243,7 +263,10 @@ export const ProjectMapper = {
       : null;
   },
 
-  /** 소프트 삭제 (del_yn = 'Y', del_dt 설정). */
+  /**
+   * @description 소프트 삭제 (del_yn = 'Y', del_dt 설정).
+   * @param prjNo 프로젝트 번호
+   */
   async delete(prjNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

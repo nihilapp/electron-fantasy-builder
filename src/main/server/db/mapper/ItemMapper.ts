@@ -12,6 +12,10 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 아이템 VO.
+ * @param row DB 결과 한 행
+ */
 function itemRowToVo(row: Record<string, unknown>): ItemVo {
   return rowToVo(row, itemSchema);
 }
@@ -19,6 +23,11 @@ function itemRowToVo(row: Record<string, unknown>): ItemVo {
 type ItemsTable = typeof localItemsTable | typeof remoteItemsTable;
 
 export const ItemMapper = {
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', item_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(prjNo: number, params: ItemVo): Promise<{ list: ItemVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
@@ -42,7 +51,7 @@ export const ItemMapper = {
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.itemNo)).$dynamic();
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
       const rows = await query;
-      return { list: rows.map((r) => itemRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+      return { list: rows.map((row) => itemRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
     const table = remoteItemsTable;
     const dbRemote = db as RemoteDb;
@@ -52,9 +61,14 @@ export const ItemMapper = {
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.itemNo)).$dynamic();
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
     const rows = await query;
-    return { list: rows.map((r) => itemRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+    return { list: rows.map((row) => itemRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
+  /**
+   * @description 상세 조회 (prjNo + itemNo).
+   * @param prjNo 프로젝트 번호
+   * @param itemNo 아이템 번호
+   */
   async selectByNo(prjNo: number, itemNo: number): Promise<ItemVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -70,6 +84,10 @@ export const ItemMapper = {
       : null;
   },
 
+  /**
+   * @description 아이템 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: ItemVo): Promise<ItemVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -100,6 +118,12 @@ export const ItemMapper = {
     return itemRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 아이템 수정 (prjNo + itemNo).
+   * @param prjNo 프로젝트 번호
+   * @param itemNo 아이템 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(prjNo: number, itemNo: number, vo: Partial<ItemVo>): Promise<ItemVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -131,6 +155,11 @@ export const ItemMapper = {
       : null;
   },
 
+  /**
+   * @description 소프트 삭제 (prjNo + itemNo).
+   * @param prjNo 프로젝트 번호
+   * @param itemNo 아이템 번호
+   */
   async delete(prjNo: number, itemNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

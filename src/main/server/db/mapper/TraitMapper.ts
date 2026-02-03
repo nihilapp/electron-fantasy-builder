@@ -1,7 +1,7 @@
-import { traitSchema } from '@zod-schema/trait.schema';
 import { and, count, desc, eq, like, or } from 'drizzle-orm';
 
 import type { TraitVo } from '@app-types/vo.types';
+import { traitSchema } from '@zod-schema/trait.schema';
 
 import { traitsTable as localTraitsTable } from '../../schema/local/traits.table';
 import { traitsTable as remoteTraitsTable } from '../../schema/remote/traits.table';
@@ -12,20 +12,27 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
-/** DB row → 트레잇 VO (공용 rowToVo + traitSchema) */
+/**
+ * @description DB row → 트레잇 VO.
+ * @param row DB 결과 한 행
+ */
 function traitRowToVo(row: Record<string, unknown>): TraitVo {
   return rowToVo(row, traitSchema);
 }
 
+type TraitsTable = typeof localTraitsTable | typeof remoteTraitsTable;
+
 export const TraitMapper = {
-  /** 목록 조회 (del_yn = 'N', trait_no 내림차순, 페이징, 검색) */
+  /**
+   * @description 목록 조회 (del_yn = 'N', trait_no 내림차순, 페이징, 검색).
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(params: TraitVo): Promise<{ list: TraitVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
 
-    // 공통 검색 조건 생성 로직
-    const createWhere = (table: any) => {
+    const createWhere = (table: TraitsTable) => {
       let where = eq(table.delYn, 'N');
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
@@ -67,7 +74,9 @@ export const TraitMapper = {
       }
 
       const rows = await query;
-      const list = rows.map((r) => traitRowToVo(r as unknown as Record<string, unknown>));
+      const list = rows.map((row) =>
+        traitRowToVo(row as unknown as Record<string, unknown>)
+      );
 
       return { list, totalCnt, };
     }
@@ -92,12 +101,17 @@ export const TraitMapper = {
     }
 
     const rows = await query;
-    const list = rows.map((r) => traitRowToVo(r as unknown as Record<string, unknown>));
+    const list = rows.map((row) =>
+      traitRowToVo(row as unknown as Record<string, unknown>)
+    );
 
     return { list, totalCnt, };
   },
 
-  /** 상세 조회 */
+  /**
+   * @description 상세 조회 (trait_no).
+   * @param traitNo 트레잇 번호
+   */
   async selectByNo(traitNo: number): Promise<TraitVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -119,7 +133,10 @@ export const TraitMapper = {
       : null;
   },
 
-  /** 생성 */
+  /**
+   * @description 트레잇 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: TraitVo): Promise<TraitVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -157,7 +174,11 @@ export const TraitMapper = {
     return traitRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
-  /** 수정 */
+  /**
+   * @description 트레잇 수정 (trait_no).
+   * @param traitNo 트레잇 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(traitNo: number, vo: Partial<TraitVo>): Promise<TraitVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -200,7 +221,10 @@ export const TraitMapper = {
       : null;
   },
 
-  /** 삭제 (Soft Delete) */
+  /**
+   * @description 소프트 삭제 (trait_no).
+   * @param traitNo 트레잇 번호
+   */
   async delete(traitNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

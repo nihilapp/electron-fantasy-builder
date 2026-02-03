@@ -1,11 +1,13 @@
 import { ipcMain } from 'electron';
 
 /**
- * ping IPC 핸들러를 등록합니다.
- * 렌더러에서 ping을 보내면 pong을 반환합니다.
+ * @description ping IPC 핸들러 등록. 렌더러에서 ping 시 pong 반환.
  */
 export function ipcGetPing() {
-  ipcMain.handle('ipc:ping', async () => {
-    return 'pong';
-  });
+  ipcMain.handle(
+    'ipc:ping',
+    async () => {
+      return 'pong';
+    }
+  );
 }

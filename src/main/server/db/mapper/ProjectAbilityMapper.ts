@@ -12,12 +12,22 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 프로젝트 어빌리티 VO.
+ * @param row DB 결과 한 행
+ */
 function projectAbilityRowToVo(row: Record<string, unknown>): ProjectAbilityVo {
   return rowToVo(row, projectAbilitySchema);
 }
 
+type ProjectAbilitiesTable = typeof localProjectAbilitiesTable | typeof remoteProjectAbilitiesTable;
+
 export const ProjectAbilityMapper = {
-  /** 목록 조회 (prjNo 스코프, del_yn = 'N', ability_no 내림차순, 페이징, 검색) */
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', ability_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(
     prjNo: number,
     params: ProjectAbilityVo
@@ -26,7 +36,7 @@ export const ProjectAbilityMapper = {
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
 
-    const createWhere = (table: any) => {
+    const createWhere = (table: ProjectAbilitiesTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
@@ -70,8 +80,8 @@ export const ProjectAbilityMapper = {
       }
 
       const rows = await query;
-      const list = rows.map((r) =>
-        projectAbilityRowToVo(r as unknown as Record<string, unknown>)
+      const list = rows.map((row) =>
+        projectAbilityRowToVo(row as unknown as Record<string, unknown>)
       );
 
       return { list, totalCnt, };
@@ -100,14 +110,18 @@ export const ProjectAbilityMapper = {
     }
 
     const rows = await query;
-    const list = rows.map((r) =>
-      projectAbilityRowToVo(r as unknown as Record<string, unknown>)
+    const list = rows.map((row) =>
+      projectAbilityRowToVo(row as unknown as Record<string, unknown>)
     );
 
     return { list, totalCnt, };
   },
 
-  /** 상세 조회 (prjNo + abilityNo) */
+  /**
+   * @description 상세 조회 (prjNo + abilityNo).
+   * @param prjNo 프로젝트 번호
+   * @param abilityNo 어빌리티 번호
+   */
   async selectByNo(
     prjNo: number,
     abilityNo: number
@@ -140,7 +154,10 @@ export const ProjectAbilityMapper = {
       : null;
   },
 
-  /** 생성 (prjNo 필수) */
+  /**
+   * @description 프로젝트 어빌리티 생성 (prjNo 필수).
+   * @param vo 생성할 VO
+   */
   async insert(vo: ProjectAbilityVo): Promise<ProjectAbilityVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -185,7 +202,12 @@ export const ProjectAbilityMapper = {
     return projectAbilityRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
-  /** 수정 (prjNo + abilityNo) */
+  /**
+   * @description 프로젝트 어빌리티 수정 (prjNo + abilityNo).
+   * @param prjNo 프로젝트 번호
+   * @param abilityNo 어빌리티 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(
     prjNo: number,
     abilityNo: number,
@@ -243,7 +265,11 @@ export const ProjectAbilityMapper = {
       : null;
   },
 
-  /** 삭제 (Soft Delete, prjNo + abilityNo) */
+  /**
+   * @description 소프트 삭제 (prjNo + abilityNo).
+   * @param prjNo 프로젝트 번호
+   * @param abilityNo 어빌리티 번호
+   */
   async delete(prjNo: number, abilityNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

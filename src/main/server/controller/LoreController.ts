@@ -6,8 +6,15 @@ import { loreSchema } from '@zod-schema/lore.schema';
 
 import { LoreService } from '../service/LoreService';
 
+/**
+ * @description 전승/설화 API 컨트롤러. /lores 마운트. prjNo는 쿼리(GET/PATCH/DELETE) 또는 바디(POST)로 전달.
+ */
 const lores = new Hono();
 
+/**
+ * @description 쿼리/바디의 prjNo 문자열을 숫자로 파싱. 유효하지 않으면 null.
+ * @param raw prjNo 문자열
+ */
 function parsePrjNo(raw: string | undefined): number | null {
   if (raw == null || raw === '') return null;
   const n = Number(raw);
@@ -16,10 +23,26 @@ function parsePrjNo(raw: string | undefined): number | null {
     : null;
 }
 
-lores.get('/', async (c) => {
-  const prjNo = parsePrjNo(c.req.query('prjNo'));
-  if (prjNo == null) return c.json({ data: null, error: true, code: RESPONSE_CODE.BAD_REQUEST, message: 'prjNo는 필수이며 숫자여야 합니다.', }, 200);
-  const query = c.req.query();
+/**
+ * @description 전승/설화 목록 조회.
+ * @param context Hono 컨텍스트
+ */
+lores.get('/', async (context) => {
+  const prjNo = parsePrjNo(context.req.query('prjNo'));
+
+  if (prjNo == null) {
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.BAD_REQUEST,
+        message: 'prjNo는 필수이며 숫자여야 합니다.',
+      },
+      200
+    );
+  }
+
+  const query = context.req.query();
   const params = loreSchema.parse({
     ...query,
     prjNo,
@@ -30,42 +53,178 @@ lores.get('/', async (c) => {
       ? Number(query.pageSize)
       : null,
   });
-  return c.json(await LoreService.getList(prjNo, params), 200);
+
+  const body = await LoreService.getList(prjNo, params);
+
+  return context.json(
+    body,
+    200
+  );
 });
 
-lores.get('/:loreNo', async (c) => {
-  const prjNo = parsePrjNo(c.req.query('prjNo'));
-  const loreNo = Number(c.req.param('loreNo'));
-  if (prjNo == null || Number.isNaN(loreNo)) return c.json({ data: null, error: true, code: RESPONSE_CODE.BAD_REQUEST, message: 'prjNo, loreNo는 필수이며 숫자여야 합니다.', }, 200);
-  return c.json(await LoreService.getByNo(prjNo, loreNo), 200);
+/**
+ * @description 전승/설화 상세 조회.
+ * @param context Hono 컨텍스트
+ */
+lores.get('/:loreNo', async (context) => {
+  const prjNo = parsePrjNo(context.req.query('prjNo'));
+  const loreNo = Number(context.req.param('loreNo'));
+
+  if (prjNo == null || Number.isNaN(loreNo)) {
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.BAD_REQUEST,
+        message: 'prjNo, loreNo는 필수이며 숫자여야 합니다.',
+      },
+      200
+    );
+  }
+
+  const body = await LoreService.getByNo(prjNo, loreNo);
+
+  return context.json(
+    body,
+    200
+  );
 });
 
-lores.post('/', async (c) => {
-  const raw = await c.req.json();
+/**
+ * @description 전승/설화 생성.
+ * @param context Hono 컨텍스트
+ */
+lores.post('/', async (context) => {
+  const raw = await context.req.json();
   const parsed = loreSchema.safeParse(raw);
-  if (!parsed.success) return c.json({ data: null, error: true, code: RESPONSE_CODE.VALIDATION_ERROR, message: parsed.error.issues.map((i) => i.message).join('; ') || '요청 검증 실패', }, 200);
+
+  if (!parsed.success) {
+    const message = parsed.error.issues
+      .map((issue) => issue.message)
+      .join('; ') || '요청 검증 실패';
+
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.VALIDATION_ERROR,
+        message,
+      },
+      200
+    );
+  }
+
   const prjNo = parsed.data.prjNo ?? null;
-  if (prjNo == null || !Number.isInteger(prjNo)) return c.json({ data: null, error: true, code: RESPONSE_CODE.VALIDATION_ERROR, message: 'prjNo는 필수이며 숫자여야 합니다.', }, 200);
+  if (prjNo == null || !Number.isInteger(prjNo)) {
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.VALIDATION_ERROR,
+        message: 'prjNo는 필수이며 숫자여야 합니다.',
+      },
+      200
+    );
+  }
+
   const loreNm = (parsed.data.loreNm ?? '').toString().trim();
-  if (!loreNm) return c.json({ data: null, error: true, code: RESPONSE_CODE.VALIDATION_ERROR, message: 'loreNm은 필수이며 비어 있을 수 없습니다.', }, 200);
-  return c.json(await LoreService.create(prjNo, parsed.data), 200);
+  if (!loreNm) {
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.VALIDATION_ERROR,
+        message: 'loreNm은 필수이며 비어 있을 수 없습니다.',
+      },
+      200
+    );
+  }
+
+  const result = await LoreService.create(prjNo, parsed.data);
+
+  return context.json(
+    result,
+    200
+  );
 });
 
-lores.patch('/:loreNo', async (c) => {
-  const prjNo = parsePrjNo(c.req.query('prjNo'));
-  const loreNo = Number(c.req.param('loreNo'));
-  if (prjNo == null || Number.isNaN(loreNo)) return c.json({ data: null, error: true, code: RESPONSE_CODE.BAD_REQUEST, message: 'prjNo, loreNo는 필수이며 숫자여야 합니다.', }, 200);
-  const raw = await c.req.json();
+/**
+ * @description 전승/설화 수정.
+ * @param context Hono 컨텍스트
+ */
+lores.patch('/:loreNo', async (context) => {
+  const prjNo = parsePrjNo(context.req.query('prjNo'));
+  const loreNo = Number(context.req.param('loreNo'));
+
+  if (prjNo == null || Number.isNaN(loreNo)) {
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.BAD_REQUEST,
+        message: 'prjNo, loreNo는 필수이며 숫자여야 합니다.',
+      },
+      200
+    );
+  }
+
+  const raw = await context.req.json();
   const parsed = loreSchema.partial().safeParse(raw);
-  if (!parsed.success) return c.json({ data: null, error: true, code: RESPONSE_CODE.VALIDATION_ERROR, message: parsed.error.issues.map((i) => i.message).join('; ') || '요청 검증 실패', }, 200);
-  return c.json(await LoreService.update(prjNo, loreNo, parsed.data ?? {} as Partial<LoreVo>), 200);
+
+  if (!parsed.success) {
+    const message = parsed.error.issues
+      .map((issue) => issue.message)
+      .join('; ') || '요청 검증 실패';
+
+    return context.json(
+      {
+        data: null,
+        error: true,
+        code: RESPONSE_CODE.VALIDATION_ERROR,
+        message,
+      },
+      200
+    );
+  }
+
+  const result = await LoreService.update(
+    prjNo,
+    loreNo,
+    parsed.data ?? {} as Partial<LoreVo>
+  );
+
+  return context.json(
+    result,
+    200
+  );
 });
 
-lores.delete('/:loreNo', async (c) => {
-  const prjNo = parsePrjNo(c.req.query('prjNo'));
-  const loreNo = Number(c.req.param('loreNo'));
-  if (prjNo == null || Number.isNaN(loreNo)) return c.json({ data: { deleted: false, }, error: true, code: RESPONSE_CODE.BAD_REQUEST, message: 'prjNo, loreNo는 필수이며 숫자여야 합니다.', }, 200);
-  return c.json(await LoreService.delete(prjNo, loreNo), 200);
+/**
+ * @description 전승/설화 삭제.
+ * @param context Hono 컨텍스트
+ */
+lores.delete('/:loreNo', async (context) => {
+  const prjNo = parsePrjNo(context.req.query('prjNo'));
+  const loreNo = Number(context.req.param('loreNo'));
+
+  if (prjNo == null || Number.isNaN(loreNo)) {
+    return context.json(
+      {
+        data: { deleted: false, },
+        error: true,
+        code: RESPONSE_CODE.BAD_REQUEST,
+        message: 'prjNo, loreNo는 필수이며 숫자여야 합니다.',
+      },
+      200
+    );
+  }
+
+  const result = await LoreService.delete(prjNo, loreNo);
+
+  return context.json(
+    result,
+    200
+  );
 });
 
 export { lores as LoreController };

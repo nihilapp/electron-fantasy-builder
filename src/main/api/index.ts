@@ -1,4 +1,6 @@
-// 모든 API 함수를 import하고 export하는 통합 역할
+/**
+ * @description 메인 프로세스용 API 모듈. 모든 API 함수와 IPC 핸들러를 import하여 re-export하는 통합 진입점.
+ */
 export {
   apiDeleteProject,
   apiGetProjectByNo,

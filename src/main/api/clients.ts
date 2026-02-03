@@ -13,7 +13,7 @@ import { getVoSchemaForUrl, normalizeResponseData } from './normalizeVoResponse'
 const app = appConfig as AppConfig;
 const log = createTaggedLogger('API');
 
-/** Hono(메인 내부 서버) API용 axios 인스턴스. config.api.baseURL = Hono 주소. */
+/** @description Hono(메인 내부 서버) API용 axios 인스턴스. config.api.baseURL = Hono 주소. */
 export const apiClient: AxiosInstance = axios.create({
   baseURL: app.api?.baseURL,
   timeout: app.api?.timeout,
@@ -23,7 +23,8 @@ export const apiClient: AxiosInstance = axios.create({
 });
 
 /**
- * 요청 인터셉터
+ * @description 요청 인터셉터. 로그 출력 후 config 그대로 반환.
+ * @param config axios 요청 설정
  */
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -35,7 +36,11 @@ apiClient.interceptors.request.use(
       ? JSON.stringify(config.data)
       : undefined;
 
-    log.log('Request', { endpoint, query, body, });
+    log.log('Request', {
+      endpoint,
+      query,
+      body,
+    });
 
     return config;
   },
@@ -45,14 +50,17 @@ apiClient.interceptors.request.use(
 );
 
 /**
- * 응답 인터셉터.
- * VO 응답(/projects, /traits, /abilities)은 해당 스키마로 parse해 없는 필드를 null로 채움.
+ * @description 응답 인터셉터. VO 응답(/projects, /traits, /abilities)은 해당 스키마로 parse해 없는 필드를 null로 채움. 로그 출력 후 response 반환.
+ * @param response axios 응답
  */
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     const schema = getVoSchemaForUrl(response.config.url);
     if (schema) {
-      response.data = normalizeResponseData(response.data, schema) as AxiosResponse['data'];
+      response.data = normalizeResponseData(
+        response.data,
+        schema
+      ) as AxiosResponse['data'];
     }
 
     const endpoint = `${response.config.method?.toUpperCase()} ${response.config.url || ''}`;
@@ -61,7 +69,11 @@ apiClient.interceptors.response.use(
       ? JSON.stringify(response.data)
       : undefined;
 
-    log.log('Response', { endpoint, statusCode, body, });
+    log.log('Response', {
+      endpoint,
+      statusCode,
+      body,
+    });
 
     return response;
   },
@@ -73,15 +85,24 @@ apiClient.interceptors.response.use(
         ? JSON.stringify(error.response.data)
         : undefined;
 
-      log.error('Error Response', { endpoint, statusCode, body, });
+      log.error('Error Response', {
+        endpoint,
+        statusCode,
+        body,
+      });
     }
     else if (error.request) {
       const endpoint = `${error.config?.method?.toUpperCase()} ${error.config?.url || ''}`;
 
-      log.error('Error', { endpoint, message: 'No response received', });
+      log.error('Error', {
+        endpoint,
+        message: 'No response received',
+      });
     }
     else {
-      log.error('Error', { message: error.message, });
+      log.error('Error', {
+        message: error.message,
+      });
     }
 
     return Promise.reject(error);

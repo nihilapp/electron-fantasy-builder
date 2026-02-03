@@ -12,6 +12,10 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 지역 VO.
+ * @param row DB 결과 한 행
+ */
 function regionRowToVo(row: Record<string, unknown>): RegionVo {
   return rowToVo(row, regionSchema);
 }
@@ -19,6 +23,11 @@ function regionRowToVo(row: Record<string, unknown>): RegionVo {
 type RegionsTable = typeof localRegionsTable | typeof remoteRegionsTable;
 
 export const RegionMapper = {
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', region_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(prjNo: number, params: RegionVo): Promise<{ list: RegionVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
@@ -42,7 +51,7 @@ export const RegionMapper = {
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.regionNo)).$dynamic();
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
       const rows = await query;
-      return { list: rows.map((r) => regionRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+      return { list: rows.map((row) => regionRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
     const table = remoteRegionsTable;
     const dbRemote = db as RemoteDb;
@@ -52,9 +61,14 @@ export const RegionMapper = {
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.regionNo)).$dynamic();
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
     const rows = await query;
-    return { list: rows.map((r) => regionRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+    return { list: rows.map((row) => regionRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
+  /**
+   * @description 상세 조회 (prjNo + regionNo).
+   * @param prjNo 프로젝트 번호
+   * @param regionNo 지역 번호
+   */
   async selectByNo(prjNo: number, regionNo: number): Promise<RegionVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -70,6 +84,10 @@ export const RegionMapper = {
       : null;
   },
 
+  /**
+   * @description 지역 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: RegionVo): Promise<RegionVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -107,6 +125,12 @@ export const RegionMapper = {
     return regionRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 지역 수정 (prjNo + regionNo).
+   * @param prjNo 프로젝트 번호
+   * @param regionNo 지역 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(prjNo: number, regionNo: number, vo: Partial<RegionVo>): Promise<RegionVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -145,6 +169,11 @@ export const RegionMapper = {
       : null;
   },
 
+  /**
+   * @description 소프트 삭제 (prjNo + regionNo).
+   * @param prjNo 프로젝트 번호
+   * @param regionNo 지역 번호
+   */
   async delete(prjNo: number, regionNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

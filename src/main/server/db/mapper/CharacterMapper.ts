@@ -12,6 +12,10 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 인물 VO.
+ * @param row DB 결과 한 행
+ */
 function characterRowToVo(row: Record<string, unknown>): CharacterVo {
   return rowToVo(row, characterSchema);
 }
@@ -19,6 +23,11 @@ function characterRowToVo(row: Record<string, unknown>): CharacterVo {
 type CharactersTable = typeof localCharactersTable | typeof remoteCharactersTable;
 
 export const CharacterMapper = {
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', char_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(
     prjNo: number,
     params: CharacterVo
@@ -56,7 +65,7 @@ export const CharacterMapper = {
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.charNo)).$dynamic();
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
       const rows = await query;
-      return { list: rows.map((r) => characterRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+      return { list: rows.map((row) => characterRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
     const table = remoteCharactersTable;
     const dbRemote = db as RemoteDb;
@@ -66,9 +75,14 @@ export const CharacterMapper = {
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.charNo)).$dynamic();
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
     const rows = await query;
-    return { list: rows.map((r) => characterRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+    return { list: rows.map((row) => characterRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
+  /**
+   * @description 상세 조회 (prjNo + charNo).
+   * @param prjNo 프로젝트 번호
+   * @param charNo 인물 번호
+   */
   async selectByNo(prjNo: number, charNo: number): Promise<CharacterVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -88,6 +102,10 @@ export const CharacterMapper = {
       : null;
   },
 
+  /**
+   * @description 인물 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: CharacterVo): Promise<CharacterVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -117,6 +135,12 @@ export const CharacterMapper = {
     return characterRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 인물 수정 (prjNo + charNo).
+   * @param prjNo 프로젝트 번호
+   * @param charNo 인물 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(prjNo: number, charNo: number, vo: Partial<CharacterVo>): Promise<CharacterVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -147,6 +171,11 @@ export const CharacterMapper = {
       : null;
   },
 
+  /**
+   * @description 소프트 삭제 (prjNo + charNo).
+   * @param prjNo 프로젝트 번호
+   * @param charNo 인물 번호
+   */
   async delete(prjNo: number, charNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

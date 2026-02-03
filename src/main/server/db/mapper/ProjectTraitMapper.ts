@@ -12,12 +12,20 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 프로젝트 트레잇 VO.
+ * @param row DB 결과 한 행
+ */
 function projectTraitRowToVo(row: Record<string, unknown>): ProjectTraitVo {
   return rowToVo(row, projectTraitSchema);
 }
 
 export const ProjectTraitMapper = {
-  /** 목록 조회 (prjNo 스코프, del_yn = 'N', trait_no 내림차순, 페이징, 검색) */
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', trait_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(
     prjNo: number,
     params: ProjectTraitVo
@@ -26,7 +34,10 @@ export const ProjectTraitMapper = {
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
 
-    const createWhere = (table: any) => {
+    type ProjectTraitsTable
+      = typeof localProjectTraitsTable
+        | typeof remoteProjectTraitsTable;
+    const createWhere = (table: ProjectTraitsTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
@@ -70,8 +81,8 @@ export const ProjectTraitMapper = {
       }
 
       const rows = await query;
-      const list = rows.map((r) =>
-        projectTraitRowToVo(r as unknown as Record<string, unknown>)
+      const list = rows.map((row) =>
+        projectTraitRowToVo(row as unknown as Record<string, unknown>)
       );
 
       return { list, totalCnt, };
@@ -100,14 +111,18 @@ export const ProjectTraitMapper = {
     }
 
     const rows = await query;
-    const list = rows.map((r) =>
-      projectTraitRowToVo(r as unknown as Record<string, unknown>)
+    const list = rows.map((row) =>
+      projectTraitRowToVo(row as unknown as Record<string, unknown>)
     );
 
     return { list, totalCnt, };
   },
 
-  /** 상세 조회 (prjNo + traitNo) */
+  /**
+   * @description 상세 조회 (prjNo + traitNo).
+   * @param prjNo 프로젝트 번호
+   * @param traitNo 트레잇 번호
+   */
   async selectByNo(
     prjNo: number,
     traitNo: number
@@ -140,7 +155,10 @@ export const ProjectTraitMapper = {
       : null;
   },
 
-  /** 생성 (prjNo 필수) */
+  /**
+   * @description 생성 (prjNo 필수).
+   * @param vo 생성할 VO
+   */
   async insert(vo: ProjectTraitVo): Promise<ProjectTraitVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -181,7 +199,12 @@ export const ProjectTraitMapper = {
     return projectTraitRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
-  /** 수정 (prjNo + traitNo) */
+  /**
+   * @description 수정 (prjNo + traitNo).
+   * @param prjNo 프로젝트 번호
+   * @param traitNo 트레잇 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(
     prjNo: number,
     traitNo: number,
@@ -235,7 +258,11 @@ export const ProjectTraitMapper = {
       : null;
   },
 
-  /** 삭제 (Soft Delete, prjNo + traitNo) */
+  /**
+   * @description 소프트 삭제 (prjNo + traitNo).
+   * @param prjNo 프로젝트 번호
+   * @param traitNo 트레잇 번호
+   */
   async delete(prjNo: number, traitNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

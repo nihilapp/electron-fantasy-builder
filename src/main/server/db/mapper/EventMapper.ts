@@ -12,6 +12,10 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 사건 VO.
+ * @param row DB 결과 한 행
+ */
 function eventRowToVo(row: Record<string, unknown>): EventVo {
   return rowToVo(row, eventSchema);
 }
@@ -19,6 +23,11 @@ function eventRowToVo(row: Record<string, unknown>): EventVo {
 type EventsTable = typeof localEventsTable | typeof remoteEventsTable;
 
 export const EventMapper = {
+  /**
+   * @description 목록 조회 (prjNo 스코프, del_yn = 'N', event_no 내림차순, 페이징, 검색).
+   * @param prjNo 프로젝트 번호
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(prjNo: number, params: EventVo): Promise<{ list: EventVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
@@ -42,7 +51,7 @@ export const EventMapper = {
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.eventNo)).$dynamic();
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
       const rows = await query;
-      return { list: rows.map((r) => eventRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+      return { list: rows.map((row) => eventRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
     const table = remoteEventsTable;
     const dbRemote = db as RemoteDb;
@@ -52,9 +61,14 @@ export const EventMapper = {
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.eventNo)).$dynamic();
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
     const rows = await query;
-    return { list: rows.map((r) => eventRowToVo(r as unknown as Record<string, unknown>)), totalCnt, };
+    return { list: rows.map((row) => eventRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
+  /**
+   * @description 상세 조회 (prjNo + eventNo).
+   * @param prjNo 프로젝트 번호
+   * @param eventNo 사건 번호
+   */
   async selectByNo(prjNo: number, eventNo: number): Promise<EventVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -70,6 +84,10 @@ export const EventMapper = {
       : null;
   },
 
+  /**
+   * @description 사건 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: EventVo): Promise<EventVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -115,6 +133,12 @@ export const EventMapper = {
     return eventRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 사건 수정 (prjNo + eventNo).
+   * @param prjNo 프로젝트 번호
+   * @param eventNo 사건 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(prjNo: number, eventNo: number, vo: Partial<EventVo>): Promise<EventVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -161,6 +185,11 @@ export const EventMapper = {
       : null;
   },
 
+  /**
+   * @description 소프트 삭제 (prjNo + eventNo).
+   * @param prjNo 프로젝트 번호
+   * @param eventNo 사건 번호
+   */
   async delete(prjNo: number, eventNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

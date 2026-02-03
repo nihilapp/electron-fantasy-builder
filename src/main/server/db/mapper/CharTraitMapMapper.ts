@@ -12,22 +12,36 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
+/**
+ * @description DB row → 인물-특성 매핑 VO.
+ * @param row DB 결과 한 행
+ */
 function rowToVoMap(row: Record<string, unknown>): CharTraitMapVo {
   return rowToVo(row, charTraitMapSchema);
 }
 
 export const CharTraitMapMapper = {
+  /**
+   * @description 인물 기준 목록 조회.
+   * @param charNo 인물 번호
+   */
   async selectList(charNo: number): Promise<CharTraitMapVo[]> {
     const db = getDb();
     const mode = getDbMode();
     if (mode === 'local') {
       const rows = await (db as LocalDb).select().from(localTable).where(eq(localTable.charNo, charNo));
-      return rows.map((r) => rowToVoMap(r as unknown as Record<string, unknown>));
+      return rows.map((row) => rowToVoMap(row as unknown as Record<string, unknown>));
     }
     const rows = await (db as RemoteDb).select().from(remoteTable).where(eq(remoteTable.charNo, charNo));
-    return rows.map((r) => rowToVoMap(r as unknown as Record<string, unknown>));
+    return rows.map((row) => rowToVoMap(row as unknown as Record<string, unknown>));
   },
 
+  /**
+   * @description 단건 조회 (charNo + traitNo + traitType).
+   * @param charNo 인물 번호
+   * @param traitNo 특성 번호
+   * @param traitType 특성 타입 (GLOBAL | PROJECT)
+   */
   async selectOne(charNo: number, traitNo: number, traitType: string): Promise<CharTraitMapVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -48,6 +62,10 @@ export const CharTraitMapMapper = {
       : null;
   },
 
+  /**
+   * @description 인물-특성 매핑 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: CharTraitMapVo): Promise<CharTraitMapVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -62,6 +80,13 @@ export const CharTraitMapMapper = {
     return rowToVoMap(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 인물-특성 매핑 수정.
+   * @param charNo 인물 번호
+   * @param traitNo 특성 번호
+   * @param traitType 특성 타입
+   * @param vo 수정할 필드 (부분)
+   */
   async update(charNo: number, traitNo: number, traitType: string, vo: Partial<CharTraitMapVo>): Promise<CharTraitMapVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -78,6 +103,12 @@ export const CharTraitMapMapper = {
       : null;
   },
 
+  /**
+   * @description 인물-특성 매핑 삭제.
+   * @param charNo 인물 번호
+   * @param traitNo 특성 번호
+   * @param traitType 특성 타입
+   */
   async delete(charNo: number, traitNo: number, traitType: string): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

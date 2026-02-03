@@ -1,7 +1,7 @@
-import { abilitySchema } from '@zod-schema/ability.schema';
 import { and, count, desc, eq, like, or } from 'drizzle-orm';
 
 import type { AbilityVo } from '@app-types/vo.types';
+import { abilitySchema } from '@zod-schema/ability.schema';
 
 import { abilitiesTable as localAbilitiesTable } from '../../schema/local/abilities.table';
 import { abilitiesTable as remoteAbilitiesTable } from '../../schema/remote/abilities.table';
@@ -12,19 +12,27 @@ import { getDbMode } from '../context';
 
 import { rowToVo } from './rowToVo';
 
-/** DB row → 어빌리티 VO */
+/**
+ * @description DB row → 어빌리티 VO.
+ * @param row DB 결과 한 행
+ */
 function abilityRowToVo(row: Record<string, unknown>): AbilityVo {
   return rowToVo(row, abilitySchema);
 }
 
+type AbilitiesTable = typeof localAbilitiesTable | typeof remoteAbilitiesTable;
+
 export const AbilityMapper = {
-  /** 목록 조회 (del_yn = 'N', ability_no 내림차순, 페이징, 검색) */
+  /**
+   * @description 목록 조회 (del_yn = 'N', ability_no 내림차순, 페이징, 검색).
+   * @param params 검색/페이징 파라미터
+   */
   async selectList(params: AbilityVo): Promise<{ list: AbilityVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
 
-    const createWhere = (table: any) => {
+    const createWhere = (table: AbilitiesTable) => {
       let where = eq(table.delYn, 'N');
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
@@ -65,7 +73,9 @@ export const AbilityMapper = {
       }
 
       const rows = await query;
-      const list = rows.map((r) => abilityRowToVo(r as unknown as Record<string, unknown>));
+      const list = rows.map((row) =>
+        abilityRowToVo(row as unknown as Record<string, unknown>)
+      );
 
       return { list, totalCnt, };
     }
@@ -90,11 +100,17 @@ export const AbilityMapper = {
     }
 
     const rows = await query;
-    const list = rows.map((r) => abilityRowToVo(r as unknown as Record<string, unknown>));
+    const list = rows.map((row) =>
+      abilityRowToVo(row as unknown as Record<string, unknown>)
+    );
 
     return { list, totalCnt, };
   },
 
+  /**
+   * @description 상세 조회 (ability_no).
+   * @param abilityNo 어빌리티 번호
+   */
   async selectByNo(abilityNo: number): Promise<AbilityVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -116,6 +132,10 @@ export const AbilityMapper = {
       : null;
   },
 
+  /**
+   * @description 어빌리티 생성.
+   * @param vo 생성할 VO
+   */
   async insert(vo: AbilityVo): Promise<AbilityVo> {
     const db = getDb();
     const mode = getDbMode();
@@ -158,6 +178,11 @@ export const AbilityMapper = {
     return abilityRowToVo(inserted as unknown as Record<string, unknown>);
   },
 
+  /**
+   * @description 어빌리티 수정 (ability_no).
+   * @param abilityNo 어빌리티 번호
+   * @param vo 수정할 필드 (부분)
+   */
   async update(abilityNo: number, vo: Partial<AbilityVo>): Promise<AbilityVo | null> {
     const db = getDb();
     const mode = getDbMode();
@@ -185,7 +210,7 @@ export const AbilityMapper = {
       const dbLocal = db as LocalDb;
       const [ updated, ] = await dbLocal
         .update(table)
-        .set(values as any)
+        .set(values as Record<string, unknown>)
         .where(eq(table.abilityNo, abilityNo))
         .returning();
       return updated
@@ -197,7 +222,7 @@ export const AbilityMapper = {
     const dbRemote = db as RemoteDb;
     const [ updated, ] = await dbRemote
       .update(table)
-      .set(values as any)
+      .set(values as Record<string, unknown>)
       .where(eq(table.abilityNo, abilityNo))
       .returning();
     return updated
@@ -205,6 +230,10 @@ export const AbilityMapper = {
       : null;
   },
 
+  /**
+   * @description 소프트 삭제 (del_yn = 'Y', del_dt 설정).
+   * @param abilityNo 어빌리티 번호
+   */
   async delete(abilityNo: number): Promise<boolean> {
     const db = getDb();
     const mode = getDbMode();

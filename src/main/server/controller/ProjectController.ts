@@ -1,25 +1,23 @@
 import { Hono } from 'hono';
 
-import type { AppConfig } from '@app-types/config.types';
 import type { ProjectVo } from '@app-types/vo.types';
-import appConfig from '@config/app.json';
 import { RESPONSE_CODE } from '@constants/response-code.const';
 import { projectSchema } from '@zod-schema/project.schema';
 
 import { ProjectService } from '../service/ProjectService';
 
-const config = appConfig as AppConfig;
-const DEFAULT_PAGE_SIZE = config.pagination?.pageSize ?? 10;
-
 /**
- * 프로젝트 API 컨트롤러.
- * 요청은 VO(projectSchema)로 파싱해 처리, 응답 TData에는 VO(ProjectType) 사용.
- * GET /projects, GET /projects/:prjNo, POST /projects, PATCH /projects/:prjNo, DELETE /projects/:prjNo.
+ * @description 프로젝트 API 컨트롤러. 요청은 VO(projectSchema)로 파싱, 응답 TData에 VO(ProjectType) 사용. GET/POST/PATCH/DELETE /projects.
  */
 const projects = new Hono();
 
+/**
+ * @description 프로젝트 목록 조회 (페이징, 검색).
+ * @param context Hono 컨텍스트
+ */
 projects.get('/', async (context) => {
   const query = context.req.query();
+
   const params = projectSchema.parse({
     ...query,
     page: query.page
@@ -27,14 +25,21 @@ projects.get('/', async (context) => {
       : null,
     pageSize: query.pageSize
       ? Number(query.pageSize)
-      : DEFAULT_PAGE_SIZE,
+      : null,
   });
 
   const body = await ProjectService.getList(params);
 
-  return context.json(body, 200);
+  return context.json(
+    body,
+    200
+  );
 });
 
+/**
+ * @description 프로젝트 상세 조회.
+ * @param context Hono 컨텍스트
+ */
 projects.get('/:prjNo', async (context) => {
   const prjNo = Number(context.req.param('prjNo'));
 
@@ -52,20 +57,31 @@ projects.get('/:prjNo', async (context) => {
 
   const body = await ProjectService.getByNo(prjNo);
 
-  return context.json(body, 200);
+  return context.json(
+    body,
+    200
+  );
 });
 
+/**
+ * @description 프로젝트 생성.
+ * @param context Hono 컨텍스트
+ */
 projects.post('/', async (context) => {
   const raw = await context.req.json();
   const parsed = projectSchema.safeParse(raw);
 
   if (!parsed.success) {
+    const message = parsed.error.issues
+      .map((issue) => issue.message)
+      .join('; ') || '요청 검증 실패';
+
     return context.json(
       {
         data: null,
         error: true,
         code: RESPONSE_CODE.VALIDATION_ERROR,
-        message: parsed.error.issues.map((issue) => issue.message).join('; ') || '요청 검증 실패',
+        message,
       },
       200
     );
@@ -88,9 +104,16 @@ projects.post('/', async (context) => {
 
   const result = await ProjectService.create(vo);
 
-  return context.json(result, 200);
+  return context.json(
+    result,
+    200
+  );
 });
 
+/**
+ * @description 프로젝트 수정.
+ * @param context Hono 컨텍스트
+ */
 projects.patch('/:prjNo', async (context) => {
   const prjNo = Number(context.req.param('prjNo'));
 
@@ -110,12 +133,16 @@ projects.patch('/:prjNo', async (context) => {
   const parsed = projectSchema.partial().safeParse(raw);
 
   if (!parsed.success) {
+    const message = parsed.error.issues
+      .map((issue) => issue.message)
+      .join('; ') || '요청 검증 실패';
+
     return context.json(
       {
         data: null,
         error: true,
         code: RESPONSE_CODE.VALIDATION_ERROR,
-        message: parsed.error.issues.map((issue) => issue.message).join('; ') || '요청 검증 실패',
+        message,
       },
       200
     );
@@ -124,9 +151,16 @@ projects.patch('/:prjNo', async (context) => {
   const payload = parsed.data ?? {};
   const result = await ProjectService.update(prjNo, payload as Partial<ProjectVo>);
 
-  return context.json(result, 200);
+  return context.json(
+    result,
+    200
+  );
 });
 
+/**
+ * @description 프로젝트 삭제.
+ * @param context Hono 컨텍스트
+ */
 projects.delete('/:prjNo', async (context) => {
   const prjNo = Number(context.req.param('prjNo'));
 
@@ -144,7 +178,10 @@ projects.delete('/:prjNo', async (context) => {
 
   const result = await ProjectService.delete(prjNo);
 
-  return context.json(result, 200);
+  return context.json(
+    result,
+    200
+  );
 });
 
 export { projects as ProjectController };

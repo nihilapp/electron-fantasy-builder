@@ -6,11 +6,14 @@ import { RESPONSE_CODE } from '@constants/response-code.const';
 import { HealthService } from '../service/HealthService';
 
 /**
- * Health API 컨트롤러.
- * 모든 응답은 HTTP 200, ResponseType 구조로 반환.
+ * @description Health API 컨트롤러. 모든 응답은 HTTP 200, ResponseType 구조로 반환.
  */
 const health = new Hono();
 
+/**
+ * @description Health 상태 조회.
+ * @param context Hono 컨텍스트
+ */
 health.get('/', (context) => {
   const data = HealthService.getHealth();
 
@@ -21,7 +24,10 @@ health.get('/', (context) => {
     message: '',
   };
 
-  return context.json(body, 200);
+  return context.json(
+    body,
+    200
+  );
 });
 
 export { health as HealthController };
