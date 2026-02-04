@@ -5,14 +5,14 @@ import type { ResponseType } from '@app-types/response.types';
 import { RESPONSE_CODE } from '@constants/response-code.const';
 
 type ErrorResponse = ResponseType<null>;
+type ResponseCode = (typeof RESPONSE_CODE)[keyof typeof RESPONSE_CODE];
 
 /**
- * 이 프로젝트는 모든 API 응답이 HTTP 200입니다.
- * 성공/실패 구별은 본문의 error, code 필드로만 합니다. (4xx/5xx 상태 코드 사용 안 함)
+ * @description 이 프로젝트는 모든 API 응답을 HTTP 200으로 반환하며, 성공/실패는 본문의 error·code 필드로 구분한다. (4xx/5xx 상태 코드 미사용)
  */
 
-/** HTTPException.status → RESPONSE_CODE 매핑 (본문 code용, HTTP 상태 아님) */
-const STATUS_TO_CODE: Record<number, (typeof RESPONSE_CODE)[keyof typeof RESPONSE_CODE]> = {
+/** @description HTTPException.status → RESPONSE_CODE 매핑 (본문 code용, HTTP 상태 아님) */
+const STATUS_TO_CODE: Record<number, ResponseCode> = {
   400: RESPONSE_CODE.BAD_REQUEST,
   401: RESPONSE_CODE.UNAUTHORIZED,
   403: RESPONSE_CODE.FORBIDDEN,
@@ -33,10 +33,8 @@ const STATUS_TO_CODE: Record<number, (typeof RESPONSE_CODE)[keyof typeof RESPONS
   504: RESPONSE_CODE.GATEWAY_TIMEOUT,
 };
 
-function toErrorResponse(
-  code: (typeof RESPONSE_CODE)[keyof typeof RESPONSE_CODE],
-  message: string
-): ErrorResponse {
+/** @description 표준 에러 응답 객체 생성 */
+function toErrorResponse(code: ResponseCode, message: string): ErrorResponse {
   return {
     data: null,
     error: true,
@@ -46,25 +44,26 @@ function toErrorResponse(
 }
 
 /**
- * Hono 전역 에러 핸들러.
- * 모든 미처리 예외를 표준 응답(ResponseType)으로 변환해 HTTP 200으로 반환합니다.
- * PRD: "모든 API는 HTTP 200으로 반환. 성공/실패는 본문의 error, code로 구분."
+ * @description Hono 전역 에러 핸들러. 미처리 예외를 ResponseType 형태로 변환해 HTTP 200으로 반환한다.
+ * @param err 발생한 예외
+ * @param context Hono 컨텍스트
  */
-export function globalExceptionHandler(err: Error, c: Context): Response {
+export function globalExceptionHandler(err: Error, context: Context): Response {
   if (err instanceof HTTPException) {
-    const status = err.status;
-    const code = STATUS_TO_CODE[status] ?? RESPONSE_CODE.ERROR;
-    const message = err.message || `HTTP ${status}`;
-    // 항상 200 반환. 구별은 본문 error/code로.
-    return c.json(toErrorResponse(code, message), 200);
+    const code = STATUS_TO_CODE[err.status] ?? RESPONSE_CODE.ERROR;
+    const message = err.message || `HTTP ${err.status}`;
+
+    return context.json(
+      toErrorResponse(code, message),
+      200
+    );
   }
 
-  const message
-    = err instanceof Error
-      ? err.message
-      : String(err);
-  // 항상 200 반환. 구별은 본문 error/code로.
-  return c.json(
+  const message = err instanceof Error
+    ? err.message
+    : String(err);
+
+  return context.json(
     toErrorResponse(RESPONSE_CODE.INTERNAL_SERVER_ERROR, message),
     200
   );

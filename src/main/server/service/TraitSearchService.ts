@@ -36,8 +36,8 @@ export const TraitSearchService = {
 
     if (type === 'GLOBAL' || type === 'ALL') {
       const { list, } = await TraitMapper.selectList(searchParams as TraitVo);
-      list.forEach((t) => {
-        globalList.push({ ...t, type: 'GLOBAL', });
+      list.forEach((item) => {
+        globalList.push({ ...item, type: 'GLOBAL', });
       });
     }
 
@@ -46,14 +46,20 @@ export const TraitSearchService = {
         prjNo,
         searchParams as ProjectTraitVo
       );
-      list.forEach((t) => {
-        projectList.push({ ...t, type: 'PROJECT', });
+      list.forEach((item) => {
+        projectList.push({ ...item, type: 'PROJECT', });
       });
     }
 
     const merged = [ ...globalList, ...projectList, ];
-    const traitNm = (t: TraitSearchItemVo) => (t.traitNm ?? '').toString();
-    merged.sort((a, b) => traitNm(a).localeCompare(traitNm(b)));
+    const traitNm = (item: TraitSearchItemVo) => (item.traitNm ?? '').toString();
+    merged.sort((itemA, itemB) => (
+      traitNm(itemA).localeCompare(traitNm(itemB))
+    ));
+
+    merged.sort((itemA, itemB) => (
+      traitNm(itemA).localeCompare(traitNm(itemB))
+    ));
 
     const totalCnt = merged.length;
     const offset = (page - 1) * pageSize;

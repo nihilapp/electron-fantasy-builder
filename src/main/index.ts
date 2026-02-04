@@ -11,38 +11,30 @@ import {
 } from './window/mainWindow';
 import { createTray } from './window/tray';
 
+/** @description 앱 준비 완료 시: DB·IPC·서버·윈도우·트레이 초기화 및 activate 핸들러 등록 */
 app.whenReady().then(() => {
-  // DB context 초기화 (연결은 getDb() 호출 시 지연 생성)
   initDbContext();
-
-  // IPC 핸들러 등록
   setupIpcHandlers();
-
-  // 메인 프로세스 내 Hono HTTP 서버 시작
   startHonoServer();
-
-  // 메인 윈도우 생성
   createMainWindow();
-
-  // 시스템 트레이 생성 (창 닫기 시 트레이에 유지)
   createTray();
-
-  // 앱 활성화 이벤트 핸들러
   app.on('activate', handleAppActivate);
 });
 
-// 모든 윈도우가 닫혔을 때의 이벤트 핸들러
 app.on('window-all-closed', handleWindowAllClosed);
 
-// 앱 종료 전 DB 연결·Hono 서버 정리 (비동기이므로 기본 종료를 막고 정리 후 exit)
+/** @description 앱 종료 전 DB·Hono 서버 정리 후 exit (비동기 정리이므로 기본 종료를 막고 완료 후 exit) */
 let isQuitting = false;
-app.on('before-quit', (event) => {
+app.on('before-quit', async (event) => {
   if (isQuitting) return;
+
   event.preventDefault();
+
   isQuitting = true;
+
   setQuittingFlag(true);
   closeDb();
-  closeHonoServer().then(() => {
-    app.exit(0);
-  });
+
+  await closeHonoServer();
+  app.exit(0);
 });

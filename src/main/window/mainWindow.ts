@@ -51,9 +51,9 @@ export function createMainWindow(): BrowserWindow {
   }
 
   // 트레이 사용 시: X 버튼으로 닫으면 창만 숨기고 트레이에 유지
-  mainWindow.on('close', (e) => {
+  mainWindow.on('close', (event) => {
     if (!isQuitting && getTray()) {
-      e.preventDefault();
+      event.preventDefault();
       mainWindow?.hide();
       return;
     }

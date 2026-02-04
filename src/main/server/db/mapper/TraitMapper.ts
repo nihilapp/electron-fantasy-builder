@@ -201,7 +201,7 @@ export const TraitMapper = {
       const dbLocal = db as LocalDb;
       const [ updated, ] = await dbLocal
         .update(table)
-        .set(values as any)
+        .set(values as Record<string, unknown>)
         .where(eq(table.traitNo, traitNo))
         .returning();
       return updated
@@ -213,7 +213,7 @@ export const TraitMapper = {
     const dbRemote = db as RemoteDb;
     const [ updated, ] = await dbRemote
       .update(table)
-      .set(values as any)
+      .set(values as Record<string, unknown>)
       .where(eq(table.traitNo, traitNo))
       .returning();
     return updated

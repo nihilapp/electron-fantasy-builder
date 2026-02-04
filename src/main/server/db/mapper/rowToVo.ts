@@ -8,7 +8,7 @@ import { getDbMode } from '../context';
  * @example 'prj_no' -> 'prjNo', 'use_yn' -> 'useYn'
  */
 function snakeToCamelKey(key: string): string {
-  return key.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
+  return key.replace(/_([a-z])/g, (_match, letter) => letter.toUpperCase());
 }
 
 /**
@@ -18,13 +18,13 @@ function snakeToCamelKey(key: string): string {
 function keysToCamel<T extends Record<string, unknown>>(obj: T): Record<string, unknown> {
   const out: Record<string, unknown> = {};
 
-  for (const [ k, v, ] of Object.entries(obj)) {
-    const camelKey = snakeToCamelKey(k);
-    if (camelKey in out && k === camelKey) {
-      out[camelKey] = v;
+  for (const [ key, value, ] of Object.entries(obj)) {
+    const camelKey = snakeToCamelKey(key);
+    if (camelKey in out && key === camelKey) {
+      out[camelKey] = value;
     }
     else if (!(camelKey in out)) {
-      out[camelKey] = v;
+      out[camelKey] = value;
     }
   }
 

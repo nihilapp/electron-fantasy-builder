@@ -67,8 +67,8 @@ function getOrCreateLocalDb(): LocalDb {
     const migrationsFolder = join(process.cwd(), 'src', 'drizzle', 'local');
     migrate(db as unknown as Parameters<typeof migrate>[0], { migrationsFolder, });
   }
-  catch (e) {
-    createTaggedLogger('db').warn('Local migration skipped or failed:', (e as Error).message);
+  catch (error) {
+    createTaggedLogger('db').warn('Local migration skipped or failed:', (error as Error).message);
   }
   return db;
 }

@@ -1,7 +1,7 @@
 import pc from 'picocolors';
 
 /** 태그별 색상 (Vite 스타일) */
-const TAG_COLORS: Record<string, (s: string) => string> = {
+const TAG_COLORS: Record<string, (str: string) => string> = {
   Hono: pc.cyan,
   db: pc.yellow,
   API: pc.magenta,
@@ -9,16 +9,17 @@ const TAG_COLORS: Record<string, (s: string) => string> = {
   electron: pc.blue,
 };
 
-function getTagStyle(tag: string): (s: string) => string {
+function getTagStyle(tag: string): (str: string) => string {
   return TAG_COLORS[tag] ?? pc.white;
 }
 
 function formatTime(): string {
   const now = new Date();
-  const h = now.getHours().toString().padStart(2, '0');
-  const m = now.getMinutes().toString().padStart(2, '0');
-  const s = now.getSeconds().toString().padStart(2, '0');
-  return pc.dim(`${h}:${m}:${s}`);
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+
+  return pc.dim(`${hours}:${minutes}:${seconds}`);
 }
 
 function formatTag(tag: string): string {

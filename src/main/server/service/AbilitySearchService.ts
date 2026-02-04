@@ -36,8 +36,8 @@ export const AbilitySearchService = {
 
     if (type === 'GLOBAL' || type === 'ALL') {
       const { list, } = await AbilityMapper.selectList(searchParams as AbilityVo);
-      list.forEach((t) => {
-        globalList.push({ ...t, type: 'GLOBAL', });
+      list.forEach((item) => {
+        globalList.push({ ...item, type: 'GLOBAL', });
       });
     }
 
@@ -46,14 +46,16 @@ export const AbilitySearchService = {
         prjNo,
         searchParams as ProjectAbilityVo
       );
-      list.forEach((t) => {
-        projectList.push({ ...t, type: 'PROJECT', });
+      list.forEach((item) => {
+        projectList.push({ ...item, type: 'PROJECT', });
       });
     }
 
     const merged = [ ...globalList, ...projectList, ];
-    const abilityNm = (t: AbilitySearchItemVo) => (t.abilityNm ?? '').toString();
-    merged.sort((a, b) => abilityNm(a).localeCompare(abilityNm(b)));
+    const abilityNm = (item: AbilitySearchItemVo) => (item.abilityNm ?? '').toString();
+    merged.sort((itemA, itemB) => (
+      abilityNm(itemA).localeCompare(abilityNm(itemB))
+    ));
 
     const totalCnt = merged.length;
     const offset = (page - 1) * pageSize;
