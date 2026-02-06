@@ -67,6 +67,11 @@
 - **개발**: `pnpm dev` (electron-vite dev)
 - **빌드 산출물**: `out/` (Main/Preload), `dist/` (Renderer)
 
+### API 설계 원칙
+- **테이블 단위**: API는 테이블(리소스) 단위로 구성한다.
+- **프로젝트 종속**: prj_no 스코프 데이터는 **JSON(body)** 로 넘긴다. 목록은 `?prjNo=`, 생성·수정은 body에 포함.
+- **추가 화면**: 해당 리소스 루트로 POST 하는 폼과 링크한다. (예: 코어 설정 추가 → `POST /core-rules` 폼 페이지.)
+
 ---
 
 ## 3. System Architecture & Features
@@ -120,7 +125,14 @@
 #### Feature H: 엔티티 간 관계 관리
 - **Logic**: 인물-인물, 인물-조직, 국가-조직 관계, 관계 유형·상세, 다형 참조
 
-### 3.3. 아키텍처 (Electron + Hono)
+### 3.3. 앱 기동 및 초기 로딩 UX
+
+- **배경**: 프로그램 최초 실행 시 Main Process에서 DB 연결(initDbContext)·Hono 서버 기동 등으로 지연이 발생할 수 있음. 사용자가 빈 화면만 보다가 갑자기 UI가 뜨면 체감 품질이 떨어짐.
+- **요구사항**: 앱이 **준비되기 전**에는 렌더러에서 **로딩 중** 상태를 명시적으로 표시한다.
+  - 렌더러 진입 시 곧바로 "로딩 중" 화면(스피너·문구)을 보여 주고, 백엔드 준비 완료(예: Health API 성공 또는 IPC 핑)를 확인한 뒤 본문 UI(타이틀바·라우터 뷰)로 전환한다.
+  - 로딩 화면은 전체 화면 또는 메인 영역을 덮는 형태로, 앱 이름·로고·"준비 중…" 등 최소 정보만 노출한다.
+
+### 3.4. 아키텍처 (Electron + Hono)
 
 - **Main Process**: Hono HTTP API(Controller → Service → Mapper), DB context(`getDb()`), IPC·API 레이어
 - **Renderer (Vue)**: `window.electron.api.*`로 Hono API 호출, `window.electron.ipc.*`로 설정·앱 통신

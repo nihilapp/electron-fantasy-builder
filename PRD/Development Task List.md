@@ -26,6 +26,7 @@
 - [x] **GlobalExceptionHandler**: Hono onError에서 표준 에러 응답(ResponseType), HTTP 200 반환
 - [x] **src/types/vo.types.ts**: Zod 스키마 기반 VO 타입 정의 (ProjectVo 등)
 - [ ] **src/types/table.ts**: Drizzle 스키마 기반 InferSelectModel/InferInsertModel (필요 시 보강)
+- [ ] **앱 초기 로딩 UI**: 프로그램 처음 열릴 때 DB·서버 등 초기화 동안 "로딩 중" 화면 표시. 렌더러 진입 시 로딩 화면 노출 → Health API 또는 IPC로 준비 완료 감지 후 본문 UI 전환 (PRD §3.3)
 
 ---
 

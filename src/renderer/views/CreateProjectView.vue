@@ -9,6 +9,10 @@ interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   class?: string;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// BASE — 기본 정보 (defineProps, cva, useRouter)
+// ═══════════════════════════════════════════════════════════════
+
 const props = defineProps<Props>();
 
 const cssVariants = cva(
@@ -23,7 +27,16 @@ const cssVariants = cva(
 );
 
 const router = useRouter();
+
+// ─────────────────────────────────────────────────────────────
+// STOREDATA — Pinia 스토어 사용 시
+// ─────────────────────────────────────────────────────────────
+
 const projectStore = useProjectStore();
+
+// ─────────────────────────────────────────────────────────────
+// STATES — ref, computed 등 반응형 변수
+// ─────────────────────────────────────────────────────────────
 
 const form = ref({
   prjNm: '',
@@ -34,6 +47,10 @@ const isSubmitting = ref(false);
 const errorMessage = ref<string | null>(null);
 
 const canSubmit = computed(() => form.value.prjNm.trim() !== '');
+
+// ─────────────────────────────────────────────────────────────
+// ACTIONS — 변수를 제어하는 함수들
+// ─────────────────────────────────────────────────────────────
 
 const submit = async () => {
   if (!canSubmit.value || isSubmitting.value) return;
@@ -57,6 +74,15 @@ const submit = async () => {
     isSubmitting.value = false;
   }
 };
+
+// ─────────────────────────────────────────────────────────────
+// WATCH — watch() 정의 영역
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// LIFECYCLE — onMounted, onUnmounted 등
+// ─────────────────────────────────────────────────────────────
+
 </script>
 
 <template>

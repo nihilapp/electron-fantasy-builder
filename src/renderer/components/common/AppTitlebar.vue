@@ -10,6 +10,10 @@ interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   class?: string;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// BASE — 기본 정보 (defineProps, cva, buttonClassNames)
+// ═══════════════════════════════════════════════════════════════
+
 const props = defineProps<Props>();
 
 const cssVariants = cva(
@@ -25,6 +29,18 @@ const cssVariants = cva(
 
 const buttonClassNames = 'flex flex-row items-center justify-center p-2 hover:bg-gray-200 rounded-2 transition-colors duration-200 ease-in-out titlebar-btn';
 
+// ─────────────────────────────────────────────────────────────
+// STOREDATA — Pinia 스토어 사용 시
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// STATES — ref, computed 등 반응형 변수
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// ACTIONS — 변수를 제어하는 함수들
+// ─────────────────────────────────────────────────────────────
+
 const onClickMinimize = () => {
   window.electron.ipc.windowMinimize();
 };
@@ -36,12 +52,21 @@ const onClickMaximizeRestore = () => {
 const onClickClose = () => {
   window.electron.ipc.windowClose();
 };
+
+// ─────────────────────────────────────────────────────────────
+// WATCH — watch() 정의 영역
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// LIFECYCLE — onMounted, onUnmounted 등
+// ─────────────────────────────────────────────────────────────
+
 </script>
 
 <template>
   <header :class="cn(cssVariants({}), props.class)" class="titlebar">
     <h1 class="flex flex-row gap-1 items-center text-lg flex-1 shrink-0 font-900 truncate leading-1">
-      <img :src="logoUrl" alt="Fantasy Builder" class="size-8">
+      <img :src="logoUrl" alt="FANTASY BUILDER" class="size-8">
       <span class="uppercase">
         {{ props.title }}
       </span>

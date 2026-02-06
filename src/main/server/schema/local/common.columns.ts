@@ -1,7 +1,7 @@
 import { integer, text } from 'drizzle-orm/sqlite-core';
 
 /**
- * Fantasy Builder 공통 필드 (CommonEntity).
+ * FANTASY BUILDER 공통 필드 (CommonEntity).
  * 모든 엔티티 테이블에 포함. TS 필드명(camelCase) → DB 컬럼명(snake_case).
  */
 export const commonColumnsSqlite = {

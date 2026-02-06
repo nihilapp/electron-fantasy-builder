@@ -2,6 +2,10 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 import CreateProjectView from '~/views/CreateProjectView.vue';
 import MainView from '~/views/MainView.vue';
+import CoreRuleAddSection from '~/views/project-detail/CoreRuleAddSection.vue';
+import CoreRulesSection from '~/views/project-detail/CoreRulesSection.vue';
+import OverviewSection from '~/views/project-detail/OverviewSection.vue';
+import PlaceholderSection from '~/views/project-detail/PlaceholderSection.vue';
 import ProjectDetailView from '~/views/ProjectDetailView.vue';
 import ProjectListView from '~/views/ProjectListView.vue';
 
@@ -25,6 +29,88 @@ const router = createRouter({
       name: 'project-detail',
       component: ProjectDetailView,
       props: true,
+      children: [
+        {
+          path: '',
+          name: 'project-detail-index',
+          redirect: (to) => ({ name: 'project-overview', params: { prjNo: to.params.prjNo, }, }),
+        },
+        {
+          path: 'overview',
+          name: 'project-overview',
+          component: OverviewSection,
+        },
+        {
+          path: 'settings',
+          name: 'project-settings',
+          component: PlaceholderSection,
+          props: { sectionLabel: '전체 설정', },
+        },
+        {
+          path: 'traits-abilities',
+          name: 'project-traits-abilities',
+          component: PlaceholderSection,
+          props: { sectionLabel: '특성/능력 관리', },
+        },
+        {
+          path: 'core-rules',
+          name: 'project-core-rules',
+          component: CoreRulesSection,
+        },
+        {
+          path: 'core-rules/new',
+          name: 'project-core-rule-new',
+          component: CoreRuleAddSection,
+        },
+        {
+          path: 'creatures',
+          name: 'project-creatures',
+          component: PlaceholderSection,
+          props: { sectionLabel: '종족/생물', },
+        },
+        {
+          path: 'characters',
+          name: 'project-characters',
+          component: PlaceholderSection,
+          props: { sectionLabel: '인물', },
+        },
+        {
+          path: 'regions',
+          name: 'project-regions',
+          component: PlaceholderSection,
+          props: { sectionLabel: '지역', },
+        },
+        {
+          path: 'nations',
+          name: 'project-nations',
+          component: PlaceholderSection,
+          props: { sectionLabel: '국가', },
+        },
+        {
+          path: 'organizations',
+          name: 'project-organizations',
+          component: PlaceholderSection,
+          props: { sectionLabel: '단체', },
+        },
+        {
+          path: 'items',
+          name: 'project-items',
+          component: PlaceholderSection,
+          props: { sectionLabel: '도구', },
+        },
+        {
+          path: 'events',
+          name: 'project-events',
+          component: PlaceholderSection,
+          props: { sectionLabel: '역사', },
+        },
+        {
+          path: 'lores',
+          name: 'project-lores',
+          component: PlaceholderSection,
+          props: { sectionLabel: '신화/전설/설화', },
+        },
+      ],
     },
   ],
 });

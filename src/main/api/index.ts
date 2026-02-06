@@ -28,4 +28,9 @@ export {
   ipcGetAbility
 } from './apiAbility';
 
+export {
+  apiGetCoreRuleList,
+  ipcGetCoreRule
+} from './apiCoreRule';
+
 export { apiGetHealth, ipcGetHealth } from './apiHealth';

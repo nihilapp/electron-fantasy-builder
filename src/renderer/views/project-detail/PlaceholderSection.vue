@@ -1,43 +1,24 @@
 <script setup lang="ts">
-import { cva, type VariantProps } from 'class-variance-authority';
+/** 프로젝트 상세 내 섹션 플레이스홀더. 추후 카테고리별 메인 뷰 구현 시 교체. */
 
-import { useProjectStore } from '~/stores/projectStore';
-import { cn } from '~/utils/cn';
-
-interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
-  class?: string;
+interface Props {
+  /** 섹션 라벨 (예: 전체 설정, 특성/능력 관리) */
+  sectionLabel: string;
 }
 
 // ═══════════════════════════════════════════════════════════════
-// BASE — 기본 정보 (defineProps, cva/cssVariants 등)
+// BASE — 기본 정보 (defineProps)
 // ═══════════════════════════════════════════════════════════════
 
-const props = defineProps<Props>();
-
-const cssVariants = cva(
-  [
-    `w-[300px] shrink-0 min-w-0 bg-white border-r border-gray-300 p-2`,
-  ],
-  {
-    variants: {},
-    defaultVariants: {},
-    compoundVariants: [],
-  }
-);
+defineProps<Props>();
 
 // ─────────────────────────────────────────────────────────────
 // STOREDATA — Pinia 스토어 사용 시
 // ─────────────────────────────────────────────────────────────
 
-const projectStore = useProjectStore();
-const { isLoaded, hasProjects, } = storeToRefs(projectStore);
-
 // ─────────────────────────────────────────────────────────────
 // STATES — ref, computed 등 반응형 변수
 // ─────────────────────────────────────────────────────────────
-
-/** 프로젝트가 있을 때만 목록/관련 메뉴 노출. 추후 설정(settings) 스토어 추가 시 동일 패턴으로 hasSettings 반영 */
-const showProjectNav = computed(() => isLoaded.value && hasProjects.value);
 
 // ─────────────────────────────────────────────────────────────
 // ACTIONS — 변수를 제어하는 함수들
@@ -54,22 +35,7 @@ const showProjectNav = computed(() => isLoaded.value && hasProjects.value);
 </script>
 
 <template>
-  <aside :class="cn(cssVariants({}), props.class)">
-    <nav class="flex flex-col gap-1">
-      <RouterLink
-        v-if="showProjectNav"
-        to="/project-list"
-        class="rounded-2 px-2 py-1.5 text-left text-sm hover:bg-gray-100"
-      >
-        프로젝트 목록
-      </RouterLink>
-      <RouterLink
-        to="/create-project"
-        class="rounded-2 px-2 py-1.5 text-left text-sm hover:bg-gray-100"
-      >
-        프로젝트 생성
-      </RouterLink>
-      <!-- 추후 설정 스토어 연동 시: v-if="hasSettings" 등으로 설정 메뉴 노출 -->
-    </nav>
-  </aside>
+  <p class="text-gray-500">
+    {{ sectionLabel }} 설정 영역입니다. (추후 구현)
+  </p>
 </template>

@@ -8,9 +8,11 @@
 
 ## 1. 공통 규칙
 
+- **API는 테이블 단위**: 리소스 경로는 **테이블(엔티티) 단위**로 한다. 한 리소스 = 한 테이블 대응.
+- **프로젝트 종속(prj_no 스코프)**: 요청 시 **JSON(body)** 으로 넘긴다. 목록은 쿼리 `?prjNo=`, 생성·수정은 body에 `prjNo` 등 포함. 경로에 `:prjNo` 중첩하지 않음.
+- **추가(생성) UI**: 해당 리소스 루트로 **POST** 하는 폼 화면과 링크한다. 예: 코어 설정 추가 → `POST /core-rules` 로 전송하는 폼 페이지로 이동.
 - **패스**: **테이블(리소스)명 + 기능(HTTP 메서드)**. 리소스는 복수형·플랫하게 두고, `/projects/:prjNo/...` 처럼 깊이 파고들지 않는다.
-- **리소스 경로**: `/{리소스}`(목록·생성), `/{리소스}/:pkNo`(상세·수정·삭제). 예: `/projects`, `/projects/:prjNo`, `/characters`, `/characters/:charNo`.
-- **프로젝트 스코프(prj_no)**: 목록은 쿼리 `?prjNo=`, 생성은 body에 `prjNo` 포함. 경로에 `:prjNo` 중첩하지 않음.
+- **리소스 경로**: `/{리소스}`(목록·생성), `/{리소스}/:pkNo`(상세·수정·삭제). 예: `/projects`, `/projects/:prjNo`, `/core-rules`, `/core-rules/:coreNo`.
 - **메서드**: GET(목록·상세), POST(생성), PATCH(수정), DELETE(삭제).
 - **응답**: HTTP 200, `ResponseType<TData>` / 목록은 `ListResponseType<TData>` (페이징: `?page`, `?pageSize`).
 - **삭제**: 소프트 삭제 시 `del_yn` 처리.

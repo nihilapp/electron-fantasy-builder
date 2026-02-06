@@ -110,6 +110,7 @@ export default defineConfig({
       }),
     ],
     server: {
+      host: '127.0.0.1', // IPv4 고정 — Windows에서 ::1:3000 EACCES 방지
       port: 3000,
     },
     resolve: {

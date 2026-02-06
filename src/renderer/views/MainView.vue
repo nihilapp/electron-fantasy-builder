@@ -8,6 +8,10 @@ interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   class?: string;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// BASE — 기본 정보 (defineProps, cva/cssVariants 등)
+// ═══════════════════════════════════════════════════════════════
+
 const props = defineProps<Props>();
 
 const cssVariants = cva(
@@ -21,8 +25,29 @@ const cssVariants = cva(
   }
 );
 
+// ─────────────────────────────────────────────────────────────
+// STOREDATA — Pinia 스토어 사용 시
+// ─────────────────────────────────────────────────────────────
+
 const projectStore = useProjectStore();
 const { isLoaded, hasProjects, } = storeToRefs(projectStore);
+
+// ─────────────────────────────────────────────────────────────
+// STATES — ref, computed 등 반응형 변수
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// ACTIONS — 변수를 제어하는 함수들
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// WATCH — watch() 정의 영역
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// LIFECYCLE — onMounted, onUnmounted 등
+// ─────────────────────────────────────────────────────────────
+
 </script>
 
 <template>
@@ -37,8 +62,8 @@ const { isLoaded, hasProjects, } = storeToRefs(projectStore);
     <!-- 로딩 완료: 웰컴 + CTA -->
     <template v-else>
       <section class="flex max-w-md flex-col gap-4 rounded-2 border border-gray-200 bg-white p-6 text-center">
-        <h1 class="text-h3 font-medium">
-          Fantasy Builder
+        <h1 class="text-h3 font-900">
+          FANTASY BUILDER
         </h1>
         <p class="text-sm text-gray-600">
           세계관과 캐릭터를 위한 프로젝트를 만들어 보세요.

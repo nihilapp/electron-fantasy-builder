@@ -61,6 +61,13 @@ pnpm install
 pnpm dev
 ```
 
+### 터미널에서 한글이 깨질 때 (Windows)
+
+Windows에서는 **콘솔 코드페이지**가 UTF-8이 아니라서, `.bashrc`에 `LANG=ko_KR.UTF-8`만 넣어도 API 로그 한글이 깨져 보일 수 있습니다. (LANG은 Git Bash 쪽 설정이고, 실제 출력을 받는 Windows 콘솔의 코드페이지는 별도입니다.)
+
+- **앱 동작**: 메인 프로세스가 **가장 먼저** Windows일 때 `chcp 65001`을 실행해, 해당 콘솔을 UTF-8로 바꿉니다. (`src/main/index.ts`) 그래서 이후 로그(요청/응답 body 포함)가 한글로 제대로 나옵니다.
+- **여전히 깨지면**: 터미널에서 직접 `chcp 65001` 실행 후 `pnpm dev` 해 보세요.
+
 개발·빌드·API·DB 설정 등 **개발자용 상세 내용**은 [PRD](./PRD/PRD.md) 및 `docs/` 폴더를 참고하세요.
 
 ---

@@ -1,43 +1,31 @@
 <script setup lang="ts">
-import { cva, type VariantProps } from 'class-variance-authority';
-
-import { useProjectStore } from '~/stores/projectStore';
 import { cn } from '~/utils/cn';
 
-interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
-  class?: string;
+/** 재사용 가능한 폼 한 줄 입력. 보기 모드(disabled) 시 회색 배경, 수정 시 흰 배경. */
+
+interface Props {
+  id: string;
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
 }
 
 // ═══════════════════════════════════════════════════════════════
-// BASE — 기본 정보 (defineProps, cva/cssVariants 등)
+// BASE — 기본 정보 (defineProps, defineModel)
 // ═══════════════════════════════════════════════════════════════
 
 const props = defineProps<Props>();
 
-const cssVariants = cva(
-  [
-    `w-[300px] shrink-0 min-w-0 bg-white border-r border-gray-300 p-2`,
-  ],
-  {
-    variants: {},
-    defaultVariants: {},
-    compoundVariants: [],
-  }
-);
+const model = defineModel<string>({ default: '', });
 
 // ─────────────────────────────────────────────────────────────
 // STOREDATA — Pinia 스토어 사용 시
 // ─────────────────────────────────────────────────────────────
 
-const projectStore = useProjectStore();
-const { isLoaded, hasProjects, } = storeToRefs(projectStore);
-
 // ─────────────────────────────────────────────────────────────
 // STATES — ref, computed 등 반응형 변수
 // ─────────────────────────────────────────────────────────────
-
-/** 프로젝트가 있을 때만 목록/관련 메뉴 노출. 추후 설정(settings) 스토어 추가 시 동일 패턴으로 hasSettings 반영 */
-const showProjectNav = computed(() => isLoaded.value && hasProjects.value);
 
 // ─────────────────────────────────────────────────────────────
 // ACTIONS — 변수를 제어하는 함수들
@@ -54,22 +42,25 @@ const showProjectNav = computed(() => isLoaded.value && hasProjects.value);
 </script>
 
 <template>
-  <aside :class="cn(cssVariants({}), props.class)">
-    <nav class="flex flex-col gap-1">
-      <RouterLink
-        v-if="showProjectNav"
-        to="/project-list"
-        class="rounded-2 px-2 py-1.5 text-left text-sm hover:bg-gray-100"
-      >
-        프로젝트 목록
-      </RouterLink>
-      <RouterLink
-        to="/create-project"
-        class="rounded-2 px-2 py-1.5 text-left text-sm hover:bg-gray-100"
-      >
-        프로젝트 생성
-      </RouterLink>
-      <!-- 추후 설정 스토어 연동 시: v-if="hasSettings" 등으로 설정 메뉴 노출 -->
-    </nav>
-  </aside>
+  <div class="flex flex-col gap-1">
+    <label :for="props.id" class="text-sm font-medium text-gray-700">
+      {{ props.label }}
+      <span v-if="props.required" class="text-red-500">
+        *
+      </span>
+    </label>
+    <input
+      :id="props.id"
+      v-model="model"
+      type="text"
+      :disabled="props.disabled"
+      :class="cn(
+        'min-h-10 rounded-2 border px-3 py-2 text-sm outline-none',
+        props.disabled
+          ? 'cursor-default border-gray-200 bg-gray-50 text-gray-900 read-only:bg-gray-50'
+          : 'border-gray-300 bg-white focus:border-gray-500 focus:ring-1 focus:ring-gray-500',
+      )"
+      :placeholder="props.placeholder"
+    >
+  </div>
 </template>

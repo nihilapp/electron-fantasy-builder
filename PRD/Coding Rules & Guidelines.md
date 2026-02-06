@@ -171,6 +171,22 @@ fantasy-builder-exe/
 - **목록 응답**: `ResponseType<ListType<TData>>` (ListResponseType) 사용. data 안에 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast` 유지.
 - **페이징**: 기본 `pageSize`는 10이며, 사용자 요청이 있을 경우 해당 값을 우선합니다.
 
+### UI (보기/수정 폼)
+- **보기 상태**: plain text가 아닌 **수정 불가(disabled) input**으로 표시한다. 레이블·필드 구조는 수정 모드와 동일하게 두고, 보기일 때만 input/textarea에 `disabled`를 적용한다.
+- **수정 가능한 폼 요소**: 편집 가능한 input/textarea 등은 배경을 **흰색(bg-white)**으로 통일한다. 보기 상태(disabled)일 때는 회색 배경(bg-gray-50 등)으로 구분해도 된다.
+
+### Vue 컴포넌트 구조 (script setup)
+- **기준 템플릿**: `src/renderer/components/template.vue`. 모든 Vue 컴포넌트(`.vue`)는 이 템플릿과 **동일한 script setup 내부 구조**를 따라야 한다.
+- **섹션 순서 (필수)**:
+  1. **BASE** — `defineProps`, `cva`/`cssVariants` 등 기본 정보. Props 인터페이스·타입은 섹션 위에.
+  2. **STOREDATA** — Pinia 스토어 사용 시. 미사용 시 빈 섹션 또는 주석만 유지.
+  3. **STATES** — `ref`, `computed` 등 반응형 변수.
+  4. **ACTIONS** — 위 변수들을 제어하는 함수들.
+  5. **WATCH** — `watch()` 정의.
+  6. **LIFECYCLE** — `onMounted`, `onUnmounted` 등.
+- **경계 주석**: BASE는 `// ═══...` 로 상·하 경계, 나머지 섹션은 `// ───...` 로 상·하 경계. 정확한 문구·길이는 `template.vue` 참고.
+- 새 컴포넌트는 `template.vue` 를 복사한 뒤 내용만 채우고, 기존 컴포넌트 수정 시에도 위 순서·경계를 유지한다.
+
 ### 기타 규칙
 - **소프트 삭제**: `del_yn = 'Y'`로 표시.
 - **공유 여부**: `shrn_yn = 'Y'`인 경우 접근 제어 정책에 따라 조회 허용.

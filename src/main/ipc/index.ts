@@ -1,5 +1,6 @@
 import {
   ipcGetAbility,
+  ipcGetCoreRule,
   ipcGetHealth,
   ipcGetProject,
   ipcGetTrait
@@ -22,4 +23,5 @@ export function setupIpcHandlers() {
   ipcGetProject();
   ipcGetTrait();
   ipcGetAbility();
+  ipcGetCoreRule();
 }

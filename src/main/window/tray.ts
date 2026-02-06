@@ -52,7 +52,7 @@ export function createTray(): Tray | null {
   ]);
 
   tray.setContextMenu(contextMenu);
-  tray.setToolTip('Fantasy Builder');
+  tray.setToolTip('FANTASY BUILDER');
 
   // Windows: 클릭 시 창 표시 (맥은 컨텍스트 메뉴만)
   tray.on('click', () => {

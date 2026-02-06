@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { getIconData, iconToSVG, replaceIDs, type IconifyIcon } from '@iconify/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { computed } from 'vue';
@@ -13,6 +12,10 @@ interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   class?: string;
   iconName: IconName;
 }
+
+// ═══════════════════════════════════════════════════════════════
+// BASE — 기본 정보 (defineProps, cva/cssVariants 등)
+// ═══════════════════════════════════════════════════════════════
 
 const props = defineProps<Props>();
 
@@ -28,6 +31,14 @@ const cssVariants = cva(
     compoundVariants: [],
   }
 );
+
+// ─────────────────────────────────────────────────────────────
+// STOREDATA — Pinia 스토어 사용 시
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// STATES — ref, computed 등 반응형 변수
+// ─────────────────────────────────────────────────────────────
 
 const iconInfo = computed(() => {
   const idx = props.iconName.indexOf(':');
@@ -65,6 +76,19 @@ const svgBody = computed(() => {
 });
 
 const svgAttributes = computed(() => renderData.value?.attributes ?? { });
+
+// ─────────────────────────────────────────────────────────────
+// ACTIONS — 변수를 제어하는 함수들
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// WATCH — watch() 정의 영역
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// LIFECYCLE — onMounted, onUnmounted 등
+// ─────────────────────────────────────────────────────────────
+
 </script>
 
 <template>

@@ -1,0 +1,17 @@
+/**
+ * 첫 페인트 로딩 화면(index.html #app-loading)용 디자인 토큰.
+ * tailwind.css / colors.css 와 동일한 변수명·값을 유지해 이질감을 없앰.
+ * 값 변경 시 colors.css, tailwind.css @theme 와 동기화할 것.
+ */
+:root {
+  /* colors.css @theme default — black, gray */
+  --color-black-100: oklch(0.97 0 0);
+  --color-black-600: oklch(0.439 0 0);
+  --color-black-700: oklch(0.371 0 0);
+  --color-gray-500: oklch(0.551 0.027 264.364);
+
+  /* tailwind.css @theme — 타이포·폰트 */
+  --text-h3: 2rem;
+  --text-sm: 1rem;
+  --font-pretendard: "Pretendard", "Noto Sans KR", sans-serif;
+}

@@ -9,6 +9,10 @@ interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   class?: string;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// BASE — 기본 정보 (defineProps, cva/cssVariants, useRouter/useRoute)
+// ═══════════════════════════════════════════════════════════════
+
 const props = defineProps<Props>();
 
 const cssVariants = cva(
@@ -24,8 +28,17 @@ const cssVariants = cva(
 
 const router = useRouter();
 const route = useRoute();
+
+// ─────────────────────────────────────────────────────────────
+// STOREDATA — Pinia 스토어 사용 시
+// ─────────────────────────────────────────────────────────────
+
 const projectStore = useProjectStore();
 const { projectList, isLoaded, hasProjects, } = storeToRefs(projectStore);
+
+// ─────────────────────────────────────────────────────────────
+// STATES — ref, computed 등 반응형 변수
+// ─────────────────────────────────────────────────────────────
 
 /** 쿼리 prjNo로 선택된 프로젝트 (숫자 파싱) */
 const selectedPrjNo = computed(() => {
@@ -44,6 +57,10 @@ const selectedProject = computed<ProjectVo | null>(() => {
   return projectList.value.find((p) => p.prjNo === no) ?? null;
 });
 
+// ─────────────────────────────────────────────────────────────
+// ACTIONS — 변수를 제어하는 함수들
+// ─────────────────────────────────────────────────────────────
+
 const selectProject = (prjNo: number | null | undefined) => {
   if (prjNo == null) {
     router.replace({ path: '/project-list', query: {}, });
@@ -51,6 +68,14 @@ const selectProject = (prjNo: number | null | undefined) => {
   }
   router.replace({ path: '/project-list', query: { prjNo: String(prjNo), }, });
 };
+
+// ─────────────────────────────────────────────────────────────
+// WATCH — watch() 정의 영역
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// LIFECYCLE — onMounted, onUnmounted 등
+// ─────────────────────────────────────────────────────────────
 
 onMounted(() => {
   projectStore.getProjectList();
@@ -101,9 +126,10 @@ onMounted(() => {
             <RouterLink
               v-if="p.prjNo != null"
               :to="{ name: 'project-detail', params: { prjNo: String(p.prjNo) } }"
-              class="shrink-0 rounded-2 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200 hover:text-gray-900"
+              class="shrink-0 inline-flex items-center gap-1 rounded-2 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200 hover:text-gray-900"
               @click.stop
             >
+              <VueIcon icon-name="lucide:settings" class="size-3.5 shrink-0" />
               관리
             </RouterLink>
           </li>

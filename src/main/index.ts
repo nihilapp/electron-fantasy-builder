@@ -1,3 +1,15 @@
+import { execSync } from 'node:child_process';
+
+/** Windows: 터미널 로그 한글 깨짐 방지. 콘솔 코드페이지를 UTF-8(65001)로 설정. .bashrc의 LANG만으로는 Windows 콘솔 코드페이지가 바뀌지 않음. */
+if (process.platform === 'win32') {
+  try {
+    execSync('cmd /c "chcp 65001 >nul 2>&1"', { stdio: 'ignore', });
+  }
+  catch {
+    // 실패해도 앱은 계속 동작
+  }
+}
+
 import { app } from 'electron';
 
 import { setupIpcHandlers } from './ipc';
