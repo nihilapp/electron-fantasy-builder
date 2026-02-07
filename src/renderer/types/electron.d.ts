@@ -89,8 +89,45 @@ interface ElectronAPI {
     getCoreRuleList: (prjNo: number, params?: ListParams) => (
       Promise<ListResponseType<CoreRuleVo>>
     );
+    getCoreRule: (prjNo: number, coreNo: number) => (
+      Promise<ResponseType<CoreRuleVo | null>>
+    );
     postCoreRule: (prjNo: number, body: Partial<CoreRuleVo>) => (
       Promise<ResponseType<CoreRuleVo>>
+    );
+    patchCoreRule: (prjNo: number, coreNo: number, body: Partial<CoreRuleVo>) => (
+      Promise<ResponseType<CoreRuleVo | null>>
+    );
+    deleteCoreRule: (prjNo: number, coreNo: number) => (
+      Promise<ResponseType<{ deleted: boolean }>>
+    );
+
+    getProjectTraitList: (prjNo: number, params?: ListParams) => (
+      Promise<ListResponseType<ProjectTraitVo>>
+    );
+    getProjectTraitByNo: (prjNo: number, traitNo: number) => (
+      Promise<ResponseType<ProjectTraitVo | null>>
+    );
+    postProjectTrait: (body: ProjectTraitVo) => Promise<ResponseType<ProjectTraitVo>>;
+    patchProjectTrait: (prjNo: number, traitNo: number, body: Partial<ProjectTraitVo>) => (
+      Promise<ResponseType<ProjectTraitVo | null>>
+    );
+    deleteProjectTrait: (prjNo: number, traitNo: number) => (
+      Promise<ResponseType<{ deleted: boolean }>>
+    );
+
+    getProjectAbilityList: (prjNo: number, params?: ListParams) => (
+      Promise<ListResponseType<ProjectAbilityVo>>
+    );
+    getProjectAbilityByNo: (prjNo: number, abilityNo: number) => (
+      Promise<ResponseType<ProjectAbilityVo | null>>
+    );
+    postProjectAbility: (body: ProjectAbilityVo) => Promise<ResponseType<ProjectAbilityVo>>;
+    patchProjectAbility: (prjNo: number, abilityNo: number, body: Partial<ProjectAbilityVo>) => (
+      Promise<ResponseType<ProjectAbilityVo | null>>
+    );
+    deleteProjectAbility: (prjNo: number, abilityNo: number) => (
+      Promise<ResponseType<{ deleted: boolean }>>
     );
   };
 }

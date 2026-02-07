@@ -18,7 +18,7 @@ const props = defineProps<Props>();
 
 const cssVariants = cva(
   [
-    'flex flex-row items-center p-2 text-black-700 bg-white border-b border-gray-300 titlebar-drag',
+    'flex flex-row items-center border-b border-border bg-card px-3 py-1.5 text-foreground titlebar-drag transition-colors duration-300',
   ],
   {
     variants: {},
@@ -27,7 +27,7 @@ const cssVariants = cva(
   }
 );
 
-const buttonClassNames = 'flex flex-row items-center justify-center p-2 hover:bg-gray-200 rounded-2 transition-colors duration-200 ease-in-out titlebar-btn';
+const buttonClassNames = 'titlebar-btn flex flex-row items-center justify-center rounded-2 p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground';
 
 // ─────────────────────────────────────────────────────────────
 // STOREDATA — Pinia 스토어 사용 시
@@ -65,25 +65,30 @@ const onClickClose = () => {
 
 <template>
   <header :class="cn(cssVariants({}), props.class)" class="titlebar">
-    <h1 class="flex flex-row gap-1 items-center text-lg flex-1 shrink-0 font-900 truncate leading-1">
-      <img :src="logoUrl" alt="FANTASY BUILDER" class="size-8">
-      <span class="uppercase">
+    <h1 class="flex flex-row gap-2 items-center text-lg flex-1 shrink-0 font-black truncate leading-none tracking-tight">
+      <img :src="logoUrl" alt="FANTASY BUILDER" class="size-6 object-contain">
+      <span class="uppercase text-current">
         {{ props.title }}
       </span>
     </h1>
 
     <div class="flex items-center gap-1 shrink-0">
+      <!-- Theme Toggle -->
+      <ToggleTheme />
+
+      <div class="w-px h-3.5 bg-border mx-0.5" />
+
       <button type="button" :class="buttonClassNames" aria-label="최소화" @click="onClickMinimize">
-        <VueIcon icon-name="fa6-solid:window-minimize" class="size-4" />
+        <VueIcon icon-name="fa6-solid:window-minimize" class="size-3" />
       </button>
       <button type="button" :class="buttonClassNames" aria-label="최대화/복구" @click="onClickMaximizeRestore">
-        <VueIcon icon-name="fa6-solid:window-restore" class="size-4" />
+        <VueIcon icon-name="fa6-solid:window-restore" class="size-3" />
       </button>
       <button
         type="button"
         :class="cn([
           buttonClassNames,
-          'hover:bg-red-500 hover:text-white'
+          'hover:bg-destructive hover:text-destructive-foreground'
         ])"
         aria-label="닫기"
         @click="onClickClose"

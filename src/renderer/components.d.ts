@@ -14,12 +14,16 @@ declare module 'vue' {
     AppLoadingScreen: typeof import('./components/common/AppLoadingScreen.vue')['default']
     AppSidebar: typeof import('./components/common/AppSidebar.vue')['default']
     AppTitlebar: typeof import('./components/common/AppTitlebar.vue')['default']
+    ContentHeader: typeof import('./components/common/ContentHeader.vue')['default']
+    EmptyState: typeof import('./components/common/EmptyState.vue')['default']
     FormButton: typeof import('./components/form/FormButton.vue')['default']
     FormInput: typeof import('./components/form/FormInput.vue')['default']
     FormTextarea: typeof import('./components/form/FormTextarea.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingItemCard: typeof import('./components/common/SettingItemCard.vue')['default']
     Template: typeof import('./components/template.vue')['default']
+    ToggleTheme: typeof import('./components/common/ToggleTheme.vue')['default']
     VueIcon: typeof import('./components/common/VueIcon.vue')['default']
   }
 }

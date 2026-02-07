@@ -15,7 +15,6 @@ export const coreRulesTable = pgTable('core_rules', {
   strcElem: text('strc_elem'),
   mechDesc: text('mech_desc'),
   narrAply: text('narr_aply'),
-  keywords: text('keywords'),
   linkDocs: text('link_docs'),
   rmk: text('rmk'),
   ...commonColumnsPg,

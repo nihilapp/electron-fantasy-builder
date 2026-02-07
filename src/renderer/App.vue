@@ -3,9 +3,26 @@ import { RouterView } from 'vue-router';
 
 import AppLoadingScreen from '~/components/common/AppLoadingScreen.vue';
 import AppTitleBar from '~/components/common/AppTitlebar.vue';
+import { useCommonStore } from '~/stores/commonStore';
 import { useProjectStore } from '~/stores/projectStore';
 
+// ═══════════════════════════════════════════════════════════════
+// BASE — 기본 정보 (defineProps, cva, useRoute 등)
+// ═══════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────
+// STOREDATA — Pinia 스토어 사용 시
+// ─────────────────────────────────────────────────────────────
+
+const commonStore = useCommonStore();
+const { initTheme, } = commonStore;
+
 const projectStore = useProjectStore();
+const { getProjectList, } = projectStore;
+
+// ─────────────────────────────────────────────────────────────
+// STATES — ref, computed 등 반응형 변수
+// ─────────────────────────────────────────────────────────────
 
 /** 테스트용: true면 로딩 화면을 계속 표시. 기본 false. */
 const FORCE_LOADING = false;
@@ -25,6 +42,10 @@ const MIN_LOADING_DISPLAY_MS = 500;
 /** 로딩 시작 시각. 최소 표시 시간 계산용 */
 const loadingStartedAt = ref(0);
 
+// ─────────────────────────────────────────────────────────────
+// ACTIONS — 변수를 제어하는 함수들
+// ─────────────────────────────────────────────────────────────
+
 /**
  * Health API로 백엔드 준비 여부 확인. 성공 시 appReady = true 후 프로젝트 목록 로드.
  * 로딩 화면이 최소 MIN_LOADING_DISPLAY_MS 동안은 보이도록 대기한 뒤 전환.
@@ -33,16 +54,20 @@ async function waitForAppReady() {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       await window.electron.api.getHealth();
+
       if (!FORCE_LOADING) {
         const elapsed = Date.now() - loadingStartedAt.value;
+
         if (elapsed < MIN_LOADING_DISPLAY_MS) {
           await new Promise((resolve) =>
             setTimeout(resolve, MIN_LOADING_DISPLAY_MS - elapsed)
           );
         }
+
         appReady.value = true;
-        await projectStore.getProjectList();
+        await getProjectList();
       }
+
       return;
     }
     catch {
@@ -56,11 +81,6 @@ async function waitForAppReady() {
   }
 }
 
-onMounted(() => {
-  loadingStartedAt.value = Date.now();
-  waitForAppReady();
-});
-
 /**
  * 에러 안내 화면에서 "다시 시도" 클릭 시 재시도.
  */
@@ -69,6 +89,20 @@ function retryLoad() {
   loadingStartedAt.value = Date.now();
   waitForAppReady();
 }
+
+// ─────────────────────────────────────────────────────────────
+// WATCH — watch() 정의 영역
+// ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// LIFECYCLE — onMounted, onUnmounted 등
+// ─────────────────────────────────────────────────────────────
+
+onMounted(() => {
+  initTheme();
+  loadingStartedAt.value = Date.now();
+  waitForAppReady();
+});
 </script>
 
 <template>
@@ -78,14 +112,14 @@ function retryLoad() {
   <!-- 준비 실패: 에러 메시지 + 다시 시도 -->
   <div
     v-else-if="loadError"
-    class="flex h-dvh w-full flex-col items-center justify-center gap-4 bg-black-100 p-4"
+    class="flex h-dvh w-full flex-col items-center justify-center gap-4 bg-indigo-950 p-4"
   >
-    <p class="text-sm text-gray-600">
+    <p class="type-muted">
       {{ loadError }}
     </p>
     <button
       type="button"
-      class="button-base rounded-2 px-4 py-2 text-sm hover:bg-black-500"
+      class="btn-primary"
       @click="retryLoad"
     >
       다시 시도

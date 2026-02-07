@@ -1,0 +1,19 @@
+ALTER TABLE `abilities` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `char_group_relations` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `char_item_maps` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `char_relations` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `characters` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `core_rules` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `creatures` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `event_entries` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `events` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `group_relations` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `items` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `lores` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `nations` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `organizations` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `project_abilities` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `project_traits` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `projects` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `regions` ADD `tags` text;--> statement-breakpoint
+ALTER TABLE `traits` ADD `tags` text;

@@ -10,9 +10,16 @@
 ### Design Pattern
 **Controller → Service → DB(Mapper)** 3계층 + **도메인 주도 설계(DDD) Lite**를 적용합니다.
 
-- **Hono Controller**: HTTP 요청/응답만 담당. Service 호출 후 `c.json()` 반환.
-- **Service**: 비즈니스 로직. Mapper 결과를 DTO로 가공.
-- **Mapper**: Drizzle 쿼리 수행. `getDb()`로 연결 취득 후 `schema/local` 또는 `schema/remote` 스키마 사용.
+- **디자인 시스템 (Design System)**:
+  - **Custom Only Rule**: Tailwind 기본 유틸리티 대신, `src/renderer/assets/styles`에 정의된 커스텀 토큰만 사용해야 합니다.
+  - **Radius 규칙**: 둥글기 크기는 **반드시 숫자**(`rounded-2`, `rounded-3` 등)만 사용합니다.
+    - `sm`, `md`, `lg`, `xl` 등 Semantic 이름 사용 금지.
+    - **예외**: `rounded-full`은 허용 (원형).
+  - **확장**: 새로운 스타일 토큰이 필요하면 `assets/styles` 내의 해당 CSS 파일(`radius.css`, `colors.css` 등)에 변수를 정의한 후 사용합니다.
+  - **프로젝트 포인트 컬러**: Primary / Accent / Ring은 **blue500** 계열로 통일. `theme.css`에서 `--color-primary`, `--color-accent`, `--color-ring` 등은 `blue-500`(및 라이트/다크용 blue-100, blue-900) 사용.
+  - **시맨틱 토큰 (다크/라이트 공통)**: 텍스트·배경·테두리는 `text-foreground`, `text-muted-foreground`, `bg-background`, `bg-card`, `border-border` 등 **시맨틱 토큰**만 사용. `text-slate-200`, `bg-violet-500/20` 등 팔레트 하드코딩은 지양. 에러/삭제는 `text-destructive`, `hover:text-destructive` 사용.
+  - **설정 목록 아이템 (SettingItemCard)**: 코어 설정·특성/능력 등 설정 목록의 한 행은 공통 컴포넌트 `SettingItemCard`(`src/renderer/components/common/SettingItemCard.vue`) 사용. 레이아웃: 카테고리(라벨) + 제목 같은 행·카테고리 선행·우측 상단 컨트롤(보기/수정/즐겨찾기/보호/삭제). 동작은 emit(`view`, `edit`, `toggle-favorite`, `toggle-protected`, `delete`)으로 부모에서 처리.
+- **컴포넌트 (Components)**: Drizzle 쿼리 수행. `getDb()`로 연결 취득 후 `schema/local` 또는 `schema/remote` 스키마 사용.
 
 ### IPC vs API
 - **엔드포인트 통신 = API(HTTP)**. Hono·외부 서버 호출은 axios(메인) 또는 fetch(렌더러 honoClient)로만 수행.
@@ -116,7 +123,7 @@ fantasy-builder-exe/
 - **반환 타입**: 함수·메서드의 **리턴 타입은 굳이 명시하지 않는다**. TypeScript 추론으로 충분하며, 명시 시 코드만 어수선해져 가독성이 떨어진다.
 
 ### Style & Documentation
-- **한 줄 공백 (기본 규칙)**: **변수**, **함수**, **클래스**, **조건문**(if/else/switch), **반복문**(for/while 등)끼리는 **한 줄의 공백**을 둔다. 이유 불문, 기본 규칙이다.
+- **한 줄 공백 (기본 규칙)**: **변수**, **함수**, **클래스**, **조건문**(if/else/switch), **반복문**(for/while 등)끼리는 **한 줄의 공백**을 둔다. 이유 불문, 기본 규칙이다. **함수 내부**에서도 동일: 변수 선언·조건문·반복문·함수 호출 등 서로 다른 성질의 블록 사이에는 반드시 한 줄 띄어 쓴다.
 - **변수·매개변수 축약 금지**: `c`처럼 의미를 파악할 수 없는 축약을 사용하지 않는다. (예: Hono 컨텍스트는 `c` 대신 `context`, `context.json()`으로 작성.) 코드는 결국 사람이 보는 것이므로 사람이 이해할 수 있어야 한다.
 - **JSDoc**: 모든 함수·메서드에는 JSDoc을 붙인다. `@description`(또는 설명 문단)과 `@param`으로 인자를 설명한다.
 - **응답 JSON 포맷**: `context.json()` 등으로 넘기는 응답 객체는 **필드당 한 줄**로 작성한다. 모든 필드를 줄바꿈하여 나열한다.
@@ -126,6 +133,7 @@ fantasy-builder-exe/
 - **긴 줄 줄바꿈**: 한 줄의 **글자 수가 길어지면** (예: 100자~120자 초과) 한 줄에 두지 않고 **줄바꿈**하여 여러 줄로 나눈다. 함수 호출·메서드 체인·콜백 등 모두 해당한다. 예: `return context.json(toErrorResponse(RESPONSE_CODE.INTERNAL_SERVER_ERROR, message), 200);` 처럼 인자만으로도 길어지면 호출을 여러 줄로 나누어 작성한다. 가독성을 위한 규칙이다.
 - **화살표 함수 반환부 줄바꿈**: 화살표 함수의 **반환 식**을 다음 줄로 나눌 때는 반드시 **소괄호 `( )`로 감싼다**. `=>` 다음에 `(`를 두고, 반환 식을 다음 줄에 쓴 뒤 `);`로 닫는다. (예: `(a, b) => (\n  a.localeCompare(b)\n);`) 이렇게 해야 반환되는 값이 하나의 식임이 명확해진다.
 - **상수 필드 문서화**: 상수 객체의 각 필드에는 **필드 상단에 한 줄짜리 JSDoc**으로 설명을 둔다. (예: `/** @description 리소스 생성 성공 */`) 우측에 일반 주석(`//`)을 달지 않는다. 상수가 어떤 의미인지 파악하기 위한 규칙이다.
+- **이벤트 핸들러 함수명**: 함수명은 `on<Action><Target>` 형식을 따른다. (예: `onClickSidebarEmpty`, `onSubmitForm`). `handle*` 접두어는 사용하지 않는다.
 
 ### Schema (Drizzle)
 - **공통 필드**: `common.columns.ts` (useYn, shrnYn, delYn, crtNo, crtDt, updtNo, updtDt, delNo, delDt)를 모든 엔티티 테이블에 spread.
@@ -139,6 +147,32 @@ fantasy-builder-exe/
 - **Hono 핸들러**: 위 "변수·매개변수 축약 금지" 규칙 적용. 컨텍스트 매개변수는 `context` 등 의미가 드러나는 이름을 사용한다.
 - **API 응답**: ResponseType 전체를 반환. 호출부에서 `data`만 잘라서 전달하지 말 것.
 - **코드 스타일**: 웬만하면 구문은 한 줄씩 띄어서 작성 (한 줄에 한 문장·표현, 논리 블록 사이 빈 줄).
+
+### State Management (Pinia)
+- **State 접근**: 반드시 `storeToRefs`를 사용하여 반응성을 유지하며 구조 분해 할당해야 한다. `store.state` 형식의 직접 접근은 금지한다.
+- **Action 사용**: Store 인스턴스에서 직접 구조 분해 할당하여 사용한다. `store.action()` 형식의 직접 호출은 금지한다.
+  ```typescript
+  // Bad
+  const store = useStore();
+  const value = store.count;
+  store.increment();
+
+  // Good
+  const store = useStore();
+  const { count } = storeToRefs(store);
+  const { increment } = store;
+  increment();
+  ```
+
+### Auto-Import (Renderer)
+- **적용 범위**: `src/renderer` 아래 모든 파일 (`.vue`, `.ts`). Main/Preload 프로세스에는 적용되지 않는다.
+- **설정**: `electron.vite.config.ts`의 `unplugin-auto-import` 플러그인. 생성되는 타입 선언은 `src/renderer/auto-imports.d.ts`에서 확인한다.
+- **자동 임포트 목록** (이 목록에 있는 심볼은 **import하지 않는다**):
+  - **Vue**: `ref`, `computed`, `watch`, `watchEffect`, `onMounted`, `onUnmounted`, `onActivated`, `inject`, `provide`, `createApp` 등 Vue API 전역.
+  - **vue-router**: `useRoute`, `useRouter`, `onBeforeRouteLeave`, `onBeforeRouteUpdate`, `useLink`.
+  - **Pinia**: `defineStore`, `storeToRefs`.
+- **규칙**: 위 목록에 포함된 심볼은 코드에서 **명시적 import를 작성하지 않는다**. 자동 임포트만 사용하여 중복을 제거한다.
+- **예외**: `createPinia`, `createRouter`, `createWebHashHistory`, `RouterView` 등 자동 임포트 목록에 없는 것은 기존처럼 import한다.
 
 ### Error Handling
 - **Renderer**: API 호출 실패 시 try/catch로 메시지 표시.
@@ -176,6 +210,7 @@ fantasy-builder-exe/
 - **수정 가능한 폼 요소**: 편집 가능한 input/textarea 등은 배경을 **흰색(bg-white)**으로 통일한다. 보기 상태(disabled)일 때는 회색 배경(bg-gray-50 등)으로 구분해도 된다.
 
 ### Vue 컴포넌트 구조 (script setup)
+- **CVA 구조 필수**: `App.vue`를 제외한 모든 컴포넌트는 `class-variance-authority (cva)`를 사용하여 스타일 변주를 관리해야 한다. `defineProps` 인터페이스는 `VariantProps<typeof cssVariants>`를 확장해야 한다.
 - **기준 템플릿**: `src/renderer/components/template.vue`. 모든 Vue 컴포넌트(`.vue`)는 이 템플릿과 **동일한 script setup 내부 구조**를 따라야 한다.
 - **섹션 순서 (필수)**:
   1. **BASE** — `defineProps`, `cva`/`cssVariants` 등 기본 정보. Props 인터페이스·타입은 섹션 위에.

@@ -29,6 +29,24 @@ export {
 } from './apiAbility';
 
 export {
+  apiDeleteProjectTrait,
+  apiGetProjectTraitByNo,
+  apiGetProjectTraitList,
+  apiPatchProjectTrait,
+  apiPostProjectTrait,
+  ipcGetProjectTrait
+} from './apiProjectTrait';
+
+export {
+  apiDeleteProjectAbility,
+  apiGetProjectAbilityByNo,
+  apiGetProjectAbilityList,
+  apiPatchProjectAbility,
+  apiPostProjectAbility,
+  ipcGetProjectAbility
+} from './apiProjectAbility';
+
+export {
   apiGetCoreRuleList,
   ipcGetCoreRule
 } from './apiCoreRule';

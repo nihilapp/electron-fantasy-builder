@@ -1,12 +1,32 @@
 <script setup lang="ts">
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import type { ProjectVo } from '@app-types/vo.types';
 import { useProjectStore } from '~/stores/projectStore';
+import { cn } from '~/utils/cn';
 
 /** 프로젝트 개요: 기본 정보 보기/수정. 기본은 보기 모드, 톱니 버튼으로 수정 모드 전환. */
+
+interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
+  class?: string;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // BASE — 기본 정보 (inject project, prjNo)
 // ═══════════════════════════════════════════════════════════════
+
+const props = defineProps<Props>();
+
+const cssVariants = cva(
+  [
+    'flex flex-col gap-6',
+  ],
+  {
+    variants: {},
+    defaultVariants: {},
+    compoundVariants: [],
+  }
+);
 
 const project = inject<Ref<ProjectVo | null>>('project')!;
 const prjNo = inject<Ref<number | null>>('prjNo')!;
@@ -16,6 +36,7 @@ const prjNo = inject<Ref<number | null>>('prjNo')!;
 // ─────────────────────────────────────────────────────────────
 
 const projectStore = useProjectStore();
+const { updateProject, getProjectByNo, } = projectStore;
 
 // ─────────────────────────────────────────────────────────────
 // STATES — ref, computed 등 반응형 변수
@@ -76,8 +97,8 @@ async function save() {
       prjVer: form.value.prjVer.trim() || null,
       prjExpln: form.value.prjExpln.trim() || null,
     };
-    await projectStore.updateProject(no, body);
-    project.value = await projectStore.getProjectByNo(no) ?? null;
+    await updateProject(no, body);
+    project.value = await getProjectByNo(no) ?? null;
     isViewMode.value = true;
   }
   catch (err) {
@@ -119,15 +140,15 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
+  <div :class="cn(cssVariants({}), 'p-4', props.class)">
     <div class="flex items-center justify-between gap-2">
-      <h2 class="text-h5 font-medium text-gray-900">
+      <h2 class="type-section-title">
         프로젝트 개요
       </h2>
       <button
         v-if="isViewMode && project"
         type="button"
-        class="rounded-2 p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+        class="btn-icon p-2"
         aria-label="수정 모드로 전환"
         @click="enterEditMode"
       >
@@ -136,7 +157,7 @@ watch(
     </div>
 
     <template v-if="!project">
-      <p class="text-gray-500">
+      <p class="type-muted">
         프로젝트 정보가 없습니다.
       </p>
     </template>
@@ -188,7 +209,7 @@ watch(
           :disabled="isViewMode"
         />
 
-        <p v-if="!isViewMode && errorMessage" class="text-sm text-red-600">
+        <p v-if="!isViewMode && errorMessage" class="text-sm text-red-400">
           {{ errorMessage }}
         </p>
 

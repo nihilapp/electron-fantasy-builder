@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "../fonts/pretendard/pretendard.css";
 @import "./colors.css";
+@import "./theme.css";
 @import "./size/dvh.css";
 @import "./size/dvw.css";
 @import "./size/radius.css";
@@ -29,6 +30,7 @@
   --breakpoint-lg: 1024px;
 
   --spacing: 0.25rem;
+  --spacing-75: 18.75rem;
 
   --animate-spin-2: spin 2s linear infinite;
   --animate-spin-3: spin 3s linear infinite;
@@ -58,18 +60,18 @@
 
 @layer base {
   * {
-    @apply p-0 m-0 box-border font-pretendard;
+    @apply p-0 m-0 box-border font-pretendard border-border;
   }
 
   body {
-    @apply bg-black-100!;
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
   }
 
   button {
     @apply cursor-pointer;
 
     &:disabled {
-      @apply cursor-not-allowed;
+      @apply cursor-not-allowed opacity-50;
     }
   }
 }
@@ -82,4 +84,51 @@
 @utility titlebar-btn {
   -webkit-app-region: no-drag;
   app-region: no-drag;
+}
+
+/* 스타일 가이드 기반 — 데스크탑 앱 UI (docs/스타일 가이드.md) */
+@layer components {
+  /* 카드/패널: 콘텐츠 컨테이너 */
+  .card-panel {
+    @apply rounded-3 border border-border bg-card text-card-foreground p-4 shadow-sm;
+  }
+  /* 모달 오버레이용 (필요 시) */
+  .modal-overlay {
+    @apply absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm;
+  }
+  .modal-content {
+    @apply w-full max-w-lg rounded-3 border border-border bg-card shadow-2xl;
+  }
+  /* 타이포: Display(Hero) */
+  .type-display {
+    @apply text-h3 font-black tracking-tight text-foreground drop-shadow-lg;
+  }
+  /* 섹션 타이틀 */
+  .type-section-title {
+    @apply text-h5 font-semibold text-foreground;
+  }
+  /* 라벨/소제목 */
+  .type-label {
+    @apply text-xs font-bold uppercase tracking-wider text-muted-foreground;
+  }
+  /* 본문 */
+  .type-body {
+    @apply text-sm leading-relaxed text-foreground;
+  }
+  /* Muted/캡션 */
+  .type-muted {
+    @apply text-xs font-medium text-muted-foreground;
+  }
+  /* Primary 버튼 (아이콘+텍스트) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2 bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95;
+  }
+  /* Secondary/Ghost 버튼 */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2 border border-border bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-all hover:bg-secondary/80 active:scale-95;
+  }
+  /* 아이콘 전용 버튼 */
+  .btn-icon {
+    @apply rounded-2 p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground;
+  }
 }

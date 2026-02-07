@@ -2,7 +2,7 @@
 
 **작성일**: 2026-01-31  
 **버전**: 1.0  
-**프로젝트 상태**: Electron + Vue + Hono 기반 구현
+**프로젝트 상태**: Electron + Vue + Hono 기반 구현 중 (디자인 개편 및 프론트엔드 기능 동기화 진행 중)
 
 ---
 
@@ -24,6 +24,7 @@
 2. **전역 풀 + 프로젝트 종속 구조**: 범용 특성/어빌리티와 프로젝트 고유 특성/어빌리티를 모두 지원
 3. **체계적인 데이터 구조화**: DB 스키마(Drizzle) 기반의 구조화된 데이터 입력 및 관리
 4. **관계 시각화**: 엔티티 간 다대다 관계 설정 및 탐색
+5. **트렌디한 UX/UI**: 몰입감을 주는 다크/라이트 모드 지원 및 유려한 디자인
 
 ### 오프라인 우선 · 온라인 프로젝트
 - **기본 동작**: 앱은 평소 **오프라인**으로 동작하며, 모든 데이터는 **로컬 DB**에만 쌓인다.
@@ -60,7 +61,7 @@
 
 ### State / UI / Validation
 - **Pinia**: Vue 상태 관리
-- **Tailwind CSS**: 4. 커스텀 스타일: `renderer/assets/styles/`
+- **Tailwind CSS**: v4 (CSS Variables 기반 테마 시스템)
 - **Zod**, **Luxon**, **UUID**: 검증·유틸
 
 ### Infra
@@ -76,7 +77,27 @@
 
 ## 3. System Architecture & Features
 
-### 3.1. User Flow (Core Scenarios)
+### 3.1. Implementation Status (Gap Analysis)
+> **Summary**: 백엔드와 DB 스키마는 대부분 준비되었으나, 프론트엔드(Renderer) 뷰 구현이 초기 단계임.
+
+| Feature / Entity | Backend (API/DB) | Frontend (View) | 비고 |
+|:--- |:---:|:---:|:---|
+| **Project** | ✅ | ✅ | 목록/생성/상세 구현됨 |
+| **Core Rules** | ✅ | ✅ | 상세 구현됨 |
+| **Traits (Global/Project)** | ✅ | ❌ | UI 미구현 |
+| **Abilities (Global/Project)** | ✅ | ❌ | UI 미구현 |
+| **Characters** | ✅ | ❌ | UI 미구현 |
+| **Creatures/Races** | ✅ | ❌ | UI 미구현 |
+| **Items** | ✅ | ❌ | UI 미구현 |
+| **Regions** | ✅ | ❌ | UI 미구현 |
+| **Nations** | ✅ | ❌ | UI 미구현 |
+| **Organizations** | ✅ | ❌ | UI 미구현 |
+| **Events** | ✅ | ❌ | UI 미구현 |
+| **Lores** | ✅ | ❌ | UI 미구현 |
+| **Theme System (Dark/Light)** | - | ✅ | blue500 포인트 컬러, 시맨틱 토큰 적용 |
+| **SettingItemCard (설정 목록 공통)** | - | ✅ | 카테고리·제목·컨트롤 emit, 재사용 컴포넌트 |
+
+### 3.2. User Flow (Core Scenarios)
 
 #### Flow 1: 사용자 등록 및 프로젝트 생성
 1. 사용자 회원가입 (이메일, 비밀번호)
@@ -95,7 +116,7 @@
 2. 엔티티 간 관계 설정 (인물-인물, 인물-조직, 국가-조직 등)
 3. 관계 탐색 및 시각화
 
-### 3.2. Core Features (Detailed)
+### 3.3. Core Features (Detailed)
 
 #### Feature A: 사용자 인증 및 권한 관리
 - **Logic**: JWT 기반 인증, 비밀번호 bcrypt 해싱, 이메일 인증(향후), 계정 잠금
@@ -125,18 +146,41 @@
 #### Feature H: 엔티티 간 관계 관리
 - **Logic**: 인물-인물, 인물-조직, 국가-조직 관계, 관계 유형·상세, 다형 참조
 
-### 3.3. 앱 기동 및 초기 로딩 UX
+### 3.4. 앱 기동 및 초기 로딩 UX
 
 - **배경**: 프로그램 최초 실행 시 Main Process에서 DB 연결(initDbContext)·Hono 서버 기동 등으로 지연이 발생할 수 있음. 사용자가 빈 화면만 보다가 갑자기 UI가 뜨면 체감 품질이 떨어짐.
 - **요구사항**: 앱이 **준비되기 전**에는 렌더러에서 **로딩 중** 상태를 명시적으로 표시한다.
   - 렌더러 진입 시 곧바로 "로딩 중" 화면(스피너·문구)을 보여 주고, 백엔드 준비 완료(예: Health API 성공 또는 IPC 핑)를 확인한 뒤 본문 UI(타이틀바·라우터 뷰)로 전환한다.
   - 로딩 화면은 전체 화면 또는 메인 영역을 덮는 형태로, 앱 이름·로고·"준비 중…" 등 최소 정보만 노출한다.
 
-### 3.4. 아키텍처 (Electron + Hono)
+### 3.5. 아키텍처 (Electron + Hono)
 
 - **Main Process**: Hono HTTP API(Controller → Service → Mapper), DB context(`getDb()`), IPC·API 레이어
 - **Renderer (Vue)**: `window.electron.api.*`로 Hono API 호출, `window.electron.ipc.*`로 설정·앱 통신
 - **IPC vs API**: 엔드포인트 통신 = API(HTTP). 설정·DB 모드·base URL = IPC
+
+### 3.6. UI 컴포넌트 및 디자인 규칙
+
+#### 프로젝트 포인트 컬러
+- **Primary / Accent / Ring**: **blue500** 계열로 통일. (`theme.css` — 라이트: primary·ring `blue-500`, accent `blue-100`/`blue-900`; 다크: 동일 계열.)
+- 버튼(추가, 관리 등)·포커스 링·태그 등 브랜드 강조는 위 시맨틱 토큰(`bg-primary`, `text-accent-foreground` 등) 사용.
+
+#### 설정 아이템 카드 (SettingItemCard)
+- **용도**: 코어 설정, 특성/능력 등 **설정 목록의 한 행**을 공통으로 표현. 재사용 컴포넌트.
+- **위치**: `src/renderer/components/common/SettingItemCard.vue`
+- **레이아웃**:
+  - 한 행에 **카테고리(라벨)** + **제목** + **컨트롤 아이콘**. `flex flex-row items-start`.
+  - **카테고리**가 앞에 오고, 제목이 길어져도 카테고리 위치는 고정(`shrink-0`).
+  - 컨트롤 아이콘은 **우측 상단** 정렬, 호버 시 **가로·세로 동일한 정사각형** 영역(`size-8`).
+- **Props**: `title`, `category`, `isFavorite`(선택), `isProtected`(선택).
+- **이벤트**: `@view`, `@edit`, `@toggle-favorite`, `@toggle-protected`, `@delete` — 부모에서 핸들러 구현 후 연결.
+- **컨트롤**: 보기(eye), 수정(pencil), 즐겨찾기(star), 보호(shield), 삭제(trash-2). 아이콘은 컴포넌트 내부에 고정, 동작만 emit으로 전달.
+
+#### 다크/라이트 공통
+- **텍스트·배경**: `text-foreground`, `text-muted-foreground`, `bg-background`, `bg-card`, `border-border` 등 **시맨틱 토큰**만 사용. `text-slate-200`, `bg-violet-500/20` 등 하드코딩 색은 지양.
+- **에러/삭제**: `text-destructive`, `hover:text-destructive` 등 시맨틱 토큰 사용.
+
+> 코드 규칙(Vue 섹션 순서, 공백, JSDoc, 반환 타입 등)은 **PRD/Coding Rules & Guidelines.md**를 따른다.
 
 ---
 

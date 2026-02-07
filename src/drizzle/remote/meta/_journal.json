@@ -15,6 +15,20 @@
       "when": 1769858726701,
       "tag": "0001_fantasy_builder",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770407426145,
+      "tag": "0002_init",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770468953693,
+      "tag": "0003_drop-core-rules-keywords",
+      "breakpoints": true
     }
   ]
 }

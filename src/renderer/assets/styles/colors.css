@@ -262,4 +262,14 @@
   --color-stone-800: oklch(0.268 0.007 34.298);
   --color-stone-900: oklch(0.216 0.006 56.043);
   --color-stone-950: oklch(0.147 0.004 49.25);
+
+  /* 다크 테마 앱 시맨틱 — 기존 팔레트 참조 (indigo·slate·violet) */
+  --color-app-bg: var(--color-indigo-950);
+  --color-app-surface: var(--color-indigo-900);
+  --color-app-surface-hover: var(--color-indigo-800);
+  --color-app-text: var(--color-slate-50);
+  --color-app-text-muted: var(--color-slate-400);
+  --color-app-accent: var(--color-violet-500);
+  --color-app-accent-hover: var(--color-violet-400);
+  --color-app-border: var(--color-slate-700);
 }

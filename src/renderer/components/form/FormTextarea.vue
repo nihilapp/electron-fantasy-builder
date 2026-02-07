@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '~/utils/cn';
 
 /** 재사용 가능한 폼 여러 줄 입력. rows·minHeightClass로 크기 조절. 보기 모드(disabled) 시 회색 배경. */
 
-interface Props {
+interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
+  class?: string;
   id: string;
   label: string;
   placeholder?: string;
@@ -24,6 +27,24 @@ const props = withDefaults(
 );
 
 const model = defineModel<string>({ default: '', });
+
+const cssVariants = cva(
+  [
+    'w-full resize-y rounded-2 border px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-muted-foreground',
+  ],
+  {
+    variants: {
+      disabled: {
+        true: 'cursor-not-allowed border-input bg-muted/80 text-muted-foreground opacity-80',
+        false: 'border-input bg-background text-foreground focus:border-primary',
+      },
+    },
+    defaultVariants: {
+      disabled: false,
+    },
+    compoundVariants: [],
+  }
+);
 
 // ─────────────────────────────────────────────────────────────
 // STOREDATA — Pinia 스토어 사용 시
@@ -50,10 +71,10 @@ const resolvedMinHeight = computed(() => props.minHeightClass ?? 'min-h-24');
 </script>
 
 <template>
-  <div class="flex flex-col gap-1">
-    <label :for="props.id" class="text-sm font-medium text-gray-700">
+  <div class="flex flex-col gap-1.5">
+    <label :for="props.id" class="text-sm font-medium text-foreground">
       {{ props.label }}
-      <span v-if="props.required" class="text-red-500">
+      <span v-if="props.required" class="text-red-400">
         *
       </span>
     </label>
@@ -63,11 +84,9 @@ const resolvedMinHeight = computed(() => props.minHeightClass ?? 'min-h-24');
       :rows="props.rows"
       :disabled="props.disabled"
       :class="cn(
-        'resize-y rounded-2 border px-3 py-2 text-sm outline-none',
+        cssVariants({ disabled: props.disabled }),
         resolvedMinHeight,
-        props.disabled
-          ? 'cursor-default border-gray-200 bg-gray-50 text-gray-900 read-only:bg-gray-50'
-          : 'border-gray-300 bg-white focus:border-gray-500 focus:ring-1 focus:ring-gray-500',
+        props.class
       )"
       :placeholder="props.placeholder"
     />

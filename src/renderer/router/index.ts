@@ -3,9 +3,11 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import CreateProjectView from '~/views/CreateProjectView.vue';
 import MainView from '~/views/MainView.vue';
 import CoreRuleAddSection from '~/views/project-detail/CoreRuleAddSection.vue';
+import CoreRuleDetailSection from '~/views/project-detail/CoreRuleDetailSection.vue';
 import CoreRulesSection from '~/views/project-detail/CoreRulesSection.vue';
 import OverviewSection from '~/views/project-detail/OverviewSection.vue';
 import PlaceholderSection from '~/views/project-detail/PlaceholderSection.vue';
+import TraitsAbilitiesSection from '~/views/project-detail/TraitsAbilitiesSection.vue';
 import ProjectDetailView from '~/views/ProjectDetailView.vue';
 import ProjectListView from '~/views/ProjectListView.vue';
 
@@ -49,8 +51,7 @@ const router = createRouter({
         {
           path: 'traits-abilities',
           name: 'project-traits-abilities',
-          component: PlaceholderSection,
-          props: { sectionLabel: '특성/능력 관리', },
+          component: TraitsAbilitiesSection,
         },
         {
           path: 'core-rules',
@@ -61,6 +62,12 @@ const router = createRouter({
           path: 'core-rules/new',
           name: 'project-core-rule-new',
           component: CoreRuleAddSection,
+        },
+        {
+          path: 'core-rules/:coreNo',
+          name: 'project-core-rule-detail',
+          component: CoreRuleDetailSection,
+          props: true,
         },
         {
           path: 'creatures',

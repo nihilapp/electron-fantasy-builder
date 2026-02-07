@@ -19,7 +19,6 @@ export const coreRuleSchema = z
     strcElem: z.string().nullable().optional().default(null),
     mechDesc: z.string().nullable().optional().default(null),
     narrAply: z.string().nullable().optional().default(null),
-    keywords: z.string().nullable().optional().default(null),
     linkDocs: z.string().nullable().optional().default(null),
     rmk: z.string().nullable().optional().default(null),
   })

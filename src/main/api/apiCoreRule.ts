@@ -42,7 +42,54 @@ export async function apiPostCoreRule(
 }
 
 /**
- * @description 코어 설정 API IPC 핸들러 등록. 채널: api:get-core-rule-list, api:post-core-rule
+ * @description 코어 설정 상세 조회. Hono GET /core-rules/:coreNo?prjNo=
+ */
+export async function apiGetCoreRuleByNo(
+  prjNo: number,
+  coreNo: number
+) {
+  const response = await apiClient.get<ResponseType<CoreRuleVo | null>>(
+    `/core-rules/${coreNo}`,
+    { params: { prjNo, }, }
+  );
+
+  return response.data;
+}
+
+/**
+ * @description 코어 설정 수정. Hono PATCH /core-rules/:coreNo.
+ */
+export async function apiPatchCoreRule(
+  prjNo: number,
+  coreNo: number,
+  body: Partial<CoreRuleVo>
+) {
+  const response = await apiClient.patch<ResponseType<CoreRuleVo | null>>(
+    `/core-rules/${coreNo}`,
+    body,
+    { params: { prjNo, }, }
+  );
+
+  return response.data;
+}
+
+/**
+ * @description 코어 설정 삭제. Hono DELETE /core-rules/:coreNo.
+ */
+export async function apiDeleteCoreRule(
+  prjNo: number,
+  coreNo: number
+) {
+  const response = await apiClient.delete<ResponseType<{ deleted: boolean }>>(
+    `/core-rules/${coreNo}`,
+    { params: { prjNo, }, }
+  );
+
+  return response.data;
+}
+
+/**
+ * @description 코어 설정 API IPC 핸들러 등록. 채널: api:get-core-rule-list, api:post-core-rule, api:get-core-rule, api:patch-core-rule, api:delete-core-rule
  */
 export function ipcGetCoreRule() {
   ipcMain.handle(
@@ -64,6 +111,33 @@ export function ipcGetCoreRule() {
     ) => {
       const { prjNo, body, } = payload;
       return await apiPostCoreRule(prjNo, body);
+    }
+  );
+
+  ipcMain.handle(
+    'api:get-core-rule',
+    async (_, payload: { prjNo: number; coreNo: number }) => {
+      const { prjNo, coreNo, } = payload;
+      return await apiGetCoreRuleByNo(prjNo, coreNo);
+    }
+  );
+
+  ipcMain.handle(
+    'api:patch-core-rule',
+    async (
+      _,
+      payload: { prjNo: number; coreNo: number; body: Partial<CoreRuleVo> }
+    ) => {
+      const { prjNo, coreNo, body, } = payload;
+      return await apiPatchCoreRule(prjNo, coreNo, body);
+    }
+  );
+
+  ipcMain.handle(
+    'api:delete-core-rule',
+    async (_, payload: { prjNo: number; coreNo: number }) => {
+      const { prjNo, coreNo, } = payload;
+      return await apiDeleteCoreRule(prjNo, coreNo);
     }
   );
 }

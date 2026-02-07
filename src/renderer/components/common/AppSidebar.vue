@@ -16,7 +16,7 @@ const props = defineProps<Props>();
 
 const cssVariants = cva(
   [
-    `w-[300px] shrink-0 min-w-0 bg-white border-r border-gray-300 p-2`,
+    'w-75 shrink-0 min-w-0 border-r border-border bg-card p-2 text-card-foreground transition-colors duration-300',
   ],
   {
     variants: {},
@@ -59,13 +59,13 @@ const showProjectNav = computed(() => isLoaded.value && hasProjects.value);
       <RouterLink
         v-if="showProjectNav"
         to="/project-list"
-        class="rounded-2 px-2 py-1.5 text-left text-sm hover:bg-gray-100"
+        class="btn-icon block text-left"
       >
         프로젝트 목록
       </RouterLink>
       <RouterLink
         to="/create-project"
-        class="rounded-2 px-2 py-1.5 text-left text-sm hover:bg-gray-100"
+        class="btn-icon block text-left"
       >
         프로젝트 생성
       </RouterLink>

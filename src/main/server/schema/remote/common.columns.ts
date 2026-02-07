@@ -1,4 +1,4 @@
-import { bigint, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { bigint, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 /**
  * FANTASY BUILDER 공통 필드 (CommonEntity).
@@ -8,6 +8,8 @@ export const commonColumnsPg = {
   useYn: varchar('use_yn', { length: 1, }).default('Y'),
   shrnYn: varchar('shrn_yn', { length: 1, }).default('N'),
   delYn: varchar('del_yn', { length: 1, }).default('N'),
+  /** 태그. 쉼표 구분 문자열 또는 JSON 배열 문자열. */
+  tags: text('tags'),
   crtNo: bigint('crt_no', { mode: 'number', }),
   crtDt: timestamp('crt_dt'),
   updtNo: bigint('updt_no', { mode: 'number', }),

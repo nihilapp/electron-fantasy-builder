@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import type { AbilityVo, CoreRuleVo, ProjectVo, TraitVo } from '@app-types/vo.types';
+import type { AbilityVo, CoreRuleVo, ProjectAbilityVo, ProjectTraitVo, ProjectVo, TraitVo } from '@app-types/vo.types';
 
 /**
  * @description 목록 조회 공통 파라미터 (페이징·검색). renderer electron.d.ts의 ListParams와 동일.
@@ -89,8 +89,49 @@ contextBridge.exposeInMainWorld('electron', {
     getCoreRuleList: (prjNo: number, params?: ListParams) => (
       ipcRenderer.invoke('api:get-core-rule-list', { prjNo, params, })
     ),
+    getCoreRule: (prjNo: number, coreNo: number) => (
+      ipcRenderer.invoke('api:get-core-rule', { prjNo, coreNo, })
+    ),
     postCoreRule: (prjNo: number, body: Partial<CoreRuleVo>) => (
       ipcRenderer.invoke('api:post-core-rule', { prjNo, body, })
+    ),
+    patchCoreRule: (prjNo: number, coreNo: number, body: Partial<CoreRuleVo>) => (
+      ipcRenderer.invoke('api:patch-core-rule', { prjNo, coreNo, body, })
+    ),
+    deleteCoreRule: (prjNo: number, coreNo: number) => (
+      ipcRenderer.invoke('api:delete-core-rule', { prjNo, coreNo, })
+    ),
+
+    getProjectTraitList: (prjNo: number, params?: ListParams) => (
+      ipcRenderer.invoke('api:get-project-trait-list', { prjNo, params, })
+    ),
+    getProjectTraitByNo: (prjNo: number, traitNo: number) => (
+      ipcRenderer.invoke('api:get-project-trait-by-no', { prjNo, traitNo, })
+    ),
+    postProjectTrait: (body: ProjectTraitVo) => (
+      ipcRenderer.invoke('api:post-project-trait', body)
+    ),
+    patchProjectTrait: (prjNo: number, traitNo: number, body: Partial<ProjectTraitVo>) => (
+      ipcRenderer.invoke('api:patch-project-trait', { prjNo, traitNo, body, })
+    ),
+    deleteProjectTrait: (prjNo: number, traitNo: number) => (
+      ipcRenderer.invoke('api:delete-project-trait', { prjNo, traitNo, })
+    ),
+
+    getProjectAbilityList: (prjNo: number, params?: ListParams) => (
+      ipcRenderer.invoke('api:get-project-ability-list', { prjNo, params, })
+    ),
+    getProjectAbilityByNo: (prjNo: number, abilityNo: number) => (
+      ipcRenderer.invoke('api:get-project-ability-by-no', { prjNo, abilityNo, })
+    ),
+    postProjectAbility: (body: ProjectAbilityVo) => (
+      ipcRenderer.invoke('api:post-project-ability', body)
+    ),
+    patchProjectAbility: (prjNo: number, abilityNo: number, body: Partial<ProjectAbilityVo>) => (
+      ipcRenderer.invoke('api:patch-project-ability', { prjNo, abilityNo, body, })
+    ),
+    deleteProjectAbility: (prjNo: number, abilityNo: number) => (
+      ipcRenderer.invoke('api:delete-project-ability', { prjNo, abilityNo, })
     ),
   },
 });

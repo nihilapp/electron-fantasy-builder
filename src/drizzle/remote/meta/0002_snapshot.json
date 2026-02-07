@@ -1,0 +1,4018 @@
+{
+  "id": "32b98ed2-a72e-4cbe-a53a-cd1c69ef4d20",
+  "prevId": "663aee41-2ad4-42ee-a4ae-817fa72aeb08",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.abilities": {
+      "name": "abilities",
+      "schema": "",
+      "columns": {
+        "ability_no": {
+          "name": "ability_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ability_nm": {
+          "name": "ability_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_lcls": {
+          "name": "ability_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_expln": {
+          "name": "ability_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trgt_type": {
+          "name": "trgt_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dmg_type": {
+          "name": "dmg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stat_eff_type": {
+          "name": "stat_eff_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_cost": {
+          "name": "use_cost",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cool_time": {
+          "name": "cool_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cast_time": {
+          "name": "cast_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_cnd": {
+          "name": "use_cnd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.char_ability_maps": {
+      "name": "char_ability_maps",
+      "schema": "",
+      "columns": {
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prof_lvl": {
+          "name": "prof_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_rmk": {
+          "name": "ability_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_ability_maps_char_no_characters_char_no_fk": {
+          "name": "char_ability_maps_char_no_characters_char_no_fk",
+          "tableFrom": "char_ability_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "char_ability_maps_char_no_ability_no_ability_type_pk": {
+          "name": "char_ability_maps_char_no_ability_no_ability_type_pk",
+          "columns": [
+            "char_no",
+            "ability_no",
+            "ability_type"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.char_group_relations": {
+      "name": "char_group_relations",
+      "schema": "",
+      "columns": {
+        "rel_no": {
+          "name": "rel_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trgt_ref_type": {
+          "name": "trgt_ref_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trgt_ref_no": {
+          "name": "trgt_ref_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rel_type": {
+          "name": "rel_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rel_desc": {
+          "name": "rel_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_group_relations_char_no_characters_char_no_fk": {
+          "name": "char_group_relations_char_no_characters_char_no_fk",
+          "tableFrom": "char_group_relations",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.char_item_maps": {
+      "name": "char_item_maps",
+      "schema": "",
+      "columns": {
+        "own_no": {
+          "name": "own_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_cnt": {
+          "name": "item_cnt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "equip_yn": {
+          "name": "equip_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_item_maps_char_no_characters_char_no_fk": {
+          "name": "char_item_maps_char_no_characters_char_no_fk",
+          "tableFrom": "char_item_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "char_item_maps_item_no_items_item_no_fk": {
+          "name": "char_item_maps_item_no_items_item_no_fk",
+          "tableFrom": "char_item_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.char_relations": {
+      "name": "char_relations",
+      "schema": "",
+      "columns": {
+        "rel_no": {
+          "name": "rel_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "src_char_no": {
+          "name": "src_char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trgt_char_no": {
+          "name": "trgt_char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rel_type": {
+          "name": "rel_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rel_desc": {
+          "name": "rel_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "intimacy_lvl": {
+          "name": "intimacy_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_relations_src_char_no_characters_char_no_fk": {
+          "name": "char_relations_src_char_no_characters_char_no_fk",
+          "tableFrom": "char_relations",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "src_char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "char_relations_trgt_char_no_characters_char_no_fk": {
+          "name": "char_relations_trgt_char_no_characters_char_no_fk",
+          "tableFrom": "char_relations",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "trgt_char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.char_trait_maps": {
+      "name": "char_trait_maps",
+      "schema": "",
+      "columns": {
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_trait_maps_char_no_characters_char_no_fk": {
+          "name": "char_trait_maps_char_no_characters_char_no_fk",
+          "tableFrom": "char_trait_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "char_trait_maps_char_no_trait_no_trait_type_pk": {
+          "name": "char_trait_maps_char_no_trait_no_trait_type_pk",
+          "columns": [
+            "char_no",
+            "trait_no",
+            "trait_type"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.characters": {
+      "name": "characters",
+      "schema": "",
+      "columns": {
+        "char_no": {
+          "name": "char_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "char_nm": {
+          "name": "char_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alias_nm": {
+          "name": "alias_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_type": {
+          "name": "role_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "narr_func": {
+          "name": "narr_func",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "race_no": {
+          "name": "race_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_no": {
+          "name": "org_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_rank": {
+          "name": "org_rank",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "characters_prj_no_projects_prj_no_fk": {
+          "name": "characters_prj_no_projects_prj_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "characters_race_no_creatures_creature_no_fk": {
+          "name": "characters_race_no_creatures_creature_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "creatures",
+          "columnsFrom": [
+            "race_no"
+          ],
+          "columnsTo": [
+            "creature_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "characters_ntn_no_nations_ntn_no_fk": {
+          "name": "characters_ntn_no_nations_ntn_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "nations",
+          "columnsFrom": [
+            "ntn_no"
+          ],
+          "columnsTo": [
+            "ntn_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "characters_org_no_organizations_org_no_fk": {
+          "name": "characters_org_no_organizations_org_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "org_no"
+          ],
+          "columnsTo": [
+            "org_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.core_rules": {
+      "name": "core_rules",
+      "schema": "",
+      "columns": {
+        "core_no": {
+          "name": "core_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "core_nm": {
+          "name": "core_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "def_desc": {
+          "name": "def_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aply_scope": {
+          "name": "aply_scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "strc_elem": {
+          "name": "strc_elem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mech_desc": {
+          "name": "mech_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "narr_aply": {
+          "name": "narr_aply",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keywords": {
+          "name": "keywords",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "link_docs": {
+          "name": "link_docs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "core_rules_prj_no_projects_prj_no_fk": {
+          "name": "core_rules_prj_no_projects_prj_no_fk",
+          "tableFrom": "core_rules",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.creature_ability_maps": {
+      "name": "creature_ability_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creature_no": {
+          "name": "creature_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prof_lvl": {
+          "name": "prof_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_rmk": {
+          "name": "ability_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creature_ability_maps_creature_no_creatures_creature_no_fk": {
+          "name": "creature_ability_maps_creature_no_creatures_creature_no_fk",
+          "tableFrom": "creature_ability_maps",
+          "tableTo": "creatures",
+          "columnsFrom": [
+            "creature_no"
+          ],
+          "columnsTo": [
+            "creature_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.creature_trait_maps": {
+      "name": "creature_trait_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creature_no": {
+          "name": "creature_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creature_trait_maps_creature_no_creatures_creature_no_fk": {
+          "name": "creature_trait_maps_creature_no_creatures_creature_no_fk",
+          "tableFrom": "creature_trait_maps",
+          "tableTo": "creatures",
+          "columnsFrom": [
+            "creature_no"
+          ],
+          "columnsTo": [
+            "creature_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.creatures": {
+      "name": "creatures",
+      "schema": "",
+      "columns": {
+        "creature_no": {
+          "name": "creature_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creature_nm": {
+          "name": "creature_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creature_type": {
+          "name": "creature_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "danger_grd": {
+          "name": "danger_grd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ident_stat": {
+          "name": "ident_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creature_expln": {
+          "name": "creature_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creatures_prj_no_projects_prj_no_fk": {
+          "name": "creatures_prj_no_projects_prj_no_fk",
+          "tableFrom": "creatures",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.event_entries": {
+      "name": "event_entries",
+      "schema": "",
+      "columns": {
+        "entry_no": {
+          "name": "entry_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_no": {
+          "name": "event_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_trgt_no": {
+          "name": "entry_trgt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_side": {
+          "name": "entry_side",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "event_entries_event_no_events_event_no_fk": {
+          "name": "event_entries_event_no_events_event_no_fk",
+          "tableFrom": "event_entries",
+          "tableTo": "events",
+          "columnsFrom": [
+            "event_no"
+          ],
+          "columnsTo": [
+            "event_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.events": {
+      "name": "events",
+      "schema": "",
+      "columns": {
+        "event_no": {
+          "name": "event_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_nm": {
+          "name": "event_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occur_time": {
+          "name": "occur_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "occur_loc": {
+          "name": "occur_loc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "smry": {
+          "name": "smry",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cause_pub": {
+          "name": "cause_pub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cause_real": {
+          "name": "cause_real",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_a_char": {
+          "name": "side_a_char",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_a_org": {
+          "name": "side_a_org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_a_ntn": {
+          "name": "side_a_ntn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_b_char": {
+          "name": "side_b_char",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_b_org": {
+          "name": "side_b_org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_b_ntn": {
+          "name": "side_b_ntn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_c_char": {
+          "name": "side_c_char",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_c_org": {
+          "name": "side_c_org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "side_c_ntn": {
+          "name": "side_c_ntn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flow_trgr": {
+          "name": "flow_trgr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flow_crisis": {
+          "name": "flow_crisis",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flow_climax": {
+          "name": "flow_climax",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flow_concl": {
+          "name": "flow_concl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dmg_rslt": {
+          "name": "dmg_rslt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "soc_chng": {
+          "name": "soc_chng",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "curr_conn": {
+          "name": "curr_conn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rec_official": {
+          "name": "rec_official",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "truth_hid": {
+          "name": "truth_hid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "events_prj_no_projects_prj_no_fk": {
+          "name": "events_prj_no_projects_prj_no_fk",
+          "tableFrom": "events",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.example": {
+      "name": "example",
+      "schema": "",
+      "columns": {
+        "ex_no": {
+          "name": "ex_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ex_name": {
+          "name": "ex_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ex_desc": {
+          "name": "ex_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.group_relations": {
+      "name": "group_relations",
+      "schema": "",
+      "columns": {
+        "rel_no": {
+          "name": "rel_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "src_type": {
+          "name": "src_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "src_no": {
+          "name": "src_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trgt_type": {
+          "name": "trgt_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trgt_no": {
+          "name": "trgt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rel_type": {
+          "name": "rel_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rel_desc": {
+          "name": "rel_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "group_relations_prj_no_projects_prj_no_fk": {
+          "name": "group_relations_prj_no_projects_prj_no_fk",
+          "tableFrom": "group_relations",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.item_ability_maps": {
+      "name": "item_ability_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prof_lvl": {
+          "name": "prof_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_rmk": {
+          "name": "ability_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_ability_maps_item_no_items_item_no_fk": {
+          "name": "item_ability_maps_item_no_items_item_no_fk",
+          "tableFrom": "item_ability_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.item_trait_maps": {
+      "name": "item_trait_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_trait_maps_item_no_items_item_no_fk": {
+          "name": "item_trait_maps_item_no_items_item_no_fk",
+          "tableFrom": "item_trait_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.items": {
+      "name": "items",
+      "schema": "",
+      "columns": {
+        "item_no": {
+          "name": "item_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_nm": {
+          "name": "item_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cls_main": {
+          "name": "cls_main",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cls_sub": {
+          "name": "cls_sub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "item_grd": {
+          "name": "item_grd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_desc": {
+          "name": "app_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "visual_feat": {
+          "name": "visual_feat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "attr_type": {
+          "name": "attr_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dmg_type": {
+          "name": "dmg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "main_func": {
+          "name": "main_func",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "items_prj_no_projects_prj_no_fk": {
+          "name": "items_prj_no_projects_prj_no_fk",
+          "tableFrom": "items",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lore_char_maps": {
+      "name": "lore_char_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "lore_no": {
+          "name": "lore_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lore_char_maps_lore_no_lores_lore_no_fk": {
+          "name": "lore_char_maps_lore_no_lores_lore_no_fk",
+          "tableFrom": "lore_char_maps",
+          "tableTo": "lores",
+          "columnsFrom": [
+            "lore_no"
+          ],
+          "columnsTo": [
+            "lore_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "lore_char_maps_char_no_characters_char_no_fk": {
+          "name": "lore_char_maps_char_no_characters_char_no_fk",
+          "tableFrom": "lore_char_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lore_item_maps": {
+      "name": "lore_item_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "lore_no": {
+          "name": "lore_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lore_item_maps_lore_no_lores_lore_no_fk": {
+          "name": "lore_item_maps_lore_no_lores_lore_no_fk",
+          "tableFrom": "lore_item_maps",
+          "tableTo": "lores",
+          "columnsFrom": [
+            "lore_no"
+          ],
+          "columnsTo": [
+            "lore_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "lore_item_maps_item_no_items_item_no_fk": {
+          "name": "lore_item_maps_item_no_items_item_no_fk",
+          "tableFrom": "lore_item_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lores": {
+      "name": "lores",
+      "schema": "",
+      "columns": {
+        "lore_no": {
+          "name": "lore_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore_nm": {
+          "name": "lore_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore_type": {
+          "name": "lore_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "main_subj": {
+          "name": "main_subj",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "smry": {
+          "name": "smry",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trans_mthd": {
+          "name": "trans_mthd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pub_perc": {
+          "name": "pub_perc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lore_plot": {
+          "name": "lore_plot",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "real_fact": {
+          "name": "real_fact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dist_rsn": {
+          "name": "dist_rsn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diff_desc": {
+          "name": "diff_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cltr_impact": {
+          "name": "cltr_impact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "plot_conn": {
+          "name": "plot_conn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lores_prj_no_projects_prj_no_fk": {
+          "name": "lores_prj_no_projects_prj_no_fk",
+          "tableFrom": "lores",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.nations": {
+      "name": "nations",
+      "schema": "",
+      "columns": {
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ntn_nm": {
+          "name": "ntn_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ntn_type": {
+          "name": "ntn_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capital_nm": {
+          "name": "capital_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ruler_txt": {
+          "name": "ruler_txt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pol_sys": {
+          "name": "pol_sys",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_law": {
+          "name": "admin_law",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state_rlgn": {
+          "name": "state_rlgn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rlgn_desc": {
+          "name": "rlgn_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nat_idlg": {
+          "name": "nat_idlg",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "main_plcy": {
+          "name": "main_plcy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "taboo_act": {
+          "name": "taboo_act",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dipl_plcy": {
+          "name": "dipl_plcy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "intr_cnfl": {
+          "name": "intr_cnfl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hidden_fact": {
+          "name": "hidden_fact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "econ_struct": {
+          "name": "econ_struct",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "soc_cltr": {
+          "name": "soc_cltr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mil_pwr": {
+          "name": "mil_pwr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hist_desc": {
+          "name": "hist_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "curr_issue": {
+          "name": "curr_issue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nations_prj_no_projects_prj_no_fk": {
+          "name": "nations_prj_no_projects_prj_no_fk",
+          "tableFrom": "nations",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ntn_trait_maps": {
+      "name": "ntn_trait_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ntn_trait_maps_ntn_no_nations_ntn_no_fk": {
+          "name": "ntn_trait_maps_ntn_no_nations_ntn_no_fk",
+          "tableFrom": "ntn_trait_maps",
+          "tableTo": "nations",
+          "columnsFrom": [
+            "ntn_no"
+          ],
+          "columnsTo": [
+            "ntn_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.org_trait_maps": {
+      "name": "org_trait_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "org_no": {
+          "name": "org_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "org_trait_maps_org_no_organizations_org_no_fk": {
+          "name": "org_trait_maps_org_no_organizations_org_no_fk",
+          "tableFrom": "org_trait_maps",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "org_no"
+          ],
+          "columnsTo": [
+            "org_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.organizations": {
+      "name": "organizations",
+      "schema": "",
+      "columns": {
+        "org_no": {
+          "name": "org_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_nm": {
+          "name": "org_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_type": {
+          "name": "org_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_theme": {
+          "name": "org_theme",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "purp_pub": {
+          "name": "purp_pub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "purp_hid": {
+          "name": "purp_hid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fnd_bg": {
+          "name": "fnd_bg",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_strc": {
+          "name": "org_strc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_scale": {
+          "name": "org_scale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_cond": {
+          "name": "join_cond",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "exit_rule": {
+          "name": "exit_rule",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "main_act": {
+          "name": "main_act",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "act_area": {
+          "name": "act_area",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "act_mthd": {
+          "name": "act_mthd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fund_src": {
+          "name": "fund_src",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "key_fig": {
+          "name": "key_fig",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hist_desc": {
+          "name": "hist_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "curr_stat": {
+          "name": "curr_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "organizations_prj_no_projects_prj_no_fk": {
+          "name": "organizations_prj_no_projects_prj_no_fk",
+          "tableFrom": "organizations",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.project_abilities": {
+      "name": "project_abilities",
+      "schema": "",
+      "columns": {
+        "ability_no": {
+          "name": "ability_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_nm": {
+          "name": "ability_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_lcls": {
+          "name": "ability_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ability_expln": {
+          "name": "ability_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trgt_type": {
+          "name": "trgt_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dmg_type": {
+          "name": "dmg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stat_eff_type": {
+          "name": "stat_eff_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_cost": {
+          "name": "use_cost",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cool_time": {
+          "name": "cool_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cast_time": {
+          "name": "cast_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_cnd": {
+          "name": "use_cnd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "project_abilities_prj_no_projects_prj_no_fk": {
+          "name": "project_abilities_prj_no_projects_prj_no_fk",
+          "tableFrom": "project_abilities",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.project_traits": {
+      "name": "project_traits",
+      "schema": "",
+      "columns": {
+        "trait_no": {
+          "name": "trait_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_nm": {
+          "name": "trait_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_expln": {
+          "name": "trait_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trait_lcls": {
+          "name": "trait_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trait_mcls": {
+          "name": "trait_mcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aply_trgt": {
+          "name": "aply_trgt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cnfl_trait_no": {
+          "name": "cnfl_trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cnfl_trait_type": {
+          "name": "cnfl_trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "project_traits_prj_no_projects_prj_no_fk": {
+          "name": "project_traits_prj_no_projects_prj_no_fk",
+          "tableFrom": "project_traits",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.projects": {
+      "name": "projects",
+      "schema": "",
+      "columns": {
+        "prj_no": {
+          "name": "prj_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_no": {
+          "name": "user_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prj_nm": {
+          "name": "prj_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "genre_type": {
+          "name": "genre_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prj_desc": {
+          "name": "prj_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cvr_img_url": {
+          "name": "cvr_img_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prj_expln": {
+          "name": "prj_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prj_ver": {
+          "name": "prj_ver",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "projects_user_no_users_user_no_fk": {
+          "name": "projects_user_no_users_user_no_fk",
+          "tableFrom": "projects",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_no"
+          ],
+          "columnsTo": [
+            "user_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.region_trait_maps": {
+      "name": "region_trait_maps",
+      "schema": "",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "region_no": {
+          "name": "region_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "region_trait_maps_region_no_regions_region_no_fk": {
+          "name": "region_trait_maps_region_no_regions_region_no_fk",
+          "tableFrom": "region_trait_maps",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_no"
+          ],
+          "columnsTo": [
+            "region_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.regions": {
+      "name": "regions",
+      "schema": "",
+      "columns": {
+        "region_no": {
+          "name": "region_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "up_region_no": {
+          "name": "up_region_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "region_nm": {
+          "name": "region_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_type": {
+          "name": "region_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "explor_stat": {
+          "name": "explor_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "region_expln": {
+          "name": "region_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "loc_desc": {
+          "name": "loc_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "climate_env": {
+          "name": "climate_env",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "terrain_feat": {
+          "name": "terrain_feat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "env_spec": {
+          "name": "env_spec",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "func_feat": {
+          "name": "func_feat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "danger_lvl": {
+          "name": "danger_lvl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "danger_fctr": {
+          "name": "danger_fctr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inhabit_info": {
+          "name": "inhabit_info",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unknown_entity": {
+          "name": "unknown_entity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "main_fclty": {
+          "name": "main_fclty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rsrc_list": {
+          "name": "rsrc_list",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "regions_prj_no_projects_prj_no_fk": {
+          "name": "regions_prj_no_projects_prj_no_fk",
+          "tableFrom": "regions",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "regions_ntn_no_nations_ntn_no_fk": {
+          "name": "regions_ntn_no_nations_ntn_no_fk",
+          "tableFrom": "regions",
+          "tableTo": "nations",
+          "columnsFrom": [
+            "ntn_no"
+          ],
+          "columnsTo": [
+            "ntn_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "regions_up_region_no_regions_region_no_fk": {
+          "name": "regions_up_region_no_regions_region_no_fk",
+          "tableFrom": "regions",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "up_region_no"
+          ],
+          "columnsTo": [
+            "region_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.traits": {
+      "name": "traits",
+      "schema": "",
+      "columns": {
+        "trait_no": {
+          "name": "trait_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "trait_nm": {
+          "name": "trait_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trait_expln": {
+          "name": "trait_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trait_lcls": {
+          "name": "trait_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trait_mcls": {
+          "name": "trait_mcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aply_trgt": {
+          "name": "aply_trgt",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cnfl_trait_no": {
+          "name": "cnfl_trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "traits_cnfl_trait_no_traits_trait_no_fk": {
+          "name": "traits_cnfl_trait_no_traits_trait_no_fk",
+          "tableFrom": "traits",
+          "tableTo": "traits",
+          "columnsFrom": [
+            "cnfl_trait_no"
+          ],
+          "columnsTo": [
+            "trait_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "user_no": {
+          "name": "user_no",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_eml": {
+          "name": "user_eml",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_nm": {
+          "name": "user_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_role": {
+          "name": "user_role",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profl_img_url": {
+          "name": "profl_img_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "biogp": {
+          "name": "biogp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "enpswd": {
+          "name": "enpswd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resh_token": {
+          "name": "resh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acnt_lck_yn": {
+          "name": "acnt_lck_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lgn_fail_nmtm": {
+          "name": "lgn_fail_nmtm",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_lgn_dt": {
+          "name": "last_lgn_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_lgn_ip": {
+          "name": "last_lgn_ip",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_pswd_chg_dt": {
+          "name": "last_pswd_chg_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eml_auth_yn": {
+          "name": "eml_auth_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mkt_recp_agre_yn": {
+          "name": "mkt_recp_agre_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "varchar(1)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

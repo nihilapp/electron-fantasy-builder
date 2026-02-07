@@ -1,9 +1,9 @@
 @layer base {
   /* 모든 요소의 스크롤바 커스텀 - thumb만 표시 */
   * {
-    /* Firefox: thumb만 보이도록 */
+    /* Firefox: thumb만 보이도록 (다크 테마 대비) */
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.5 0 0 / 0.3) transparent;
+    scrollbar-color: oklch(0.45 0.02 265 / 0.6) transparent;
   }
 
   /* Webkit 브라우저 (Chrome, Safari, Edge) */
@@ -21,14 +21,14 @@
     background: transparent;
   }
 
-  /* Thumb만 표시 */
+  /* Thumb만 표시 (다크 배경용) */
   *::-webkit-scrollbar-thumb {
-    background-color: oklch(0.5 0 0 / 0.3);
+    background-color: oklch(0.45 0.02 265 / 0.6);
     border-radius: 4px;
+  }
 
-    &:hover {
-      background-color: oklch(0.5 0 0 / 0.5);
-    }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(0.5 0.02 265 / 0.75);
   }
 
   /* 위/아래 버튼 제거 */

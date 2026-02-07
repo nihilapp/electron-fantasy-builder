@@ -51,6 +51,7 @@ const categoryItems = [
 // ─────────────────────────────────────────────────────────────
 
 const projectStore = useProjectStore();
+const { getProjectByNo, } = projectStore;
 
 // ─────────────────────────────────────────────────────────────
 // STATES — ref, computed 등 반응형 변수
@@ -68,6 +69,7 @@ const prjNoNum = computed(() => {
 
 /** 현재 프로젝트 (상세 조회 결과) */
 const project = ref<ProjectVo | null>(null);
+
 const projectLoadError = ref<string | null>(null);
 
 // ─────────────────────────────────────────────────────────────
@@ -83,7 +85,7 @@ const loadProject = async () => {
   }
   projectLoadError.value = null;
   try {
-    const data = await projectStore.getProjectByNo(no);
+    const data = await getProjectByNo(no);
     project.value = data ?? null;
     if (project.value == null) {
       projectLoadError.value = '프로젝트를 찾을 수 없습니다.';
@@ -118,18 +120,29 @@ watch(prjNoNum, loadProject, { immediate: true, });
 
 <template>
   <div :class="cn(cssVariants({}), props.class)">
-    <!-- 좌측: 카테고리 설정 사이드바 -->
-    <aside class="flex min-h-0 w-[260px] shrink-0 flex-col overflow-y-auto border-r border-gray-300 bg-white p-2">
+    <!-- 좌측: 카테고리 사이드바 -->
+    <aside class="flex min-h-0 w-65 shrink-0 flex-col overflow-y-auto border-r border-border bg-card p-2 transition-colors duration-300">
       <nav class="flex flex-col gap-0.5">
         <RouterLink
-          :to="{ path: '/project-list', query: project?.prjNo != null ? { prjNo: String(project.prjNo) } : {} }"
-          class="rounded-2 px-2 py-1.5 text-left text-sm text-gray-600 hover:bg-gray-100"
+          to="/"
+          class="btn-icon flex h-10 w-full items-center gap-1.5 rounded-2 px-3 text-left transition-colors hover:bg-accent/50 hover:text-foreground"
         >
-          ← 목록으로
+          <VueIcon icon-name="lucide:house" class="size-4 shrink-0" />
+          <span class="text-sm font-medium">
+            첫 화면
+          </span>
+        </RouterLink>
+        <RouterLink
+          :to="{ path: '/project-list', query: project?.prjNo != null ? { prjNo: String(project.prjNo) } : {} }"
+          class="btn-icon flex h-10 w-full items-center gap-1.5 rounded-2 px-3 text-left transition-colors hover:bg-accent/50 hover:text-foreground"
+        >
+          <span class="text-sm font-medium">
+            ← 목록으로
+          </span>
         </RouterLink>
       </nav>
       <template v-if="project">
-        <p class="mt-2 px-2 py-1 text-xs font-medium uppercase tracking-wider text-gray-500">
+        <p class="type-label mt-2 px-2 py-1">
           설정
         </p>
         <ul class="flex flex-col gap-0.5">
@@ -140,11 +153,11 @@ watch(prjNoNum, loadProject, { immediate: true, });
           >
             <RouterLink
               :to="{ name: item.name, params: { prjNo: project!.prjNo } }"
-              class="block w-full rounded-2 px-2 py-1.5 text-left text-sm transition-colors hover:bg-gray-100"
-              :class="isActiveCategory(item.name) ? 'bg-gray-100 font-medium text-gray-900' : 'text-gray-700'"
+              class="btn-icon flex h-10 w-full items-center gap-2 rounded-2 px-3 text-left transition-colors hover:bg-accent/50 hover:text-foreground"
+              :class="isActiveCategory(item.name) ? 'bg-accent text-accent-foreground font-semibold' : ''"
             >
-              <span class="inline-flex items-center gap-2">
-                <VueIcon :icon-name="item.icon" class="size-4 shrink-0 text-gray-500" />
+              <VueIcon :icon-name="item.icon" class="size-4 shrink-0" />
+              <span class="text-sm">
                 {{ item.label }}
               </span>
             </RouterLink>
@@ -153,26 +166,30 @@ watch(prjNoNum, loadProject, { immediate: true, });
       </template>
     </aside>
 
-    <!-- 우측: 카테고리별 설정 메인 영역 (라우트별 뷰 전환) -->
-    <main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-auto p-4">
+    <!-- 우측: 메인 영역 (패딩 없음 — 자식 뷰에서 처리) -->
+    <main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background transition-colors duration-300">
       <template v-if="projectLoadError">
-        <p class="text-gray-600">
-          {{ projectLoadError }}
-        </p>
-        <RouterLink
-          to="/project-list"
-          class="mt-2 text-sm text-blue-600 underline hover:text-blue-700"
-        >
-          프로젝트 목록으로
-        </RouterLink>
+        <div class="p-4">
+          <p class="type-muted">
+            {{ projectLoadError }}
+          </p>
+          <RouterLink
+            to="/project-list"
+            class="mt-2 text-sm text-primary underline hover:text-primary/80"
+          >
+            프로젝트 목록으로
+          </RouterLink>
+        </div>
       </template>
       <template v-else-if="project">
         <RouterView />
       </template>
       <template v-else>
-        <p class="text-gray-500">
-          로딩 중…
-        </p>
+        <div class="p-4">
+          <p class="type-muted">
+            로딩 중…
+          </p>
+        </div>
       </template>
     </main>
   </div>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { getIconData, iconToSVG, replaceIDs, type IconifyIcon } from '@iconify/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { computed } from 'vue';
 
 import type { IconSetName } from '@app-types/common.types';
 import type { IconName } from '~/data/icon-name.generated';
@@ -75,7 +74,7 @@ const svgBody = computed(() => {
   return replaceIDs(renderData.value.body);
 });
 
-const svgAttributes = computed(() => renderData.value?.attributes ?? { });
+const svgAttributes = computed(() => renderData.value?.attributes ?? {});
 
 // ─────────────────────────────────────────────────────────────
 // ACTIONS — 변수를 제어하는 함수들

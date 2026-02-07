@@ -1,0 +1,4202 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "96ac822f-54f2-4631-9d60-b1267a46b703",
+  "prevId": "dc5f9577-0426-4fd7-9ab0-be9ca870d5d8",
+  "tables": {
+    "abilities": {
+      "name": "abilities",
+      "columns": {
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "ability_nm": {
+          "name": "ability_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_lcls": {
+          "name": "ability_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_expln": {
+          "name": "ability_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trgt_type": {
+          "name": "trgt_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dmg_type": {
+          "name": "dmg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "stat_eff_type": {
+          "name": "stat_eff_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_cost": {
+          "name": "use_cost",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cool_time": {
+          "name": "cool_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cast_time": {
+          "name": "cast_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_cnd": {
+          "name": "use_cnd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "char_ability_maps": {
+      "name": "char_ability_maps",
+      "columns": {
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "prof_lvl": {
+          "name": "prof_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_rmk": {
+          "name": "ability_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_ability_maps_char_no_characters_char_no_fk": {
+          "name": "char_ability_maps_char_no_characters_char_no_fk",
+          "tableFrom": "char_ability_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "char_ability_maps_char_no_ability_no_ability_type_pk": {
+          "columns": [
+            "char_no",
+            "ability_no",
+            "ability_type"
+          ],
+          "name": "char_ability_maps_char_no_ability_no_ability_type_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "char_group_relations": {
+      "name": "char_group_relations",
+      "columns": {
+        "rel_no": {
+          "name": "rel_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trgt_ref_type": {
+          "name": "trgt_ref_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trgt_ref_no": {
+          "name": "trgt_ref_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rel_type": {
+          "name": "rel_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rel_desc": {
+          "name": "rel_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_group_relations_char_no_characters_char_no_fk": {
+          "name": "char_group_relations_char_no_characters_char_no_fk",
+          "tableFrom": "char_group_relations",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "char_item_maps": {
+      "name": "char_item_maps",
+      "columns": {
+        "own_no": {
+          "name": "own_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_cnt": {
+          "name": "item_cnt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "equip_yn": {
+          "name": "equip_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_item_maps_char_no_characters_char_no_fk": {
+          "name": "char_item_maps_char_no_characters_char_no_fk",
+          "tableFrom": "char_item_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "char_item_maps_item_no_items_item_no_fk": {
+          "name": "char_item_maps_item_no_items_item_no_fk",
+          "tableFrom": "char_item_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "char_relations": {
+      "name": "char_relations",
+      "columns": {
+        "rel_no": {
+          "name": "rel_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "src_char_no": {
+          "name": "src_char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trgt_char_no": {
+          "name": "trgt_char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rel_type": {
+          "name": "rel_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rel_desc": {
+          "name": "rel_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "intimacy_lvl": {
+          "name": "intimacy_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_relations_src_char_no_characters_char_no_fk": {
+          "name": "char_relations_src_char_no_characters_char_no_fk",
+          "tableFrom": "char_relations",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "src_char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "char_relations_trgt_char_no_characters_char_no_fk": {
+          "name": "char_relations_trgt_char_no_characters_char_no_fk",
+          "tableFrom": "char_relations",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "trgt_char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "char_trait_maps": {
+      "name": "char_trait_maps",
+      "columns": {
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "char_trait_maps_char_no_characters_char_no_fk": {
+          "name": "char_trait_maps_char_no_characters_char_no_fk",
+          "tableFrom": "char_trait_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "char_trait_maps_char_no_trait_no_trait_type_pk": {
+          "columns": [
+            "char_no",
+            "trait_no",
+            "trait_type"
+          ],
+          "name": "char_trait_maps_char_no_trait_no_trait_type_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "characters": {
+      "name": "characters",
+      "columns": {
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "char_nm": {
+          "name": "char_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "alias_nm": {
+          "name": "alias_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "role_type": {
+          "name": "role_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "narr_func": {
+          "name": "narr_func",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "race_no": {
+          "name": "race_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "org_no": {
+          "name": "org_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "org_rank": {
+          "name": "org_rank",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "characters_prj_no_projects_prj_no_fk": {
+          "name": "characters_prj_no_projects_prj_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "characters_race_no_creatures_creature_no_fk": {
+          "name": "characters_race_no_creatures_creature_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "creatures",
+          "columnsFrom": [
+            "race_no"
+          ],
+          "columnsTo": [
+            "creature_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "characters_ntn_no_nations_ntn_no_fk": {
+          "name": "characters_ntn_no_nations_ntn_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "nations",
+          "columnsFrom": [
+            "ntn_no"
+          ],
+          "columnsTo": [
+            "ntn_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "characters_org_no_organizations_org_no_fk": {
+          "name": "characters_org_no_organizations_org_no_fk",
+          "tableFrom": "characters",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "org_no"
+          ],
+          "columnsTo": [
+            "org_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "core_rules": {
+      "name": "core_rules",
+      "columns": {
+        "core_no": {
+          "name": "core_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "core_nm": {
+          "name": "core_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "def_desc": {
+          "name": "def_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "aply_scope": {
+          "name": "aply_scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "strc_elem": {
+          "name": "strc_elem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mech_desc": {
+          "name": "mech_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "narr_aply": {
+          "name": "narr_aply",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "link_docs": {
+          "name": "link_docs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "core_rules_prj_no_projects_prj_no_fk": {
+          "name": "core_rules_prj_no_projects_prj_no_fk",
+          "tableFrom": "core_rules",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "creature_ability_maps": {
+      "name": "creature_ability_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "creature_no": {
+          "name": "creature_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "prof_lvl": {
+          "name": "prof_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_rmk": {
+          "name": "ability_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creature_ability_maps_creature_no_creatures_creature_no_fk": {
+          "name": "creature_ability_maps_creature_no_creatures_creature_no_fk",
+          "tableFrom": "creature_ability_maps",
+          "tableTo": "creatures",
+          "columnsFrom": [
+            "creature_no"
+          ],
+          "columnsTo": [
+            "creature_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "creature_trait_maps": {
+      "name": "creature_trait_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "creature_no": {
+          "name": "creature_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creature_trait_maps_creature_no_creatures_creature_no_fk": {
+          "name": "creature_trait_maps_creature_no_creatures_creature_no_fk",
+          "tableFrom": "creature_trait_maps",
+          "tableTo": "creatures",
+          "columnsFrom": [
+            "creature_no"
+          ],
+          "columnsTo": [
+            "creature_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "creatures": {
+      "name": "creatures",
+      "columns": {
+        "creature_no": {
+          "name": "creature_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "creature_nm": {
+          "name": "creature_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "creature_type": {
+          "name": "creature_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "danger_grd": {
+          "name": "danger_grd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ident_stat": {
+          "name": "ident_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "creature_expln": {
+          "name": "creature_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creatures_prj_no_projects_prj_no_fk": {
+          "name": "creatures_prj_no_projects_prj_no_fk",
+          "tableFrom": "creatures",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "event_entries": {
+      "name": "event_entries",
+      "columns": {
+        "entry_no": {
+          "name": "entry_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "event_no": {
+          "name": "event_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_trgt_no": {
+          "name": "entry_trgt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_side": {
+          "name": "entry_side",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "event_entries_event_no_events_event_no_fk": {
+          "name": "event_entries_event_no_events_event_no_fk",
+          "tableFrom": "event_entries",
+          "tableTo": "events",
+          "columnsFrom": [
+            "event_no"
+          ],
+          "columnsTo": [
+            "event_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "events": {
+      "name": "events",
+      "columns": {
+        "event_no": {
+          "name": "event_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "event_nm": {
+          "name": "event_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "occur_time": {
+          "name": "occur_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "occur_loc": {
+          "name": "occur_loc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "smry": {
+          "name": "smry",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cause_pub": {
+          "name": "cause_pub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cause_real": {
+          "name": "cause_real",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_a_char": {
+          "name": "side_a_char",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_a_org": {
+          "name": "side_a_org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_a_ntn": {
+          "name": "side_a_ntn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_b_char": {
+          "name": "side_b_char",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_b_org": {
+          "name": "side_b_org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_b_ntn": {
+          "name": "side_b_ntn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_c_char": {
+          "name": "side_c_char",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_c_org": {
+          "name": "side_c_org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "side_c_ntn": {
+          "name": "side_c_ntn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "flow_trgr": {
+          "name": "flow_trgr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "flow_crisis": {
+          "name": "flow_crisis",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "flow_climax": {
+          "name": "flow_climax",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "flow_concl": {
+          "name": "flow_concl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dmg_rslt": {
+          "name": "dmg_rslt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "soc_chng": {
+          "name": "soc_chng",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "curr_conn": {
+          "name": "curr_conn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rec_official": {
+          "name": "rec_official",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "truth_hid": {
+          "name": "truth_hid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "events_prj_no_projects_prj_no_fk": {
+          "name": "events_prj_no_projects_prj_no_fk",
+          "tableFrom": "events",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "example": {
+      "name": "example",
+      "columns": {
+        "ex_no": {
+          "name": "ex_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "ex_name": {
+          "name": "ex_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ex_desc": {
+          "name": "ex_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "group_relations": {
+      "name": "group_relations",
+      "columns": {
+        "rel_no": {
+          "name": "rel_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "src_type": {
+          "name": "src_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "src_no": {
+          "name": "src_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trgt_type": {
+          "name": "trgt_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trgt_no": {
+          "name": "trgt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rel_type": {
+          "name": "rel_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rel_desc": {
+          "name": "rel_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "group_relations_prj_no_projects_prj_no_fk": {
+          "name": "group_relations_prj_no_projects_prj_no_fk",
+          "tableFrom": "group_relations",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "item_ability_maps": {
+      "name": "item_ability_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "prof_lvl": {
+          "name": "prof_lvl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_rmk": {
+          "name": "ability_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_ability_maps_item_no_items_item_no_fk": {
+          "name": "item_ability_maps_item_no_items_item_no_fk",
+          "tableFrom": "item_ability_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "item_trait_maps": {
+      "name": "item_trait_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_trait_maps_item_no_items_item_no_fk": {
+          "name": "item_trait_maps_item_no_items_item_no_fk",
+          "tableFrom": "item_trait_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "items": {
+      "name": "items",
+      "columns": {
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_nm": {
+          "name": "item_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "cls_main": {
+          "name": "cls_main",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cls_sub": {
+          "name": "cls_sub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "item_grd": {
+          "name": "item_grd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "app_desc": {
+          "name": "app_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "visual_feat": {
+          "name": "visual_feat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "attr_type": {
+          "name": "attr_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dmg_type": {
+          "name": "dmg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_func": {
+          "name": "main_func",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "items_prj_no_projects_prj_no_fk": {
+          "name": "items_prj_no_projects_prj_no_fk",
+          "tableFrom": "items",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "lore_char_maps": {
+      "name": "lore_char_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "lore_no": {
+          "name": "lore_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "char_no": {
+          "name": "char_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lore_char_maps_lore_no_lores_lore_no_fk": {
+          "name": "lore_char_maps_lore_no_lores_lore_no_fk",
+          "tableFrom": "lore_char_maps",
+          "tableTo": "lores",
+          "columnsFrom": [
+            "lore_no"
+          ],
+          "columnsTo": [
+            "lore_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "lore_char_maps_char_no_characters_char_no_fk": {
+          "name": "lore_char_maps_char_no_characters_char_no_fk",
+          "tableFrom": "lore_char_maps",
+          "tableTo": "characters",
+          "columnsFrom": [
+            "char_no"
+          ],
+          "columnsTo": [
+            "char_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "lore_item_maps": {
+      "name": "lore_item_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "lore_no": {
+          "name": "lore_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_no": {
+          "name": "item_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lore_item_maps_lore_no_lores_lore_no_fk": {
+          "name": "lore_item_maps_lore_no_lores_lore_no_fk",
+          "tableFrom": "lore_item_maps",
+          "tableTo": "lores",
+          "columnsFrom": [
+            "lore_no"
+          ],
+          "columnsTo": [
+            "lore_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "lore_item_maps_item_no_items_item_no_fk": {
+          "name": "lore_item_maps_item_no_items_item_no_fk",
+          "tableFrom": "lore_item_maps",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_no"
+          ],
+          "columnsTo": [
+            "item_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "lores": {
+      "name": "lores",
+      "columns": {
+        "lore_no": {
+          "name": "lore_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lore_nm": {
+          "name": "lore_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lore_type": {
+          "name": "lore_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_subj": {
+          "name": "main_subj",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "smry": {
+          "name": "smry",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trans_mthd": {
+          "name": "trans_mthd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "pub_perc": {
+          "name": "pub_perc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lore_plot": {
+          "name": "lore_plot",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "real_fact": {
+          "name": "real_fact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dist_rsn": {
+          "name": "dist_rsn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "diff_desc": {
+          "name": "diff_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cltr_impact": {
+          "name": "cltr_impact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "plot_conn": {
+          "name": "plot_conn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rmk": {
+          "name": "rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lores_prj_no_projects_prj_no_fk": {
+          "name": "lores_prj_no_projects_prj_no_fk",
+          "tableFrom": "lores",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "nations": {
+      "name": "nations",
+      "columns": {
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ntn_nm": {
+          "name": "ntn_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ntn_type": {
+          "name": "ntn_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "capital_nm": {
+          "name": "capital_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ruler_txt": {
+          "name": "ruler_txt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "pol_sys": {
+          "name": "pol_sys",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "admin_law": {
+          "name": "admin_law",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state_rlgn": {
+          "name": "state_rlgn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rlgn_desc": {
+          "name": "rlgn_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "nat_idlg": {
+          "name": "nat_idlg",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_plcy": {
+          "name": "main_plcy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "taboo_act": {
+          "name": "taboo_act",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dipl_plcy": {
+          "name": "dipl_plcy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "intr_cnfl": {
+          "name": "intr_cnfl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hidden_fact": {
+          "name": "hidden_fact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "econ_struct": {
+          "name": "econ_struct",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "soc_cltr": {
+          "name": "soc_cltr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mil_pwr": {
+          "name": "mil_pwr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hist_desc": {
+          "name": "hist_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "curr_issue": {
+          "name": "curr_issue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nations_prj_no_projects_prj_no_fk": {
+          "name": "nations_prj_no_projects_prj_no_fk",
+          "tableFrom": "nations",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "ntn_trait_maps": {
+      "name": "ntn_trait_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ntn_trait_maps_ntn_no_nations_ntn_no_fk": {
+          "name": "ntn_trait_maps_ntn_no_nations_ntn_no_fk",
+          "tableFrom": "ntn_trait_maps",
+          "tableTo": "nations",
+          "columnsFrom": [
+            "ntn_no"
+          ],
+          "columnsTo": [
+            "ntn_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "org_trait_maps": {
+      "name": "org_trait_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "org_no": {
+          "name": "org_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "org_trait_maps_org_no_organizations_org_no_fk": {
+          "name": "org_trait_maps_org_no_organizations_org_no_fk",
+          "tableFrom": "org_trait_maps",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "org_no"
+          ],
+          "columnsTo": [
+            "org_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "organizations": {
+      "name": "organizations",
+      "columns": {
+        "org_no": {
+          "name": "org_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "org_nm": {
+          "name": "org_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "org_type": {
+          "name": "org_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "logline": {
+          "name": "logline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "org_theme": {
+          "name": "org_theme",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "purp_pub": {
+          "name": "purp_pub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "purp_hid": {
+          "name": "purp_hid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fnd_bg": {
+          "name": "fnd_bg",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "org_strc": {
+          "name": "org_strc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "org_scale": {
+          "name": "org_scale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "join_cond": {
+          "name": "join_cond",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "exit_rule": {
+          "name": "exit_rule",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_act": {
+          "name": "main_act",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "act_area": {
+          "name": "act_area",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "act_mthd": {
+          "name": "act_mthd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fund_src": {
+          "name": "fund_src",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "key_fig": {
+          "name": "key_fig",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hist_desc": {
+          "name": "hist_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "curr_stat": {
+          "name": "curr_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "organizations_prj_no_projects_prj_no_fk": {
+          "name": "organizations_prj_no_projects_prj_no_fk",
+          "tableFrom": "organizations",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "project_abilities": {
+      "name": "project_abilities",
+      "columns": {
+        "ability_no": {
+          "name": "ability_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_nm": {
+          "name": "ability_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ability_type": {
+          "name": "ability_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_lcls": {
+          "name": "ability_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_expln": {
+          "name": "ability_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trgt_type": {
+          "name": "trgt_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dmg_type": {
+          "name": "dmg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "stat_eff_type": {
+          "name": "stat_eff_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_cost": {
+          "name": "use_cost",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cool_time": {
+          "name": "cool_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cast_time": {
+          "name": "cast_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_cnd": {
+          "name": "use_cnd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "project_abilities_prj_no_projects_prj_no_fk": {
+          "name": "project_abilities_prj_no_projects_prj_no_fk",
+          "tableFrom": "project_abilities",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "project_traits": {
+      "name": "project_traits",
+      "columns": {
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_nm": {
+          "name": "trait_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_expln": {
+          "name": "trait_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trait_lcls": {
+          "name": "trait_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trait_mcls": {
+          "name": "trait_mcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "aply_trgt": {
+          "name": "aply_trgt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cnfl_trait_no": {
+          "name": "cnfl_trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cnfl_trait_type": {
+          "name": "cnfl_trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "project_traits_prj_no_projects_prj_no_fk": {
+          "name": "project_traits_prj_no_projects_prj_no_fk",
+          "tableFrom": "project_traits",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "projects": {
+      "name": "projects",
+      "columns": {
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_nm": {
+          "name": "prj_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "genre_type": {
+          "name": "genre_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "prj_desc": {
+          "name": "prj_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cvr_img_url": {
+          "name": "cvr_img_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "prj_expln": {
+          "name": "prj_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "prj_ver": {
+          "name": "prj_ver",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "region_trait_maps": {
+      "name": "region_trait_maps",
+      "columns": {
+        "map_no": {
+          "name": "map_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "region_no": {
+          "name": "region_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_type": {
+          "name": "trait_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_rmk": {
+          "name": "trait_rmk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "region_trait_maps_region_no_regions_region_no_fk": {
+          "name": "region_trait_maps_region_no_regions_region_no_fk",
+          "tableFrom": "region_trait_maps",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_no"
+          ],
+          "columnsTo": [
+            "region_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "regions": {
+      "name": "regions",
+      "columns": {
+        "region_no": {
+          "name": "region_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "prj_no": {
+          "name": "prj_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "up_region_no": {
+          "name": "up_region_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "region_nm": {
+          "name": "region_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region_type": {
+          "name": "region_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "explor_stat": {
+          "name": "explor_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "region_expln": {
+          "name": "region_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "loc_desc": {
+          "name": "loc_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "climate_env": {
+          "name": "climate_env",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "terrain_feat": {
+          "name": "terrain_feat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "env_spec": {
+          "name": "env_spec",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "func_feat": {
+          "name": "func_feat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "danger_lvl": {
+          "name": "danger_lvl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "danger_fctr": {
+          "name": "danger_fctr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "inhabit_info": {
+          "name": "inhabit_info",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "unknown_entity": {
+          "name": "unknown_entity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_fclty": {
+          "name": "main_fclty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rsrc_list": {
+          "name": "rsrc_list",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ntn_no": {
+          "name": "ntn_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "regions_prj_no_projects_prj_no_fk": {
+          "name": "regions_prj_no_projects_prj_no_fk",
+          "tableFrom": "regions",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "prj_no"
+          ],
+          "columnsTo": [
+            "prj_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "regions_ntn_no_nations_ntn_no_fk": {
+          "name": "regions_ntn_no_nations_ntn_no_fk",
+          "tableFrom": "regions",
+          "tableTo": "nations",
+          "columnsFrom": [
+            "ntn_no"
+          ],
+          "columnsTo": [
+            "ntn_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "regions_up_region_no_regions_region_no_fk": {
+          "name": "regions_up_region_no_regions_region_no_fk",
+          "tableFrom": "regions",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "up_region_no"
+          ],
+          "columnsTo": [
+            "region_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "traits": {
+      "name": "traits",
+      "columns": {
+        "trait_no": {
+          "name": "trait_no",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "trait_nm": {
+          "name": "trait_nm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_expln": {
+          "name": "trait_expln",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trait_lcls": {
+          "name": "trait_lcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trait_mcls": {
+          "name": "trait_mcls",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "aply_trgt": {
+          "name": "aply_trgt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cnfl_trait_no": {
+          "name": "cnfl_trait_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "use_yn": {
+          "name": "use_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'Y'"
+        },
+        "shrn_yn": {
+          "name": "shrn_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "del_yn": {
+          "name": "del_yn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'N'"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_no": {
+          "name": "crt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "crt_dt": {
+          "name": "crt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_no": {
+          "name": "updt_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updt_dt": {
+          "name": "updt_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_no": {
+          "name": "del_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "del_dt": {
+          "name": "del_dt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "traits_cnfl_trait_no_traits_trait_no_fk": {
+          "name": "traits_cnfl_trait_no_traits_trait_no_fk",
+          "tableFrom": "traits",
+          "tableTo": "traits",
+          "columnsFrom": [
+            "cnfl_trait_no"
+          ],
+          "columnsTo": [
+            "trait_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

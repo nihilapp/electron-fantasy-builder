@@ -126,13 +126,20 @@ export const CoreRuleMapper = {
     const db = getDb();
     const mode = getDbMode();
 
+    const whereByNo = (table: CoreRulesTable) =>
+      and(
+        eq(table.prjNo, prjNo),
+        eq(table.coreNo, coreNo),
+        eq(table.delYn, 'N')
+      )!;
+
     if (mode === 'local') {
       const table = localCoreRulesTable;
       const dbLocal = db as LocalDb;
       const [ row, ] = await dbLocal
         .select()
         .from(table)
-        .where(and(eq(table.prjNo, prjNo), eq(table.coreNo, coreNo)))
+        .where(whereByNo(table))
         .limit(1);
       return row
         ? coreRuleRowToVo(row as unknown as Record<string, unknown>)
@@ -144,7 +151,7 @@ export const CoreRuleMapper = {
     const [ row, ] = await dbRemote
       .select()
       .from(table)
-      .where(and(eq(table.prjNo, prjNo), eq(table.coreNo, coreNo)))
+      .where(whereByNo(table))
       .limit(1);
     return row
       ? coreRuleRowToVo(row as unknown as Record<string, unknown>)
@@ -171,7 +178,7 @@ export const CoreRuleMapper = {
       strcElem: vo.strcElem ?? null,
       mechDesc: vo.mechDesc ?? null,
       narrAply: vo.narrAply ?? null,
-      keywords: vo.keywords ?? null,
+      tags: vo.tags ?? null,
       linkDocs: vo.linkDocs ?? null,
       rmk: vo.rmk ?? null,
     };
@@ -221,7 +228,7 @@ export const CoreRuleMapper = {
       strcElem: vo.strcElem ?? undefined,
       mechDesc: vo.mechDesc ?? undefined,
       narrAply: vo.narrAply ?? undefined,
-      keywords: vo.keywords ?? undefined,
+      tags: vo.tags ?? undefined,
       linkDocs: vo.linkDocs ?? undefined,
       rmk: vo.rmk ?? undefined,
       updtDt: now,

@@ -13,7 +13,7 @@
       "path": "./src/data/app.db"
     },
     "remote": {
-      "connectionUrl": ""
+      "connectionUrl": "postgresql://neondb_owner:npg_drEjFQ6cP8GD@ep-aged-union-ahyfulaf-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
     }
   },
   "pagination": {

@@ -8,6 +8,8 @@ export const commonColumnsSqlite = {
   useYn: text('use_yn').default('Y'),
   shrnYn: text('shrn_yn').default('N'),
   delYn: text('del_yn').default('N'),
+  /** 태그. 쉼표 구분 문자열 또는 JSON 배열 문자열. */
+  tags: text('tags'),
   crtNo: integer('crt_no'),
   crtDt: text('crt_dt'),
   updtNo: integer('updt_no'),

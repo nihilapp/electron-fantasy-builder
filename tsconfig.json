@@ -56,11 +56,12 @@
   },
   "include": [
     "src/**/*",
+    "src/renderer/**/*.vue",
     "electron.vite.config.ts"
   ],
   "exclude": [
     "node_modules",
     "out",
     "dist"
-  ]
+  ],
 }

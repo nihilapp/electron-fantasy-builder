@@ -1,17 +1,31 @@
 /**
  * 첫 페인트 로딩 화면(index.html #app-loading)용 디자인 토큰.
- * tailwind.css / colors.css 와 동일한 변수명·값을 유지해 이질감을 없앰.
- * 값 변경 시 colors.css, tailwind.css @theme 와 동기화할 것.
+ * colors.css 기존 팔레트와 동일한 값 (indigo-950, slate-50, slate-400).
+ * 메인 CSS 로드 전이라 변수 참조 불가 → 값만 복사.
  */
 :root {
-  /* colors.css @theme default — black, gray */
-  --color-black-100: oklch(0.97 0 0);
-  --color-black-600: oklch(0.439 0 0);
-  --color-black-700: oklch(0.371 0 0);
-  --color-gray-500: oklch(0.551 0.027 264.364);
+  /* Light Theme Defaults (slate-50 / slate-900 / slate-500) */
+  --color-app-bg: oklch(0.984 0.003 247.858);
+  --color-app-text: oklch(0.208 0.042 265.755);
+  --color-app-text-muted: oklch(0.554 0.046 257.417);
 
-  /* tailwind.css @theme — 타이포·폰트 */
   --text-h3: 2rem;
+  --text-xs: 0.8rem;
   --text-sm: 1rem;
   --font-pretendard: "Pretendard", "Noto Sans KR", sans-serif;
+}
+
+/* Dark Theme Overrides (indigo-950 / slate-50 / slate-400) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-app-bg: oklch(0.257 0.09 281.288);
+    --color-app-text: oklch(0.984 0.003 247.858);
+    --color-app-text-muted: oklch(0.704 0.04 256.788);
+  }
+}
+
+:root.dark {
+  --color-app-bg: oklch(0.257 0.09 281.288);
+  --color-app-text: oklch(0.984 0.003 247.858);
+  --color-app-text-muted: oklch(0.704 0.04 256.788);
 }

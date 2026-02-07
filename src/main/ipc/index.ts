@@ -3,6 +3,8 @@ import {
   ipcGetCoreRule,
   ipcGetHealth,
   ipcGetProject,
+  ipcGetProjectAbility,
+  ipcGetProjectTrait,
   ipcGetTrait
 } from '../api';
 
@@ -23,5 +25,7 @@ export function setupIpcHandlers() {
   ipcGetProject();
   ipcGetTrait();
   ipcGetAbility();
+  ipcGetProjectTrait();
+  ipcGetProjectAbility();
   ipcGetCoreRule();
 }

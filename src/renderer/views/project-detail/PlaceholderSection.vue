@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '~/utils/cn';
+
 /** 프로젝트 상세 내 섹션 플레이스홀더. 추후 카테고리별 메인 뷰 구현 시 교체. */
 
-interface Props {
+interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
+  class?: string;
   /** 섹션 라벨 (예: 전체 설정, 특성/능력 관리) */
   sectionLabel: string;
 }
@@ -10,7 +15,18 @@ interface Props {
 // BASE — 기본 정보 (defineProps)
 // ═══════════════════════════════════════════════════════════════
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const cssVariants = cva(
+  [
+    'type-muted',
+  ],
+  {
+    variants: {},
+    defaultVariants: {},
+    compoundVariants: [],
+  }
+);
 
 // ─────────────────────────────────────────────────────────────
 // STOREDATA — Pinia 스토어 사용 시
@@ -35,7 +51,7 @@ defineProps<Props>();
 </script>
 
 <template>
-  <p class="text-gray-500">
+  <p :class="cn(cssVariants({}), 'p-4', props.class)">
     {{ sectionLabel }} 설정 영역입니다. (추후 구현)
   </p>
 </template>

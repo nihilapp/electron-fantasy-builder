@@ -18,11 +18,13 @@ const dateTimeSchema = z
   .nullable()
   .optional();
 
-/** 테이블 공통 9컬럼 (common.columns) + rowNo, totalCnt. 값 없으면 null (undefined보다 치기 쉬움). */
+/** 테이블 공통 컬럼 (common.columns) + rowNo, totalCnt. 값 없으면 null. */
 export const commonSchema = z.object({
   useYn: ynEnum.nullable().optional().default(null),
   shrnYn: ynEnum.nullable().optional().default(null),
   delYn: ynEnum.nullable().optional().default(null),
+  /** 태그. 쉼표 구분 또는 JSON 배열 문자열. */
+  tags: z.string().nullable().optional().default(null),
   crtNo: z.number().nullable().optional().default(null),
   crtDt: dateTimeSchema.optional().default(null),
   updtNo: z.number().nullable().optional().default(null),
