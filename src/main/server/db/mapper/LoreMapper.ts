@@ -32,35 +32,51 @@ export const LoreMapper = {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
+
     const createWhere = (table: LoresTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
+
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
+
         if (searchType === 'loreNm') where = and(where, like(table.loreNm, keyword))!;
         else if (searchType === 'smry') where = and(where, like(table.smry, keyword))!;
         else where = and(where, or(like(table.loreNm, keyword), like(table.smry, keyword)))!;
       }
+
       return where;
     };
+
     if (mode === 'local') {
       const table = localLoresTable;
       const dbLocal = db as LocalDb;
       const where = createWhere(table);
+
       const [ countRow, ] = await dbLocal.select({ count: count(), }).from(table).where(where);
       const totalCnt = Number(countRow?.count ?? 0);
+
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.loreNo)).$dynamic();
+
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
       const rows = await query;
+
       return { list: rows.map((row) => loreRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
+
     const table = remoteLoresTable;
     const dbRemote = db as RemoteDb;
     const where = createWhere(table);
+
     const [ countRow, ] = await dbRemote.select({ count: count(), }).from(table).where(where);
     const totalCnt = Number(countRow?.count ?? 0);
+
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.loreNo)).$dynamic();
+
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
     const rows = await query;
+
     return { list: rows.map((row) => loreRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
@@ -72,12 +88,14 @@ export const LoreMapper = {
   async selectByNo(prjNo: number, loreNo: number): Promise<LoreVo | null> {
     const db = getDb();
     const mode = getDbMode();
+
     if (mode === 'local') {
       const [ row, ] = await (db as LocalDb).select().from(localLoresTable).where(and(eq(localLoresTable.prjNo, prjNo), eq(localLoresTable.loreNo, loreNo))).limit(1);
       return row
         ? loreRowToVo(row as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ row, ] = await (db as RemoteDb).select().from(remoteLoresTable).where(and(eq(remoteLoresTable.prjNo, prjNo), eq(remoteLoresTable.loreNo, loreNo))).limit(1);
     return row
       ? loreRowToVo(row as unknown as Record<string, unknown>)
@@ -95,10 +113,12 @@ export const LoreMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values = {
       prjNo,
       loreNm: (vo.loreNm ?? '').toString().trim(),
-      loreType: vo.loreType ?? null,
+      loreType: vo.loreType ?? 'LORE',
+      subLoreType: vo.subLoreType ?? null,
       mainSubj: vo.mainSubj ?? null,
       smry: vo.smry ?? null,
       transMthd: vo.transMthd ?? null,
@@ -111,11 +131,13 @@ export const LoreMapper = {
       plotConn: vo.plotConn ?? null,
       rmk: vo.rmk ?? null,
     };
+
     if (mode === 'local') {
       const [ inserted, ] = await (db as LocalDb).insert(localLoresTable).values({ ...values, crtDt: now as string, updtDt: now as string, }).returning();
       if (!inserted) throw new Error('LoreMapper.insert: no row returned');
       return loreRowToVo(inserted as unknown as Record<string, unknown>);
     }
+
     const [ inserted, ] = await (db as RemoteDb).insert(remoteLoresTable).values({ ...values, crtDt: now as Date, updtDt: now as Date, }).returning();
     if (!inserted) throw new Error('LoreMapper.insert: no row returned');
     return loreRowToVo(inserted as unknown as Record<string, unknown>);
@@ -133,9 +155,11 @@ export const LoreMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values: Record<string, unknown> = {
       loreNm: vo.loreNm ?? undefined,
       loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       mainSubj: vo.mainSubj ?? undefined,
       smry: vo.smry ?? undefined,
       transMthd: vo.transMthd ?? undefined,
@@ -149,12 +173,14 @@ export const LoreMapper = {
       rmk: vo.rmk ?? undefined,
       updtDt: now,
     };
+
     if (mode === 'local') {
       const [ updated, ] = await (db as LocalDb).update(localLoresTable).set(values).where(and(eq(localLoresTable.prjNo, prjNo), eq(localLoresTable.loreNo, loreNo))).returning();
       return updated
         ? loreRowToVo(updated as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ updated, ] = await (db as RemoteDb).update(remoteLoresTable).set(values).where(and(eq(remoteLoresTable.prjNo, prjNo), eq(remoteLoresTable.loreNo, loreNo))).returning();
     return updated
       ? loreRowToVo(updated as unknown as Record<string, unknown>)
@@ -172,10 +198,12 @@ export const LoreMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     if (mode === 'local') {
       const result = await (db as LocalDb).update(localLoresTable).set({ delYn: 'Y', delDt: now as string, }).where(and(eq(localLoresTable.prjNo, prjNo), eq(localLoresTable.loreNo, loreNo))).returning({ loreNo: localLoresTable.loreNo, });
       return result.length > 0;
     }
+
     const result = await (db as RemoteDb).update(remoteLoresTable).set({ delYn: 'Y', delDt: now as Date, }).where(and(eq(remoteLoresTable.prjNo, prjNo), eq(remoteLoresTable.loreNo, loreNo))).returning({ loreNo: remoteLoresTable.loreNo, });
     return result.length > 0;
   },

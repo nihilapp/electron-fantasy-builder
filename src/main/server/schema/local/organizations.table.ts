@@ -27,5 +27,7 @@ export const organizationsTable = sqliteTable('organizations', {
   keyFig: text('key_fig'),
   histDesc: text('hist_desc'),
   currStat: text('curr_stat'),
+  loreType: text('lore_type').default('ORGANIZATION'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsSqlite,
 });

@@ -41,14 +41,17 @@ const buttonClassNames = 'titlebar-btn flex flex-row items-center justify-center
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
+/** @description 창 최소화 IPC 호출 */
 const onClickMinimize = () => {
   window.electron.ipc.windowMinimize();
 };
 
+/** @description 창 최대화/복원 토글 IPC 호출 */
 const onClickMaximizeRestore = () => {
   window.electron.ipc.windowMaximizeRestore();
 };
 
+/** @description 창 닫기 IPC 호출 */
 const onClickClose = () => {
   window.electron.ipc.windowClose();
 };

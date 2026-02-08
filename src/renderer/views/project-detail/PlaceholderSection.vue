@@ -19,7 +19,7 @@ const props = defineProps<Props>();
 
 const cssVariants = cva(
   [
-    'type-muted',
+    'flex min-h-0 flex-1 flex-col type-muted',
   ],
   {
     variants: {},

@@ -12,7 +12,7 @@ import type { abilitySchema } from '../zod-schema/ability.schema';
 import type { charAbilityMapSchema } from '../zod-schema/charAbilityMap.schema';
 import type { characterSchema } from '../zod-schema/character.schema';
 import type { charTraitMapSchema } from '../zod-schema/charTraitMap.schema';
-import type { coreRuleSchema } from '../zod-schema/coreRule.schema';
+import type { coreRuleListItemSchema, coreRuleSchema } from '../zod-schema/coreRule.schema';
 import type { creatureSchema } from '../zod-schema/creature.schema';
 import type { creatureAbilityMapSchema } from '../zod-schema/creatureAbilityMap.schema';
 import type { creatureTraitMapSchema } from '../zod-schema/creatureTraitMap.schema';
@@ -46,6 +46,9 @@ export type ProjectAbilityVo = z.infer<typeof projectAbilitySchema>;
 
 /** 코어 설정 VO. coreRuleSchema와 동일. */
 export type CoreRuleVo = z.infer<typeof coreRuleSchema>;
+
+/** 코어 설정 목록 항목 VO. 목록 API 응답용(메타+이름만). */
+export type CoreRuleListItemVo = z.infer<typeof coreRuleListItemSchema>;
 
 /** 생물/종족 VO. creatureSchema와 동일. */
 export type CreatureVo = z.infer<typeof creatureSchema>;

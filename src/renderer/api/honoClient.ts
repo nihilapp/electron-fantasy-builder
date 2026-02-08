@@ -7,8 +7,7 @@ import type { ResponseType } from '@app-types/response.types';
  * 모든 API는 HTTP 200 + ResponseType 구조. ResponseType 전체를 반환.
  */
 
-export type { HealthDto };
-
+/** @description IPC로 Hono base URL 취득. Electron 미사용 시 예외. */
 async function getBaseUrl(): Promise<string> {
   if (!window.electron?.ipc?.getHonoBaseUrl) {
     throw new Error('Electron IPC를 사용할 수 없습니다.');
@@ -17,11 +16,10 @@ async function getBaseUrl(): Promise<string> {
   return window.electron.ipc.getHonoBaseUrl();
 }
 
-/**
- * GET /health — 서버 상태 조회
- */
+/** @description GET /health — 서버 상태 조회 */
 export async function getHealth(): Promise<ResponseType<HealthDto>> {
   const baseUrl = await getBaseUrl();
+
   const res = await fetch(`${baseUrl}/health`);
 
   if (!res.ok) {

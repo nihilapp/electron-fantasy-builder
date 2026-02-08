@@ -48,8 +48,11 @@ const { getProjectList, } = projectStore;
 /** 쿼리 prjNo로 선택된 프로젝트 (숫자 파싱) */
 const selectedPrjNo = computed(() => {
   const raw = route.query.prjNo;
+
   if (raw == null || raw === '') return null;
+
   const n = Number(raw);
+
   return Number.isInteger(n)
     ? n
     : null;
@@ -58,7 +61,9 @@ const selectedPrjNo = computed(() => {
 /** 선택된 프로젝트 VO */
 const selectedProject = computed<ProjectVo | null>(() => {
   const no = selectedPrjNo.value;
+
   if (no == null) return null;
+
   return projectList.value.find((p) => p.prjNo === no) ?? null;
 });
 
@@ -66,6 +71,7 @@ const selectedProject = computed<ProjectVo | null>(() => {
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
+/** @description 프로젝트 목록 라우트로 이동. prjNo가 있으면 쿼리로 전달해 선택 상태 반영. */
 const selectProject = (prjNo: number | null | undefined) => {
   if (prjNo == null) {
     router.replace({
@@ -74,6 +80,7 @@ const selectProject = (prjNo: number | null | undefined) => {
     });
     return;
   }
+
   router.replace({
     path: '/project-list',
     query: {
@@ -82,6 +89,7 @@ const selectProject = (prjNo: number | null | undefined) => {
   });
 };
 
+/** @description 사이드바 빈 영역 클릭 시 선택 해제(목록으로 이동). */
 const onClickSidebarEmpty = () => {
   if (selectedPrjNo.value != null) {
     selectProject(null);
@@ -216,10 +224,20 @@ onMounted(() => {
               <RouterLink
                 v-if="selectedProject.prjNo != null"
                 :to="{ name: 'project-overview', params: { prjNo: String(selectedProject.prjNo) } }"
-                class="btn-primary flex w-full"
+                custom
+                #default="{ navigate }"
               >
-                <VueIcon icon-name="lucide:settings" class="size-4 shrink-0" />
-                관리
+                <CommonButton
+                  type="button"
+                  variant="primary"
+                  label="관리"
+                  class="w-full"
+                  @click="navigate"
+                >
+                  <template #icon>
+                    <VueIcon icon-name="lucide:settings" class="size-4 shrink-0" />
+                  </template>
+                </CommonButton>
               </RouterLink>
             </div>
           </div>

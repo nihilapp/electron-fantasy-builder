@@ -2,6 +2,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import type { ProjectVo } from '@app-types/vo.types';
+import IconButton from '~/components/form/IconButton.vue';
 import { useProjectStore } from '~/stores/projectStore';
 import { cn } from '~/utils/cn';
 
@@ -19,7 +20,7 @@ const props = defineProps<Props>();
 
 const cssVariants = cva(
   [
-    'flex flex-col gap-6',
+    'flex min-h-0 flex-1 flex-col gap-6',
   ],
   {
     variants: {},
@@ -63,9 +64,10 @@ const canSave = computed(() => form.value.prjNm.trim() !== '');
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
-/** 수정 모드로 전환 시 폼을 현재 project로 채움 */
+/** @description 수정 모드로 전환 시 폼을 현재 project로 채움 */
 function enterEditMode() {
   const p = project.value;
+
   if (p) {
     form.value = {
       prjNm: p.prjNm ?? '',
@@ -74,21 +76,28 @@ function enterEditMode() {
       prjVer: p.prjVer ?? '',
       prjExpln: p.prjExpln ?? '',
     };
+
     errorMessage.value = null;
     isViewMode.value = false;
   }
 }
 
+/** @description 수정 → 보기 모드 전환. 에러 메시지 초기화. */
 function exitEditMode() {
   isViewMode.value = true;
+
   errorMessage.value = null;
 }
 
+/** @description 프로젝트 수정 API 호출 후 보기 모드로 전환. */
 async function save() {
   const no = prjNo.value;
+
   if (no == null || !canSave.value || isSubmitting.value) return;
+
   errorMessage.value = null;
   isSubmitting.value = true;
+
   try {
     const body: Partial<ProjectVo> = {
       prjNm: form.value.prjNm.trim(),
@@ -97,8 +106,11 @@ async function save() {
       prjVer: form.value.prjVer.trim() || null,
       prjExpln: form.value.prjExpln.trim() || null,
     };
+
     await updateProject(no, body);
+
     project.value = await getProjectByNo(no) ?? null;
+
     isViewMode.value = true;
   }
   catch (err) {
@@ -127,6 +139,7 @@ watch(
         prjVer: p.prjVer ?? '',
         prjExpln: p.prjExpln ?? '',
       };
+
       isViewMode.value = true;
     }
   },
@@ -145,15 +158,12 @@ watch(
       <h2 class="type-section-title">
         프로젝트 개요
       </h2>
-      <button
+      <IconButton
         v-if="isViewMode && project"
-        type="button"
-        class="btn-icon p-2"
-        aria-label="수정 모드로 전환"
+        icon-name="lucide:settings"
+        a11y-label="수정 모드로 전환"
         @click="enterEditMode"
-      >
-        <VueIcon icon-name="lucide:settings" class="size-5" />
-      </button>
+      />
     </div>
 
     <template v-if="!project">
@@ -163,8 +173,36 @@ watch(
     </template>
 
     <template v-else>
-      <!-- 보기: disabled input / 수정: 동일 input 활성화. 보기 상태 = 수정 불가 input. -->
+      <!-- 보기 모드: DetailField로 라벨·내용 구분 표시 -->
+      <template v-if="isViewMode">
+        <div class="flex flex-col gap-4">
+          <DetailField
+            label="프로젝트 이름"
+            :content="project.prjNm"
+            :title-weight="true"
+          />
+          <DetailField
+            label="장르"
+            :content="project.genreType"
+          />
+          <DetailField
+            label="간단 설명"
+            :content="project.prjDesc"
+          />
+          <DetailField
+            label="버전"
+            :content="project.prjVer"
+          />
+          <DetailField
+            label="상세 설명"
+            :content="project.prjExpln"
+          />
+        </div>
+      </template>
+
+      <!-- 수정 모드: 폼 -->
       <form
+        v-else
         class="flex flex-col gap-4"
         @submit.prevent="save"
       >
@@ -174,14 +212,12 @@ watch(
           label="프로젝트 이름"
           placeholder="프로젝트 이름"
           :required="true"
-          :disabled="isViewMode"
         />
         <FormInput
           id="overview-genreType"
           v-model="form.genreType"
           label="장르"
           placeholder="예: 판타지, SF"
-          :disabled="isViewMode"
         />
         <FormTextarea
           id="overview-prjDesc"
@@ -190,14 +226,12 @@ watch(
           placeholder="한 줄 요약"
           :rows="2"
           min-height-class="min-h-20"
-          :disabled="isViewMode"
         />
         <FormInput
           id="overview-prjVer"
           v-model="form.prjVer"
           label="버전"
           placeholder="예: 1.0.0"
-          :disabled="isViewMode"
         />
         <FormTextarea
           id="overview-prjExpln"
@@ -206,28 +240,35 @@ watch(
           placeholder="프로젝트에 대한 설명"
           :rows="4"
           min-height-class="min-h-40"
-          :disabled="isViewMode"
         />
 
-        <p v-if="!isViewMode && errorMessage" class="text-sm text-red-400">
+        <p v-if="errorMessage" class="text-sm text-destructive">
           {{ errorMessage }}
         </p>
 
-        <div v-if="!isViewMode" class="flex gap-2">
-          <FormButton
+        <div class="flex gap-2">
+          <CommonButton
             type="submit"
             variant="primary"
             :disabled="!canSave"
             :loading="isSubmitting"
             label="저장"
             loading-label="저장 중…"
-          />
-          <FormButton
+          >
+            <template #icon>
+              <VueIcon icon-name="lucide:save" class="size-4 shrink-0" />
+            </template>
+          </CommonButton>
+          <CommonButton
             type="button"
             variant="secondary"
             label="취소"
             @click="exitEditMode"
-          />
+          >
+            <template #icon>
+              <VueIcon icon-name="lucide:x" class="size-4 shrink-0" />
+            </template>
+          </CommonButton>
         </div>
       </form>
     </template>

@@ -35,3 +35,5 @@ export { regionTraitMapsTable } from './region_trait_maps.table';
 export { charGroupRelationsTable } from './char_group_relations.table';
 export { charItemMapsTable } from './char_item_maps.table';
 export { charRelationsTable } from './char_relations.table';
+export { settingProtectionsTable } from './setting_protections.table';
+export { settingFavoritesTable } from './setting_favorites.table';

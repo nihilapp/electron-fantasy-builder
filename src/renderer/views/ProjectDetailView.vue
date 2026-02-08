@@ -2,6 +2,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import type { ProjectVo } from '@app-types/vo.types';
+import ProjectMenuLayout from '~/components/layouts/ProjectMenuLayout.vue';
 import { useProjectStore } from '~/stores/projectStore';
 import { cn } from '~/utils/cn';
 
@@ -19,7 +20,7 @@ const props = defineProps<Props>();
 
 const cssVariants = cva(
   [
-    'flex h-full min-h-0 flex-row gap-0 overflow-hidden',
+    'flex h-full min-h-0 min-w-0 flex-1 flex-row gap-0 overflow-hidden',
   ],
   {
     variants: {},
@@ -35,7 +36,7 @@ const categoryItems = [
   { label: '프로젝트 개요', path: 'overview', name: 'project-overview', icon: 'lucide:layout-dashboard', },
   { label: '전체 설정', path: 'settings', name: 'project-settings', icon: 'lucide:settings', },
   { label: '특성/능력 관리', path: 'traits-abilities', name: 'project-traits-abilities', icon: 'lucide:layers', },
-  { label: '코어 설정', path: 'core-rules', name: 'project-core-rules', icon: 'lucide:book-open', },
+  { label: '주요 설정', path: 'core-rules', name: 'project-core-rules', icon: 'lucide:book-open', },
   { label: '종족/생물', path: 'creatures', name: 'project-creatures', icon: 'lucide:dna', },
   { label: '인물', path: 'characters', name: 'project-characters', icon: 'lucide:users', },
   { label: '지역', path: 'regions', name: 'project-regions', icon: 'lucide:map-pin', },
@@ -60,8 +61,11 @@ const { getProjectByNo, } = projectStore;
 /** 라우트 prjNo 파라미터를 숫자로 파싱 */
 const prjNoNum = computed(() => {
   const raw = props.prjNo;
+
   if (raw == null || raw === '') return null;
+
   const n = Number(raw);
+
   return Number.isInteger(n)
     ? n
     : null;
@@ -72,21 +76,44 @@ const project = ref<ProjectVo | null>(null);
 
 const projectLoadError = ref<string | null>(null);
 
+/**
+ * 상세/등록 화면 여부. true이면 좌측 카테고리 사이드바를 숨기고,
+ * 자식 뷰가 그리는 상세용 사이드바(목록으로·처음으로·항목 목록)만 표시한다.
+ */
+const ROUTES_WITH_DETAIL_LAYOUT = [
+  'project-core-rule-detail',
+  'project-core-rule-new',
+] as const;
+
+const isDetailLayoutRoute = computed(() => {
+  const name = route.name;
+
+  if (typeof name !== 'string') return false;
+
+  return (ROUTES_WITH_DETAIL_LAYOUT as readonly string[]).includes(name);
+});
+
 // ─────────────────────────────────────────────────────────────
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
+/** @description 라우트 prjNo로 프로젝트 1건 조회 후 project·projectLoadError 반영. */
 const loadProject = async () => {
   const no = prjNoNum.value;
+
   if (no == null) {
     project.value = null;
     projectLoadError.value = '프로젝트 번호가 올바르지 않습니다.';
     return;
   }
+
   projectLoadError.value = null;
+
   try {
     const data = await getProjectByNo(no);
+
     project.value = data ?? null;
+
     if (project.value == null) {
       projectLoadError.value = '프로젝트를 찾을 수 없습니다.';
     }
@@ -100,11 +127,6 @@ const loadProject = async () => {
 /** 자식 라우트에 project·prjNo 제공 (OverviewSection 등에서 inject) */
 provide('project', project);
 provide('prjNo', prjNoNum);
-
-/** 현재 라우트 name과 일치하는 카테고리 활성 여부 */
-function isActiveCategory(routeName: string) {
-  return route.name === routeName;
-}
 
 // ─────────────────────────────────────────────────────────────
 // WATCH — watch() 정의 영역
@@ -120,77 +142,66 @@ watch(prjNoNum, loadProject, { immediate: true, });
 
 <template>
   <div :class="cn(cssVariants({}), props.class)">
-    <!-- 좌측: 카테고리 사이드바 -->
-    <aside class="flex min-h-0 w-65 shrink-0 flex-col overflow-y-auto border-r border-border bg-card p-2 transition-colors duration-300">
-      <nav class="flex flex-col gap-0.5">
-        <RouterLink
-          to="/"
-          class="btn-icon flex h-10 w-full items-center gap-1.5 rounded-2 px-3 text-left transition-colors hover:bg-accent/50 hover:text-foreground"
-        >
-          <VueIcon icon-name="lucide:house" class="size-4 shrink-0" />
-          <span class="text-sm font-medium">
-            첫 화면
-          </span>
-        </RouterLink>
-        <RouterLink
-          :to="{ path: '/project-list', query: project?.prjNo != null ? { prjNo: String(project.prjNo) } : {} }"
-          class="btn-icon flex h-10 w-full items-center gap-1.5 rounded-2 px-3 text-left transition-colors hover:bg-accent/50 hover:text-foreground"
-        >
-          <span class="text-sm font-medium">
-            ← 목록으로
-          </span>
-        </RouterLink>
-      </nav>
-      <template v-if="project">
-        <p class="type-label mt-2 px-2 py-1">
-          설정
-        </p>
-        <ul class="flex flex-col gap-0.5">
-          <li
-            v-for="item in categoryItems"
-            :key="item.path"
-            class="flex"
-          >
+    <!-- 목록 화면: ProjectMenuLayout(좌측 카테고리 + 우측 메인) -->
+    <template v-if="!isDetailLayoutRoute">
+      <ProjectMenuLayout
+        :project="project"
+        :category-items="categoryItems"
+        :active-route-name="route.name"
+      >
+        <template v-if="projectLoadError">
+          <div class="p-4">
+            <p class="type-muted">
+              {{ projectLoadError }}
+            </p>
             <RouterLink
-              :to="{ name: item.name, params: { prjNo: project!.prjNo } }"
-              class="btn-icon flex h-10 w-full items-center gap-2 rounded-2 px-3 text-left transition-colors hover:bg-accent/50 hover:text-foreground"
-              :class="isActiveCategory(item.name) ? 'bg-accent text-accent-foreground font-semibold' : ''"
+              to="/project-list"
+              class="mt-2 text-sm text-primary underline hover:text-primary/80"
             >
-              <VueIcon :icon-name="item.icon" class="size-4 shrink-0" />
-              <span class="text-sm">
-                {{ item.label }}
-              </span>
+              프로젝트 목록으로
             </RouterLink>
-          </li>
-        </ul>
-      </template>
-    </aside>
+          </div>
+        </template>
+        <template v-else-if="project">
+          <RouterView />
+        </template>
+        <template v-else>
+          <div class="p-4">
+            <p class="type-muted">
+              로딩 중…
+            </p>
+          </div>
+        </template>
+      </ProjectMenuLayout>
+    </template>
 
-    <!-- 우측: 메인 영역 (패딩 없음 — 자식 뷰에서 처리) -->
-    <main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background transition-colors duration-300">
-      <template v-if="projectLoadError">
-        <div class="p-4">
-          <p class="type-muted">
-            {{ projectLoadError }}
-          </p>
-          <RouterLink
-            to="/project-list"
-            class="mt-2 text-sm text-primary underline hover:text-primary/80"
-          >
-            프로젝트 목록으로
-          </RouterLink>
-        </div>
-      </template>
-      <template v-else-if="project">
-        <RouterView />
-      </template>
-      <template v-else>
-        <div class="p-4">
-          <p class="type-muted">
-            로딩 중…
-          </p>
-        </div>
-      </template>
-    </main>
+    <!-- 상세 라우트: 메인 전체 폭 (카테고리 사이드바 없음) -->
+    <template v-else>
+      <main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background transition-colors duration-300">
+        <template v-if="projectLoadError">
+          <div class="p-4">
+            <p class="type-muted">
+              {{ projectLoadError }}
+            </p>
+            <RouterLink
+              to="/project-list"
+              class="mt-2 text-sm text-primary underline hover:text-primary/80"
+            >
+              프로젝트 목록으로
+            </RouterLink>
+          </div>
+        </template>
+        <template v-else-if="project">
+          <RouterView />
+        </template>
+        <template v-else>
+          <div class="p-4">
+            <p class="type-muted">
+              로딩 중…
+            </p>
+          </div>
+        </template>
+      </main>
+    </template>
   </div>
 </template>

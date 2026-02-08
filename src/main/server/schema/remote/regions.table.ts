@@ -29,6 +29,8 @@ export const regionsTable = pgTable(
     mainFclty: text('main_fclty'),
     rsrcList: text('rsrc_list'),
     ntnNo: integer('ntn_no').references(() => nationsTable.ntnNo),
+    loreType: text('lore_type').default('REGION'),
+    subLoreType: text('sub_lore_type'),
     ...commonColumnsPg,
   },
   (regions) => [

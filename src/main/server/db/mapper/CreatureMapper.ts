@@ -38,8 +38,10 @@ export const CreatureMapper = {
 
     const createWhere = (table: CreaturesTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
+
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
+
         if (searchType === 'creatureNm') {
           where = and(where, like(table.creatureNm, keyword))!;
         }
@@ -53,6 +55,7 @@ export const CreatureMapper = {
           )!;
         }
       }
+
       return where;
     };
 
@@ -170,6 +173,8 @@ export const CreatureMapper = {
       dangerGrd: vo.dangerGrd ?? null,
       identStat: vo.identStat ?? null,
       creatureExpln: vo.creatureExpln ?? null,
+      loreType: vo.loreType ?? 'CREATURE',
+      subLoreType: vo.subLoreType ?? null,
     };
 
     if (mode === 'local') {
@@ -215,6 +220,8 @@ export const CreatureMapper = {
       creatureType: vo.creatureType ?? undefined,
       dangerGrd: vo.dangerGrd ?? undefined,
       identStat: vo.identStat ?? undefined,
+      loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       creatureExpln: vo.creatureExpln ?? undefined,
       updtDt: now,
     };

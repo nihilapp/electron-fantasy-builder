@@ -54,17 +54,22 @@ const canSubmit = computed(() => form.value.prjNm.trim() !== '');
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
+/** @description 프로젝트 생성 API 호출 후 목록 페이지로 이동. */
 const submit = async () => {
   if (!canSubmit.value || isSubmitting.value) return;
+
   errorMessage.value = null;
   isSubmitting.value = true;
+
   try {
     const body = {
       prjNm: form.value.prjNm.trim(),
       genreType: form.value.genreType.trim() || null,
       prjDesc: form.value.prjDesc.trim() || null,
     } as ProjectVo;
+
     await createProject(body);
+
     router.push('/project-list');
   }
   catch (e) {
@@ -123,7 +128,7 @@ const submit = async () => {
         </p>
 
         <div class="flex gap-2">
-          <FormButton
+          <CommonButton
             type="button"
             variant="secondary"
             :disabled="isSubmitting"
@@ -134,8 +139,8 @@ const submit = async () => {
             <template #icon>
               <VueIcon icon-name="fa6-solid:xmark" class="size-4 shrink-0" />
             </template>
-          </FormButton>
-          <FormButton
+          </CommonButton>
+          <CommonButton
             type="submit"
             variant="primary"
             :disabled="!canSubmit"
@@ -147,7 +152,7 @@ const submit = async () => {
             <template #icon>
               <VueIcon icon-name="lucide:plus" class="size-4 shrink-0" />
             </template>
-          </FormButton>
+          </CommonButton>
         </div>
       </form>
     </section>

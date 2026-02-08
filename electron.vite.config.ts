@@ -76,6 +76,7 @@ export default defineConfig({
             imports: [ 'defineStore', 'storeToRefs', ],
           },
         ],
+        dirs: [ 'composables', ],
         dts: 'auto-imports.d.ts',
         eslintrc: {
           enabled: true,

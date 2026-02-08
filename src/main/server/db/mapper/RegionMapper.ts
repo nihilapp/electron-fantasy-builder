@@ -32,35 +32,51 @@ export const RegionMapper = {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
+
     const createWhere = (table: RegionsTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
+
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
+
         if (searchType === 'regionNm') where = and(where, like(table.regionNm, keyword))!;
         else if (searchType === 'regionExpln') where = and(where, like(table.regionExpln, keyword))!;
         else where = and(where, or(like(table.regionNm, keyword), like(table.regionExpln, keyword)))!;
       }
+
       return where;
     };
+
     if (mode === 'local') {
       const table = localRegionsTable;
       const dbLocal = db as LocalDb;
       const where = createWhere(table);
+
       const [ countRow, ] = await dbLocal.select({ count: count(), }).from(table).where(where);
       const totalCnt = Number(countRow?.count ?? 0);
+
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.regionNo)).$dynamic();
+
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
       const rows = await query;
+
       return { list: rows.map((row) => regionRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
+
     const table = remoteRegionsTable;
     const dbRemote = db as RemoteDb;
     const where = createWhere(table);
+
     const [ countRow, ] = await dbRemote.select({ count: count(), }).from(table).where(where);
     const totalCnt = Number(countRow?.count ?? 0);
+
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.regionNo)).$dynamic();
+
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
     const rows = await query;
+
     return { list: rows.map((row) => regionRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
@@ -72,12 +88,14 @@ export const RegionMapper = {
   async selectByNo(prjNo: number, regionNo: number): Promise<RegionVo | null> {
     const db = getDb();
     const mode = getDbMode();
+
     if (mode === 'local') {
       const [ row, ] = await (db as LocalDb).select().from(localRegionsTable).where(and(eq(localRegionsTable.prjNo, prjNo), eq(localRegionsTable.regionNo, regionNo))).limit(1);
       return row
         ? regionRowToVo(row as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ row, ] = await (db as RemoteDb).select().from(remoteRegionsTable).where(and(eq(remoteRegionsTable.prjNo, prjNo), eq(remoteRegionsTable.regionNo, regionNo))).limit(1);
     return row
       ? regionRowToVo(row as unknown as Record<string, unknown>)
@@ -95,6 +113,7 @@ export const RegionMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values = {
       prjNo,
       upRegionNo: vo.upRegionNo ?? null,
@@ -114,12 +133,16 @@ export const RegionMapper = {
       mainFclty: vo.mainFclty ?? null,
       rsrcList: vo.rsrcList ?? null,
       ntnNo: vo.ntnNo ?? null,
+      loreType: vo.loreType ?? 'REGION',
+      subLoreType: vo.subLoreType ?? null,
     };
+
     if (mode === 'local') {
       const [ inserted, ] = await (db as LocalDb).insert(localRegionsTable).values({ ...values, crtDt: now as string, updtDt: now as string, }).returning();
       if (!inserted) throw new Error('RegionMapper.insert: no row returned');
       return regionRowToVo(inserted as unknown as Record<string, unknown>);
     }
+
     const [ inserted, ] = await (db as RemoteDb).insert(remoteRegionsTable).values({ ...values, crtDt: now as Date, updtDt: now as Date, }).returning();
     if (!inserted) throw new Error('RegionMapper.insert: no row returned');
     return regionRowToVo(inserted as unknown as Record<string, unknown>);
@@ -137,6 +160,7 @@ export const RegionMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values: Record<string, unknown> = {
       upRegionNo: vo.upRegionNo ?? undefined,
       regionNm: vo.regionNm ?? undefined,
@@ -155,14 +179,18 @@ export const RegionMapper = {
       mainFclty: vo.mainFclty ?? undefined,
       rsrcList: vo.rsrcList ?? undefined,
       ntnNo: vo.ntnNo ?? undefined,
+      loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       updtDt: now,
     };
+
     if (mode === 'local') {
       const [ updated, ] = await (db as LocalDb).update(localRegionsTable).set(values).where(and(eq(localRegionsTable.prjNo, prjNo), eq(localRegionsTable.regionNo, regionNo))).returning();
       return updated
         ? regionRowToVo(updated as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ updated, ] = await (db as RemoteDb).update(remoteRegionsTable).set(values).where(and(eq(remoteRegionsTable.prjNo, prjNo), eq(remoteRegionsTable.regionNo, regionNo))).returning();
     return updated
       ? regionRowToVo(updated as unknown as Record<string, unknown>)
@@ -180,10 +208,12 @@ export const RegionMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     if (mode === 'local') {
       const result = await (db as LocalDb).update(localRegionsTable).set({ delYn: 'Y', delDt: now as string, }).where(and(eq(localRegionsTable.prjNo, prjNo), eq(localRegionsTable.regionNo, regionNo))).returning({ regionNo: localRegionsTable.regionNo, });
       return result.length > 0;
     }
+
     const result = await (db as RemoteDb).update(remoteRegionsTable).set({ delYn: 'Y', delDt: now as Date, }).where(and(eq(remoteRegionsTable.prjNo, prjNo), eq(remoteRegionsTable.regionNo, regionNo))).returning({ regionNo: remoteRegionsTable.regionNo, });
     return result.length > 0;
   },

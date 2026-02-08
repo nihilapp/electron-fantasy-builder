@@ -110,8 +110,21 @@ PRD/
 
 **Only if a Plan was created.**
 
-1.  **Verify Result**.
-2.  **Create Result File** (플랜과 같은 폴더에 생성):
+1.  **Verify Result**: 실행 결과를 확인한다.
+
+2.  **Self-Check Checklist (필수, 매우 중요)**  
+    **결과 문서(RESULT)를 작성하기 전에 반드시 수행한다.**
+
+    *   **PLAN 파일 재열람**: 해당 PLAN의 **§5 Task List**와 **§6 Verification Plan** 항목을 모두 꺼낸다.
+    *   **항목별 검증**: 각 항목에 대해 코드·파일·동작을 실제로 확인한 뒤,
+        *   완료·검증됨 → **`[x]`** 로 표시
+        *   미완료 또는 미검증 → **`[ ]`** (또는 x) 로 표시
+    *   **진행 제한**:
+        *   **모든 체크리스트 항목이 `[x]`가 될 때까지** RESULT 문서를 작성하지 않는다.
+        *   하나라도 `[ ]`가 남아 있으면: 남은 작업을 수행하거나, 마스터에게 "체크리스트 미충족"을 보고하고 RESULT 작성을 보류한다.
+    *   **진행 허용**: 전부 `[x]`가 된 경우에만 다음 단계(Result File 생성)로 진행한다.
+
+3.  **Create Result File** (체크리스트 전부 통과 후, 플랜과 같은 폴더에 생성):
     *   **Path**: `./PRD/plans/{YYYY-MM-DD}/{Seq}_{Type}_{Keyword}_RESULT.md`
     *   **Template**:
         ```markdown
@@ -133,7 +146,8 @@ PRD/
         ## 4. Verification Results
         ...
         ```
-3.  **Final Report**: Notify the user of completion.
+
+4.  **Final Report**: 사용자에게 완료를 알린다.
 
 ---
 

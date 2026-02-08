@@ -24,32 +24,32 @@ const { getProjectList, } = projectStore;
 // STATES — ref, computed 등 반응형 변수
 // ─────────────────────────────────────────────────────────────
 
-/** 테스트용: true면 로딩 화면을 계속 표시. 기본 false. */
+/** @description 테스트용: true면 로딩 화면을 계속 표시. 기본 false. */
 const FORCE_LOADING = false;
 
-/** 앱(백엔드) 준비 완료 여부. false일 때 로딩 화면 표시 */
+/** @description 앱(백엔드) 준비 완료 여부. false일 때 로딩 화면 표시 */
 const appReady = ref(false);
 
-/** 준비 완료 감지 실패 시 메시지. 있으면 로딩 대신 에러 안내 표시 */
+/** @description 준비 완료 감지 실패 시 메시지. 있으면 로딩 대신 에러 안내 표시 */
 const loadError = ref<string | null>(null);
 
+/** @description Health 재시도 최대 횟수 */
 const MAX_RETRIES = 10;
+
+/** @description 재시도 간격(ms) */
 const RETRY_DELAY_MS = 400;
 
-/** 로딩 화면 최소 표시 시간(ms). 이 시간만큼은 AppLoadingScreen이 보이도록 유지 */
+/** @description 로딩 화면 최소 표시 시간(ms). 이 시간만큼은 AppLoadingScreen이 보이도록 유지 */
 const MIN_LOADING_DISPLAY_MS = 500;
 
-/** 로딩 시작 시각. 최소 표시 시간 계산용 */
+/** @description 로딩 시작 시각. 최소 표시 시간 계산용 */
 const loadingStartedAt = ref(0);
 
 // ─────────────────────────────────────────────────────────────
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
-/**
- * Health API로 백엔드 준비 여부 확인. 성공 시 appReady = true 후 프로젝트 목록 로드.
- * 로딩 화면이 최소 MIN_LOADING_DISPLAY_MS 동안은 보이도록 대기한 뒤 전환.
- */
+/** @description Health API로 백엔드 준비 여부 확인. 성공 시 appReady = true 후 프로젝트 목록 로드. 로딩 화면은 최소 MIN_LOADING_DISPLAY_MS 동안 유지 후 전환. */
 async function waitForAppReady() {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -65,6 +65,7 @@ async function waitForAppReady() {
         }
 
         appReady.value = true;
+
         await getProjectList();
       }
 
@@ -81,12 +82,12 @@ async function waitForAppReady() {
   }
 }
 
-/**
- * 에러 안내 화면에서 "다시 시도" 클릭 시 재시도.
- */
+/** @description 에러 안내 화면에서 "다시 시도" 클릭 시 재시도. */
 function retryLoad() {
   loadError.value = null;
+
   loadingStartedAt.value = Date.now();
+
   waitForAppReady();
 }
 
@@ -100,7 +101,9 @@ function retryLoad() {
 
 onMounted(() => {
   initTheme();
+
   loadingStartedAt.value = Date.now();
+
   waitForAppReady();
 });
 </script>
@@ -112,18 +115,17 @@ onMounted(() => {
   <!-- 준비 실패: 에러 메시지 + 다시 시도 -->
   <div
     v-else-if="loadError"
-    class="flex h-dvh w-full flex-col items-center justify-center gap-4 bg-indigo-950 p-4"
+    class="flex h-dvh w-full flex-col items-center justify-center gap-4 bg-card border border-border p-4"
   >
     <p class="type-muted">
       {{ loadError }}
     </p>
-    <button
+    <CommonButton
       type="button"
-      class="btn-primary"
+      variant="primary"
+      label="다시 시도"
       @click="retryLoad"
-    >
-      다시 시도
-    </button>
+    />
   </div>
 
   <!-- 준비 완료: 본문 -->
@@ -132,7 +134,7 @@ onMounted(() => {
     class="flex flex-col gap-0 h-dvh"
   >
     <AppTitleBar title="FANTASY BUILDER" />
-    <main class="flex-1 min-h-0 min-w-0 shrink overflow-hidden">
+    <main class="flex min-h-0 min-w-0 flex-1 flex-col shrink overflow-hidden">
       <RouterView />
     </main>
   </div>

@@ -22,8 +22,8 @@ export function createMainWindow(): BrowserWindow {
   }
 
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1600,
+    height: 900,
     /** 네이티브 타이틀바 제거. AppTitlebar.vue 커스텀 타이틀바 사용 */
     frame: false,
     // 메뉴바 비활성화 옵션 (템플릿 가이드)

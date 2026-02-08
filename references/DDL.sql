@@ -332,17 +332,20 @@ CREATE TABLE public.abilities (
     updt_dt timestamp(6) NULL,
     updt_no int8 NULL,
     use_yn varchar(1) DEFAULT 'Y'::character varying NULL,
+    ability_nm text NOT NULL,
+    ability_domain text NOT NULL,
+    ability_source text NOT NULL,
+    ability_lineage text NOT NULL,
+    ability_form text NOT NULL,
+    tags text NULL,
     ability_expln text NULL,
-    ability_lcls varchar(255) NULL,
-    ability_nm varchar(255) NOT NULL,
-    ability_type varchar(255) NULL,
     cast_time int4 NULL,
     cool_time int4 NULL,
-    dmg_type varchar(255) NULL,
-    stat_eff_type varchar(255) NULL,
-    trgt_type varchar(255) NULL,
+    dmg_type text NULL,
+    stat_eff_type text NULL,
+    trgt_type text NULL,
     use_cnd text NULL,
-    use_cost varchar(255) NULL,
+    use_cost text NULL,
     CONSTRAINT abilities_pkey PRIMARY KEY (ability_no)
 );
 
@@ -1014,17 +1017,20 @@ CREATE TABLE public.project_abilities (
     updt_dt timestamp(6) NULL,
     updt_no int8 NULL,
     use_yn varchar(1) DEFAULT 'Y'::character varying NULL,
+    ability_nm text NOT NULL,
+    ability_domain text NOT NULL,
+    ability_source text NOT NULL,
+    ability_lineage text NOT NULL,
+    ability_form text NOT NULL,
+    tags text NULL,
     ability_expln text NULL,
-    ability_lcls varchar(255) NULL,
-    ability_nm varchar(255) NOT NULL,
-    ability_type varchar(255) NULL,
     cast_time int4 NULL,
     cool_time int4 NULL,
-    dmg_type varchar(255) NULL,
-    stat_eff_type varchar(255) NULL,
-    trgt_type varchar(255) NULL,
+    dmg_type text NULL,
+    stat_eff_type text NULL,
+    trgt_type text NULL,
     use_cnd text NULL,
-    use_cost varchar(255) NULL,
+    use_cost text NULL,
     prj_no int8 NOT NULL,
     CONSTRAINT project_abilities_pkey PRIMARY KEY (ability_no),
     CONSTRAINT fkt1wubm6pt5ko9mj6hg874e5pk FOREIGN KEY (prj_no) REFERENCES public.projects (prj_no)
@@ -1039,6 +1045,40 @@ CREATE INDEX idx_project_abilities_prj_no ON public.project_abilities USING btre
 ALTER TABLE public.project_abilities OWNER TO neondb_owner;
 
 GRANT ALL ON TABLE public.project_abilities TO neondb_owner;
+
+-- public.setting_protections definition (설정 보호. FK는 설정 쪽 미사용, 논리 참조만)
+-- DROP TABLE public.setting_protections;
+CREATE TABLE public.setting_protections (
+    protection_no serial4 NOT NULL,
+    prj_no int4 NOT NULL,
+    setting_category text NOT NULL,
+    setting_no int8 NOT NULL,
+    crt_dt timestamp NULL,
+    crt_no int8 NULL,
+    CONSTRAINT setting_protections_pkey PRIMARY KEY (protection_no),
+    CONSTRAINT setting_protections_prj_category_no_unique UNIQUE (prj_no, setting_category, setting_no),
+    CONSTRAINT setting_protections_prj_no_fkey FOREIGN KEY (prj_no) REFERENCES public.projects (prj_no)
+);
+
+ALTER TABLE public.setting_protections OWNER TO neondb_owner;
+GRANT ALL ON TABLE public.setting_protections TO neondb_owner;
+
+-- public.setting_favorites definition (설정 즐겨찾기. FK는 설정 쪽 미사용, 논리 참조만)
+-- DROP TABLE public.setting_favorites;
+CREATE TABLE public.setting_favorites (
+    favorite_no serial4 NOT NULL,
+    prj_no int4 NOT NULL,
+    setting_category text NOT NULL,
+    setting_no int8 NOT NULL,
+    crt_dt timestamp NULL,
+    crt_no int8 NULL,
+    CONSTRAINT setting_favorites_pkey PRIMARY KEY (favorite_no),
+    CONSTRAINT setting_favorites_prj_category_no_unique UNIQUE (prj_no, setting_category, setting_no),
+    CONSTRAINT setting_favorites_prj_no_fkey FOREIGN KEY (prj_no) REFERENCES public.projects (prj_no)
+);
+
+ALTER TABLE public.setting_favorites OWNER TO neondb_owner;
+GRANT ALL ON TABLE public.setting_favorites TO neondb_owner;
 
 -- public.project_skills definition
 

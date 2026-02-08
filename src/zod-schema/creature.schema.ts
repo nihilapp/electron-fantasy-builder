@@ -18,6 +18,8 @@ export const creatureSchema = z
     dangerGrd: z.string().nullable().optional().default(null),
     identStat: z.string().nullable().optional().default(null),
     creatureExpln: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

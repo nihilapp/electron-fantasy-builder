@@ -1,7 +1,7 @@
 import { and, count, desc, eq, like, or } from 'drizzle-orm';
 
-import type { CoreRuleVo } from '@app-types/vo.types';
-import { coreRuleSchema } from '@zod-schema/coreRule.schema';
+import type { CoreRuleListItemVo, CoreRuleVo } from '@app-types/vo.types';
+import { coreRuleListItemSchema, coreRuleSchema } from '@zod-schema/coreRule.schema';
 
 import { coreRulesTable as localCoreRulesTable } from '../../schema/local/core_rules.table';
 import { coreRulesTable as remoteCoreRulesTable } from '../../schema/remote/core_rules.table';
@@ -20,18 +20,27 @@ function coreRuleRowToVo(row: Record<string, unknown>): CoreRuleVo {
   return rowToVo(row, coreRuleSchema);
 }
 
+/**
+ * @description DB row → 코어룰 목록 항목 VO (메타+이름만).
+ * @param row DB 결과 한 행 (목록용 select 컬럼만 포함)
+ */
+function coreRuleListRowToVo(row: Record<string, unknown>): CoreRuleListItemVo {
+  return rowToVo(row, coreRuleListItemSchema);
+}
+
 type CoreRulesTable = typeof localCoreRulesTable | typeof remoteCoreRulesTable;
 
 export const CoreRuleMapper = {
   /**
    * @description 목록 조회 (prjNo 스코프, del_yn = 'N', core_no 내림차순, 페이징, 검색).
+   * 반환 항목은 메타+이름만(식별자, coreNm, 공통 컬럼). 상세 본문은 상세 API에서만 조회.
    * @param prjNo 프로젝트 번호
    * @param params 검색/페이징 파라미터
    */
   async selectList(
     prjNo: number,
     params: CoreRuleVo
-  ): Promise<{ list: CoreRuleVo[]; totalCnt: number }> {
+  ): Promise<{ list: CoreRuleListItemVo[]; totalCnt: number }> {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
@@ -68,7 +77,22 @@ export const CoreRuleMapper = {
       const totalCnt = Number(countRow?.count ?? 0);
 
       let query = dbLocal
-        .select()
+        .select({
+          coreNo: table.coreNo,
+          prjNo: table.prjNo,
+          coreNm: table.coreNm,
+          loreType: table.loreType,
+          subLoreType: table.subLoreType,
+          useYn: table.useYn,
+          shrnYn: table.shrnYn,
+          delYn: table.delYn,
+          crtNo: table.crtNo,
+          crtDt: table.crtDt,
+          updtNo: table.updtNo,
+          updtDt: table.updtDt,
+          delNo: table.delNo,
+          delDt: table.delDt,
+        })
         .from(table)
         .where(where)
         .orderBy(desc(table.coreNo))
@@ -81,7 +105,7 @@ export const CoreRuleMapper = {
 
       const rows = await query;
       const list = rows.map((row) =>
-        coreRuleRowToVo(row as unknown as Record<string, unknown>)
+        coreRuleListRowToVo(row as unknown as Record<string, unknown>)
       );
 
       return { list, totalCnt, };
@@ -98,7 +122,22 @@ export const CoreRuleMapper = {
     const totalCnt = Number(countRow?.count ?? 0);
 
     let query = dbRemote
-      .select()
+      .select({
+        coreNo: table.coreNo,
+        prjNo: table.prjNo,
+        coreNm: table.coreNm,
+        loreType: table.loreType,
+        subLoreType: table.subLoreType,
+        useYn: table.useYn,
+        shrnYn: table.shrnYn,
+        delYn: table.delYn,
+        crtNo: table.crtNo,
+        crtDt: table.crtDt,
+        updtNo: table.updtNo,
+        updtDt: table.updtDt,
+        delNo: table.delNo,
+        delDt: table.delDt,
+      })
       .from(table)
       .where(where)
       .orderBy(desc(table.coreNo))
@@ -111,7 +150,7 @@ export const CoreRuleMapper = {
 
     const rows = await query;
     const list = rows.map((row) =>
-      coreRuleRowToVo(row as unknown as Record<string, unknown>)
+      coreRuleListRowToVo(row as unknown as Record<string, unknown>)
     );
 
     return { list, totalCnt, };
@@ -181,6 +220,8 @@ export const CoreRuleMapper = {
       tags: vo.tags ?? null,
       linkDocs: vo.linkDocs ?? null,
       rmk: vo.rmk ?? null,
+      loreType: vo.loreType ?? 'CORE_RULE',
+      subLoreType: vo.subLoreType ?? null,
     };
 
     if (mode === 'local') {
@@ -231,6 +272,8 @@ export const CoreRuleMapper = {
       tags: vo.tags ?? undefined,
       linkDocs: vo.linkDocs ?? undefined,
       rmk: vo.rmk ?? undefined,
+      loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       updtDt: now,
     };
 

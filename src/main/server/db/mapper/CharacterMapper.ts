@@ -38,8 +38,10 @@ export const CharacterMapper = {
 
     const createWhere = (table: CharactersTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
+
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
+
         if (searchType === 'charNm') {
           where = and(where, like(table.charNm, keyword))!;
         }
@@ -53,6 +55,7 @@ export const CharacterMapper = {
           )!;
         }
       }
+
       return where;
     };
 
@@ -60,21 +63,32 @@ export const CharacterMapper = {
       const table = localCharactersTable;
       const dbLocal = db as LocalDb;
       const where = createWhere(table);
+
       const [ countRow, ] = await dbLocal.select({ count: count(), }).from(table).where(where);
       const totalCnt = Number(countRow?.count ?? 0);
+
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.charNo)).$dynamic();
+
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
       const rows = await query;
+
       return { list: rows.map((row) => characterRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
+
     const table = remoteCharactersTable;
     const dbRemote = db as RemoteDb;
     const where = createWhere(table);
+
     const [ countRow, ] = await dbRemote.select({ count: count(), }).from(table).where(where);
     const totalCnt = Number(countRow?.count ?? 0);
+
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.charNo)).$dynamic();
+
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
     const rows = await query;
+
     return { list: rows.map((row) => characterRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
@@ -86,6 +100,7 @@ export const CharacterMapper = {
   async selectByNo(prjNo: number, charNo: number): Promise<CharacterVo | null> {
     const db = getDb();
     const mode = getDbMode();
+
     if (mode === 'local') {
       const table = localCharactersTable;
       const dbLocal = db as LocalDb;
@@ -94,6 +109,7 @@ export const CharacterMapper = {
         ? characterRowToVo(row as unknown as Record<string, unknown>)
         : null;
     }
+
     const table = remoteCharactersTable;
     const dbRemote = db as RemoteDb;
     const [ row, ] = await dbRemote.select().from(table).where(and(eq(table.prjNo, prjNo), eq(table.charNo, charNo))).limit(1);
@@ -113,6 +129,7 @@ export const CharacterMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values = {
       prjNo,
       charNm: (vo.charNm ?? '').toString().trim(),
@@ -124,12 +141,16 @@ export const CharacterMapper = {
       ntnNo: vo.ntnNo ?? null,
       orgNo: vo.orgNo ?? null,
       orgRank: vo.orgRank ?? null,
+      loreType: vo.loreType ?? 'CHARACTER',
+      subLoreType: vo.subLoreType ?? null,
     };
+
     if (mode === 'local') {
       const [ inserted, ] = await (db as LocalDb).insert(localCharactersTable).values({ ...values, crtDt: now as string, updtDt: now as string, }).returning();
       if (!inserted) throw new Error('CharacterMapper.insert: no row returned');
       return characterRowToVo(inserted as unknown as Record<string, unknown>);
     }
+
     const [ inserted, ] = await (db as RemoteDb).insert(remoteCharactersTable).values({ ...values, crtDt: now as Date, updtDt: now as Date, }).returning();
     if (!inserted) throw new Error('CharacterMapper.insert: no row returned');
     return characterRowToVo(inserted as unknown as Record<string, unknown>);
@@ -147,6 +168,7 @@ export const CharacterMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values: Record<string, unknown> = {
       charNm: vo.charNm ?? undefined,
       aliasNm: vo.aliasNm ?? undefined,
@@ -157,14 +179,18 @@ export const CharacterMapper = {
       ntnNo: vo.ntnNo ?? undefined,
       orgNo: vo.orgNo ?? undefined,
       orgRank: vo.orgRank ?? undefined,
+      loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       updtDt: now,
     };
+
     if (mode === 'local') {
       const [ updated, ] = await (db as LocalDb).update(localCharactersTable).set(values).where(and(eq(localCharactersTable.prjNo, prjNo), eq(localCharactersTable.charNo, charNo))).returning();
       return updated
         ? characterRowToVo(updated as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ updated, ] = await (db as RemoteDb).update(remoteCharactersTable).set(values).where(and(eq(remoteCharactersTable.prjNo, prjNo), eq(remoteCharactersTable.charNo, charNo))).returning();
     return updated
       ? characterRowToVo(updated as unknown as Record<string, unknown>)
@@ -182,10 +208,12 @@ export const CharacterMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     if (mode === 'local') {
       const result = await (db as LocalDb).update(localCharactersTable).set({ delYn: 'Y', delDt: now as string, }).where(and(eq(localCharactersTable.prjNo, prjNo), eq(localCharactersTable.charNo, charNo))).returning({ charNo: localCharactersTable.charNo, });
       return result.length > 0;
     }
+
     const result = await (db as RemoteDb).update(remoteCharactersTable).set({ delYn: 'Y', delDt: now as Date, }).where(and(eq(remoteCharactersTable.prjNo, prjNo), eq(remoteCharactersTable.charNo, charNo))).returning({ charNo: remoteCharactersTable.charNo, });
     return result.length > 0;
   },

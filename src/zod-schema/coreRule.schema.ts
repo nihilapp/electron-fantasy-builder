@@ -21,8 +21,25 @@ export const coreRuleSchema = z
     narrAply: z.string().nullable().optional().default(null),
     linkDocs: z.string().nullable().optional().default(null),
     rmk: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);
+
+/** 목록 API 응답용. 식별자 + 이름 + 메타만. (상세 본문·검색 필드 제외) */
+export const coreRuleListItemSchema = coreRuleSchema.omit({
+  defDesc: true,
+  aplyScope: true,
+  strcElem: true,
+  mechDesc: true,
+  narrAply: true,
+  linkDocs: true,
+  rmk: true,
+  page: true,
+  pageSize: true,
+  searchKeyword: true,
+  searchType: true,
+});
 
 export const getEmptyCoreRule = () => coreRuleSchema.parse({});

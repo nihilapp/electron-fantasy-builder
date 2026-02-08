@@ -30,6 +30,8 @@ export const regionSchema = z
     mainFclty: z.string().nullable().optional().default(null),
     rsrcList: z.string().nullable().optional().default(null),
     ntnNo: z.number().int().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

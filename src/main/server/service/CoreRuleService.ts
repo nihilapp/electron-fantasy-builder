@@ -1,5 +1,5 @@
 import type { ListResponseType, ListType, ResponseType } from '@app-types/response.types';
-import type { CoreRuleVo } from '@app-types/vo.types';
+import type { CoreRuleListItemVo, CoreRuleVo } from '@app-types/vo.types';
 import { RESPONSE_CODE } from '@constants/response-code.const';
 
 import { CoreRuleMapper } from '../db/mapper/CoreRuleMapper';
@@ -12,13 +12,14 @@ export const CoreRuleService = {
   async getList(
     prjNo: number,
     params: CoreRuleVo
-  ): Promise<ListResponseType<CoreRuleVo>> {
+  ): Promise<ListResponseType<CoreRuleListItemVo>> {
     const { list, totalCnt, } = await CoreRuleMapper.selectList(prjNo, params);
+
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 10;
     const totalPage = Math.max(1, Math.ceil(totalCnt / pageSize));
 
-    const data: ListType<CoreRuleVo> = {
+    const data: ListType<CoreRuleListItemVo> = {
       list,
       totalCnt,
       pageSize,

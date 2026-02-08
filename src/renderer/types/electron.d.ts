@@ -2,6 +2,7 @@ import type { HealthDto } from '@app-types/dto.types';
 import type { ListResponseType, ResponseType } from '@app-types/response.types';
 import type {
   AbilityVo,
+  CoreRuleListItemVo,
   CoreRuleVo,
   ProjectVo,
   TraitVo,
@@ -87,7 +88,7 @@ interface ElectronAPI {
     );
 
     getCoreRuleList: (prjNo: number, params?: ListParams) => (
-      Promise<ListResponseType<CoreRuleVo>>
+      Promise<ListResponseType<CoreRuleListItemVo>>
     );
     getCoreRule: (prjNo: number, coreNo: number) => (
       Promise<ResponseType<CoreRuleVo | null>>

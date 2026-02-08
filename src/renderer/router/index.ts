@@ -2,9 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 import CreateProjectView from '~/views/CreateProjectView.vue';
 import MainView from '~/views/MainView.vue';
-import CoreRuleAddSection from '~/views/project-detail/CoreRuleAddSection.vue';
-import CoreRuleDetailSection from '~/views/project-detail/CoreRuleDetailSection.vue';
-import CoreRulesSection from '~/views/project-detail/CoreRulesSection.vue';
+import CoreRuleFormSection from '~/views/project-detail/core-rules/CoreRuleFormSection.vue';
+import CoreRulesSection from '~/views/project-detail/core-rules/CoreRulesSection.vue';
 import OverviewSection from '~/views/project-detail/OverviewSection.vue';
 import PlaceholderSection from '~/views/project-detail/PlaceholderSection.vue';
 import TraitsAbilitiesSection from '~/views/project-detail/TraitsAbilitiesSection.vue';
@@ -61,12 +60,12 @@ const router = createRouter({
         {
           path: 'core-rules/new',
           name: 'project-core-rule-new',
-          component: CoreRuleAddSection,
+          component: CoreRuleFormSection,
         },
         {
           path: 'core-rules/:coreNo',
           name: 'project-core-rule-detail',
-          component: CoreRuleDetailSection,
+          component: CoreRuleFormSection,
           props: true,
         },
         {

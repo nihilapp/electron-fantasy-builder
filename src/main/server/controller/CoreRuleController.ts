@@ -16,7 +16,9 @@ const coreRules = new Hono();
  */
 function parsePrjNo(raw: string | undefined): number | null {
   if (raw == null || raw === '') return null;
+
   const n = Number(raw);
+
   return Number.isInteger(n)
     ? n
     : null;
@@ -42,6 +44,7 @@ coreRules.get('/', async (context) => {
   }
 
   const query = context.req.query();
+
   const params = coreRuleSchema.parse({
     ...query,
     prjNo,
@@ -95,6 +98,7 @@ coreRules.get('/:coreNo', async (context) => {
  */
 coreRules.post('/', async (context) => {
   const raw = await context.req.json();
+
   const parsed = coreRuleSchema.safeParse(raw);
 
   if (!parsed.success) {
@@ -114,6 +118,7 @@ coreRules.post('/', async (context) => {
   }
 
   const prjNo = parsed.data.prjNo ?? null;
+
   if (prjNo == null || !Number.isInteger(prjNo)) {
     return context.json(
       {
@@ -127,6 +132,7 @@ coreRules.post('/', async (context) => {
   }
 
   const coreNm = (parsed.data.coreNm ?? '').toString().trim();
+
   if (!coreNm) {
     return context.json(
       {
@@ -168,6 +174,7 @@ coreRules.patch('/:coreNo', async (context) => {
   }
 
   const raw = await context.req.json();
+
   const parsed = coreRuleSchema.partial().safeParse(raw);
 
   if (!parsed.success) {

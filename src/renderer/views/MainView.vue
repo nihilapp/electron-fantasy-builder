@@ -74,17 +74,42 @@ const { isLoaded, hasProjects, } = storeToRefs(projectStore);
           세계관과 캐릭터를 위한 프로젝트를 만들어 보세요.
         </p>
         <div class="flex flex-col gap-2">
-          <RouterLink v-if="hasProjects" to="/project-list" class="w-full">
-            <button class="btn-secondary w-full" type="button">
-              <VueIcon icon-name="lucide:folder-open" class="size-4 shrink-0" />
-              프로젝트 관리
-            </button>
+          <RouterLink
+            v-if="hasProjects"
+            to="/project-list"
+            class="w-full"
+            custom
+            #default="{ navigate }"
+          >
+            <CommonButton
+              type="button"
+              variant="secondary"
+              label="프로젝트 관리"
+              class="w-full"
+              @click="navigate"
+            >
+              <template #icon>
+                <VueIcon icon-name="lucide:folder-open" class="size-4 shrink-0" />
+              </template>
+            </CommonButton>
           </RouterLink>
-          <RouterLink to="/create-project" class="w-full">
-            <button class="btn-primary w-full" type="button">
-              <VueIcon icon-name="lucide:plus" class="size-4 shrink-0" />
-              프로젝트 생성
-            </button>
+          <RouterLink
+            to="/create-project"
+            class="w-full"
+            custom
+            #default="{ navigate }"
+          >
+            <CommonButton
+              type="button"
+              variant="primary"
+              label="프로젝트 생성"
+              class="w-full"
+              @click="navigate"
+            >
+              <template #icon>
+                <VueIcon icon-name="lucide:plus" class="size-4 shrink-0" />
+              </template>
+            </CommonButton>
           </RouterLink>
         </div>
       </section>

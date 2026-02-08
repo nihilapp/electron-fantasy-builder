@@ -18,19 +18,25 @@
   - **확장**: 새로운 스타일 토큰이 필요하면 `assets/styles` 내의 해당 CSS 파일(`radius.css`, `colors.css` 등)에 변수를 정의한 후 사용합니다.
   - **프로젝트 포인트 컬러**: Primary / Accent / Ring은 **blue500** 계열로 통일. `theme.css`에서 `--color-primary`, `--color-accent`, `--color-ring` 등은 `blue-500`(및 라이트/다크용 blue-100, blue-900) 사용.
   - **시맨틱 토큰 (다크/라이트 공통)**: 텍스트·배경·테두리는 `text-foreground`, `text-muted-foreground`, `bg-background`, `bg-card`, `border-border` 등 **시맨틱 토큰**만 사용. `text-slate-200`, `bg-violet-500/20` 등 팔레트 하드코딩은 지양. 에러/삭제는 `text-destructive`, `hover:text-destructive` 사용.
-  - **설정 목록 아이템 (SettingItemCard)**: 코어 설정·특성/능력 등 설정 목록의 한 행은 공통 컴포넌트 `SettingItemCard`(`src/renderer/components/common/SettingItemCard.vue`) 사용. 레이아웃: 카테고리(라벨) + 제목 같은 행·카테고리 선행·우측 상단 컨트롤(보기/수정/즐겨찾기/보호/삭제). 동작은 emit(`view`, `edit`, `toggle-favorite`, `toggle-protected`, `delete`)으로 부모에서 처리.
-- **컴포넌트 (Components)**: Drizzle 쿼리 수행. `getDb()`로 연결 취득 후 `schema/local` 또는 `schema/remote` 스키마 사용.
+  - **설정 목록 아이템 (SettingItemCard)**: 주요 설정·특성/능력 등 설정 목록의 한 행은 공통 컴포넌트 `SettingItemCard`(`src/renderer/components/common/SettingItemCard.vue`) 사용. 레이아웃: 카테고리(라벨) + 제목 같은 행·카테고리 선행·우측 상단 컨트롤(보기/수정/즐겨찾기/보호/삭제). 동작은 emit(`view`, `edit`, `toggle-favorite`, `toggle-protected`, `delete`)으로 부모에서 처리. **예외**: 즐겨찾기 강조(별 아이콘)는 시맨틱 토큰 미정의 시 `text-amber-500`/`fill-amber-500` 등 amber 팔레트 사용을 허용한다.
+  - **컴포넌트 (Components)**: Drizzle 쿼리 수행. `getDb()`로 연결 취득 후 `schema/local` 또는 `schema/remote` 스키마 사용.
+
+### Directory Strategy
+- **Main / Preload / Renderer** 분리.
+- **공용 타입**: `src/types/` 에만 정의. main·renderer 모두 `@app-types/*` 로 참조. DTO·테이블·config 타입 중복 정의 금지.
+- **직접 임포트**: 타입·심볼은 **필요한 곳에서 정의처를 직접 import**한다. 임포트한 뒤 다시 export하는 **재익스포트 패턴**(예: `export type { X } from '...'`, 파일 상단에서 import 후 `export { X }`)은 사용하지 않는다.
+- **타입 파일 명명**: `src/types/` 아래 파일은 반드시 `*.types.ts` 로 명명 (예: `response.types.ts`, `config.types.ts`).
+- **상수**: `src/constants/` 아래 파일은 `*.const.ts` 로만 명명 (예: `response-code.const.ts`).
+- **도메인별**: Controller, Service, Mapper는 기능 단위로 구성. 공통(common)은 shared 또는 공통 모듈로.
 
 ### IPC vs API
 - **엔드포인트 통신 = API(HTTP)**. Hono·외부 서버 호출은 axios(메인) 또는 fetch(렌더러 honoClient)로만 수행.
 - **설정·앱 단 통신 = IPC**. base URL, DB 모드 등은 IPC로 제공.
 
-### Directory Strategy
-- **Main / Preload / Renderer** 분리.
-- **공용 타입**: `src/types/` 에만 정의. main·renderer 모두 `@app-types/*` 로 참조. DTO·테이블·config 타입 중복 정의 금지.
-- **타입 파일 명명**: `src/types/` 아래 파일은 반드시 `*.types.ts` 로 명명 (예: `response.types.ts`, `config.types.ts`).
-- **상수**: `src/constants/` 아래 파일은 `*.const.ts` 로만 명명 (예: `response-code.const.ts`).
-- **도메인별**: Controller, Service, Mapper는 기능 단위로 구성. 공통(common)은 shared 또는 공통 모듈로.
+### 목록 API vs 상세 API (모든 엔티티 공통)
+- **목록 API (List)**: 응답 항목에는 **식별자(PK) + 이름(표시명) + 메타정보(공통 컬럼: useYn, delYn, shrnYn, crtNo, crtDt, updtNo, updtDt, delNo, delDt)** 만 포함한다. 상세 본문(긴 텍스트, 설명, 연관 데이터 등)은 목록에 넣지 않는다.
+- **상세 API (GetByNo 등)**: 개별 항목의 전체 데이터는 **해당 상세 페이지 진입 시에만** 조회·반환한다. 목록 화면에서는 상세 본문을 가져오지 않는다.
+- 이 원칙은 **주요 설정(core-rules), 특성(traits), 능력(abilities)** 등 모든 설정 엔티티에 공통 적용한다.
 
 ---
 
@@ -148,6 +154,14 @@ fantasy-builder-exe/
 - **API 응답**: ResponseType 전체를 반환. 호출부에서 `data`만 잘라서 전달하지 말 것.
 - **코드 스타일**: 웬만하면 구문은 한 줄씩 띄어서 작성 (한 줄에 한 문장·표현, 논리 블록 사이 빈 줄).
 
+### Error Handling
+- **Renderer**: API 호출 실패 시 try/catch로 메시지 표시.
+- **Main**: 예외는 IPC 응답으로 전달하지 않고, API 레이어에서 catch 후 적절한 응답/로그 처리.
+
+### Logging
+- **Main**: console.log/error (개발 시). API 요청/응답은 `main/api/clients.ts` 인터셉터에서 로그.
+- **Renderer**: DevTools Console.
+
 ### State Management (Pinia)
 - **State 접근**: 반드시 `storeToRefs`를 사용하여 반응성을 유지하며 구조 분해 할당해야 한다. `store.state` 형식의 직접 접근은 금지한다.
 - **Action 사용**: Store 인스턴스에서 직접 구조 분해 할당하여 사용한다. `store.action()` 형식의 직접 호출은 금지한다.
@@ -174,14 +188,6 @@ fantasy-builder-exe/
 - **규칙**: 위 목록에 포함된 심볼은 코드에서 **명시적 import를 작성하지 않는다**. 자동 임포트만 사용하여 중복을 제거한다.
 - **예외**: `createPinia`, `createRouter`, `createWebHashHistory`, `RouterView` 등 자동 임포트 목록에 없는 것은 기존처럼 import한다.
 
-### Error Handling
-- **Renderer**: API 호출 실패 시 try/catch로 메시지 표시.
-- **Main**: 예외는 IPC 응답으로 전달하지 않고, API 레이어에서 catch 후 적절한 응답/로그 처리.
-
-### Logging
-- **Main**: console.log/error (개발 시). API 요청/응답은 `main/api/clients.ts` 인터셉터에서 로그.
-- **Renderer**: DevTools Console.
-
 ---
 
 ## 5. Fantasy Builder 특화 규칙
@@ -192,18 +198,18 @@ fantasy-builder-exe/
 - **모든 필드는 선택값**: VO의 모든 필드는 **반드시 선택적(optional)**이어야 합니다. (`z.string().nullable().optional()` 등). 이는 VO가 검색 조건, 부분 업데이트, 생성 등 다양한 상황에서 유연하게 재사용되기 위함입니다.
 - **검색 필드 포함**: 위 확장을 통해 자동으로 `page`, `pageSize`, `searchKeyword`, `searchType` 등 검색 및 페이징 필드를 포함하게 됩니다.
 
+### 응답 규격
+- **목록 응답**: `ResponseType<ListType<TData>>` (ListResponseType) 사용. data 안에 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast` 유지.
+- **페이징**: 기본 `pageSize`는 10이며, 사용자 요청이 있을 경우 해당 값을 우선합니다.
+
 ### 목록 조회 및 검색 처리
 - **Controller**: 쿼리 스트링을 VO 스키마로 파싱하여 서비스로 전달합니다. (예: `projectSchema.parse({ ...query, page, pageSize })`)
 - **Service**: VO를 매퍼의 `selectList` 메서드에 통째로 전달합니다.
-- **Mapper**: 
+- **Mapper**:
     - `selectList(params: VO)` 형태로 정의합니다.
     - `params`에서 `searchKeyword`와 `searchType`을 추출하여 Drizzle의 `and`, `or`, `like` 연산자로 동적 `WHERE` 절을 생성합니다.
     - `params`의 `page`와 `pageSize`를 이용해 `limit`와 `offset`을 계산합니다.
     - **소프트 삭제**: 모든 조회 시 `del_yn = 'N'` 조건을 기본으로 포함합니다.
-
-### 응답 규격
-- **목록 응답**: `ResponseType<ListType<TData>>` (ListResponseType) 사용. data 안에 `list`, `totalCnt`, `pageSize`, `page`, `totalPage`, `isFirst`, `isLast` 유지.
-- **페이징**: 기본 `pageSize`는 10이며, 사용자 요청이 있을 경우 해당 값을 우선합니다.
 
 ### UI (보기/수정 폼)
 - **보기 상태**: plain text가 아닌 **수정 불가(disabled) input**으로 표시한다. 레이블·필드 구조는 수정 모드와 동일하게 두고, 보기일 때만 input/textarea에 `disabled`를 적용한다.

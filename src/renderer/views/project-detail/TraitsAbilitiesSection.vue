@@ -3,8 +3,8 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import ContentHeader from '~/components/common/ContentHeader.vue';
 import EmptyState from '~/components/common/EmptyState.vue';
-import { useAbilityStore } from '~/stores/abilityStore';
-import { useTraitStore } from '~/stores/traitStore';
+import { useProjectAbilityStore } from '~/stores/projectAbilityStore';
+import { useProjectTraitStore } from '~/stores/projectTraitStore';
 import { cn } from '~/utils/cn';
 
 interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
@@ -19,7 +19,7 @@ const props = defineProps<Props>();
 
 const cssVariants = cva(
   [
-    'flex flex-col h-full overflow-hidden',
+    'flex min-h-0 flex-1 flex-col overflow-hidden',
   ],
   {
     variants: {},
@@ -32,19 +32,19 @@ const cssVariants = cva(
 // STOREDATA — Pinia 스토어 사용 시
 // ─────────────────────────────────────────────────────────────
 
-const traitStore = useTraitStore();
+const projectTraitStore = useProjectTraitStore();
 const {
   projectTraitList,
   isLoaded: isTraitLoaded,
-} = storeToRefs(traitStore);
-const { getProjectTraitList, } = traitStore;
+} = storeToRefs(projectTraitStore);
+const { getProjectTraitList, } = projectTraitStore;
 
-const abilityStore = useAbilityStore();
+const projectAbilityStore = useProjectAbilityStore();
 const {
   projectAbilityList,
   isLoaded: isAbilityLoaded,
-} = storeToRefs(abilityStore);
-const { getProjectAbilityList, } = abilityStore;
+} = storeToRefs(projectAbilityStore);
+const { getProjectAbilityList, } = projectAbilityStore;
 
 // ─────────────────────────────────────────────────────────────
 // STATES — ref, computed 등 반응형 변수
@@ -59,6 +59,7 @@ const activeTab = ref<'traits' | 'abilities'>('traits');
 // ACTIONS — 변수를 제어하는 함수들
 // ─────────────────────────────────────────────────────────────
 
+/** @description 현재 탭(특성/어빌리티)에 따라 프로젝트 특성 또는 어빌리티 목록 조회. */
 const loadData = async () => {
   if (prjNo.value == null) return;
 
@@ -70,8 +71,10 @@ const loadData = async () => {
   }
 };
 
+/** @description 추가 버튼 클릭 시 동작. (TODO: 생성 모달 또는 페이지 이동) */
 const onCreateClick = () => {
   // TODO: 생성 모달 또는 페이지 이동
+
   console.log(`Create new ${activeTab.value}`);
 };
 
@@ -98,13 +101,16 @@ watch(
       :description="activeTab === 'traits' ? '프로젝트 전용 특성을 관리합니다.' : '프로젝트 전용 능력과 마법을 관리합니다.'"
     >
       <template #actions>
-        <button
-          class="btn-primary flex items-center gap-1.5"
+        <CommonButton
+          type="button"
+          variant="primary"
+          :label="activeTab === 'traits' ? '특성 추가' : '능력 추가'"
           @click="onCreateClick"
         >
-          <VueIcon icon-name="lucide:plus" class="size-4" />
-          {{ activeTab === 'traits' ? '특성 추가' : '능력 추가' }}
-        </button>
+          <template #icon>
+            <VueIcon icon-name="lucide:plus" class="size-4" />
+          </template>
+        </CommonButton>
       </template>
     </ContentHeader>
 
@@ -189,7 +195,7 @@ watch(
                 {{ ability.abilityNm }}
               </h3>
               <span class="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">
-                {{ ability.abilityType ?? '일반' }}
+                {{ ability.abilityDomain ?? ability.abilityForm ?? '—' }}
               </span>
             </div>
             <p class="text-sm text-muted-foreground line-clamp-3 h-[3em]">

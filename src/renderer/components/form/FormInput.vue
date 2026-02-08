@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '~/utils/cn';
 
-/** 재사용 가능한 폼 한 줄 입력. 보기 모드(disabled) 시 회색 배경, 수정 시 흰 배경. */
+/** 재사용 가능한 폼 한 줄 입력. 보기 모드(disabled) 시 회색 배경, 수정 시 카드 배경(라이트/다크 대응). */
 
 interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   class?: string;
@@ -30,7 +30,7 @@ const cssVariants = cva(
     variants: {
       disabled: {
         true: 'cursor-not-allowed border-input bg-muted/80 text-muted-foreground opacity-80',
-        false: 'border-input bg-background text-foreground focus:border-primary',
+        false: 'border-input bg-card text-foreground focus:border-primary',
       },
     },
     defaultVariants: {
@@ -64,9 +64,9 @@ const cssVariants = cva(
 
 <template>
   <div class="flex flex-col gap-1.5">
-    <label :for="props.id" class="text-sm font-medium text-foreground">
+    <label :for="props.id" class="type-detail-label">
       {{ props.label }}
-      <span v-if="props.required" class="text-red-400">
+      <span v-if="props.required" class="text-destructive">
         *
       </span>
     </label>

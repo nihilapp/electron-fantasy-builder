@@ -38,6 +38,8 @@ export const eventSchema = z
     recOfficial: z.string().nullable().optional().default(null),
     truthHid: z.string().nullable().optional().default(null),
     rmk: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

@@ -14,5 +14,7 @@ export const creaturesTable = sqliteTable('creatures', {
   dangerGrd: text('danger_grd'),
   identStat: text('ident_stat'),
   creatureExpln: text('creature_expln'),
+  loreType: text('lore_type').default('CREATURE'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsSqlite,
 });

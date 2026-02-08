@@ -29,5 +29,7 @@ export const nationsTable = sqliteTable('nations', {
   milPwr: text('mil_pwr'),
   histDesc: text('hist_desc'),
   currIssue: text('curr_issue'),
+  loreType: text('lore_type').default('NATION'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsSqlite,
 });

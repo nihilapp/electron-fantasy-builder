@@ -14,6 +14,14 @@ declare module '*.png' {
   export default src;
 }
 
+// declare module 'luxon' {
+//   export class DateTime {
+//     static fromISO(iso: string): DateTime;
+//     isValid: boolean;
+//     toFormat(fmt: string): string;
+//   }
+// }
+
 // declare module '*.vue' {
 //   import type { DefineComponent } from 'vue'
 //   const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, unknown>

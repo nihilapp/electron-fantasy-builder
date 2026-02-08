@@ -19,5 +19,7 @@ export const itemsTable = sqliteTable('items', {
   attrType: text('attr_type'),
   dmgType: text('dmg_type'),
   mainFunc: text('main_func'),
+  loreType: text('lore_type').default('ITEM'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsSqlite,
 });

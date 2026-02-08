@@ -23,6 +23,8 @@ export const itemSchema = z
     attrType: z.string().nullable().optional().default(null),
     dmgType: z.string().nullable().optional().default(null),
     mainFunc: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

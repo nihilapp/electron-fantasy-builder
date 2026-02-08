@@ -31,6 +31,8 @@ export const organizationSchema = z
     keyFig: z.string().nullable().optional().default(null),
     histDesc: z.string().nullable().optional().default(null),
     currStat: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

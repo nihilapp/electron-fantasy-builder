@@ -22,6 +22,8 @@ export const characterSchema = z
     ntnNo: z.number().int().nullable().optional().default(null),
     orgNo: z.number().int().nullable().optional().default(null),
     orgRank: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

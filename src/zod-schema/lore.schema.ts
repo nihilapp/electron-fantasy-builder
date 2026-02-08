@@ -15,6 +15,7 @@ export const loreSchema = z
     prjNo: z.number().int().nullable().optional().default(null),
     loreNm: z.string().nullable().optional().default(null),
     loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
     mainSubj: z.string().nullable().optional().default(null),
     smry: z.string().nullable().optional().default(null),
     transMthd: z.string().nullable().optional().default(null),

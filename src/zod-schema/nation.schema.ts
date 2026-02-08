@@ -33,6 +33,8 @@ export const nationSchema = z
     milPwr: z.string().nullable().optional().default(null),
     histDesc: z.string().nullable().optional().default(null),
     currIssue: z.string().nullable().optional().default(null),
+    loreType: z.string().nullable().optional().default(null),
+    subLoreType: z.string().nullable().optional().default(null),
   })
   .extend(commonSchema.shape)
   .extend(searchSchema.shape);

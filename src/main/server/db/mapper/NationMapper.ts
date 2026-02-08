@@ -32,35 +32,51 @@ export const NationMapper = {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
+
     const createWhere = (table: NationsTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
+
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
+
         if (searchType === 'ntnNm') where = and(where, like(table.ntnNm, keyword))!;
         else if (searchType === 'logline') where = and(where, like(table.logline, keyword))!;
         else where = and(where, or(like(table.ntnNm, keyword), like(table.logline, keyword)))!;
       }
+
       return where;
     };
+
     if (mode === 'local') {
       const table = localNationsTable;
       const dbLocal = db as LocalDb;
       const where = createWhere(table);
+
       const [ countRow, ] = await dbLocal.select({ count: count(), }).from(table).where(where);
       const totalCnt = Number(countRow?.count ?? 0);
+
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.ntnNo)).$dynamic();
+
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
       const rows = await query;
+
       return { list: rows.map((row) => nationRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
+
     const table = remoteNationsTable;
     const dbRemote = db as RemoteDb;
     const where = createWhere(table);
+
     const [ countRow, ] = await dbRemote.select({ count: count(), }).from(table).where(where);
     const totalCnt = Number(countRow?.count ?? 0);
+
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.ntnNo)).$dynamic();
+
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
     const rows = await query;
+
     return { list: rows.map((row) => nationRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
@@ -72,12 +88,14 @@ export const NationMapper = {
   async selectByNo(prjNo: number, ntnNo: number): Promise<NationVo | null> {
     const db = getDb();
     const mode = getDbMode();
+
     if (mode === 'local') {
       const [ row, ] = await (db as LocalDb).select().from(localNationsTable).where(and(eq(localNationsTable.prjNo, prjNo), eq(localNationsTable.ntnNo, ntnNo))).limit(1);
       return row
         ? nationRowToVo(row as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ row, ] = await (db as RemoteDb).select().from(remoteNationsTable).where(and(eq(remoteNationsTable.prjNo, prjNo), eq(remoteNationsTable.ntnNo, ntnNo))).limit(1);
     return row
       ? nationRowToVo(row as unknown as Record<string, unknown>)
@@ -95,6 +113,7 @@ export const NationMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values = {
       prjNo,
       ntnNm: (vo.ntnNm ?? '').toString().trim(),
@@ -117,12 +136,16 @@ export const NationMapper = {
       milPwr: vo.milPwr ?? null,
       histDesc: vo.histDesc ?? null,
       currIssue: vo.currIssue ?? null,
+      loreType: vo.loreType ?? 'NATION',
+      subLoreType: vo.subLoreType ?? null,
     };
+
     if (mode === 'local') {
       const [ inserted, ] = await (db as LocalDb).insert(localNationsTable).values({ ...values, crtDt: now as string, updtDt: now as string, }).returning();
       if (!inserted) throw new Error('NationMapper.insert: no row returned');
       return nationRowToVo(inserted as unknown as Record<string, unknown>);
     }
+
     const [ inserted, ] = await (db as RemoteDb).insert(remoteNationsTable).values({ ...values, crtDt: now as Date, updtDt: now as Date, }).returning();
     if (!inserted) throw new Error('NationMapper.insert: no row returned');
     return nationRowToVo(inserted as unknown as Record<string, unknown>);
@@ -140,6 +163,7 @@ export const NationMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values: Record<string, unknown> = {
       ntnNm: vo.ntnNm ?? undefined,
       ntnType: vo.ntnType ?? undefined,
@@ -161,14 +185,18 @@ export const NationMapper = {
       milPwr: vo.milPwr ?? undefined,
       histDesc: vo.histDesc ?? undefined,
       currIssue: vo.currIssue ?? undefined,
+      loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       updtDt: now,
     };
+
     if (mode === 'local') {
       const [ updated, ] = await (db as LocalDb).update(localNationsTable).set(values).where(and(eq(localNationsTable.prjNo, prjNo), eq(localNationsTable.ntnNo, ntnNo))).returning();
       return updated
         ? nationRowToVo(updated as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ updated, ] = await (db as RemoteDb).update(remoteNationsTable).set(values).where(and(eq(remoteNationsTable.prjNo, prjNo), eq(remoteNationsTable.ntnNo, ntnNo))).returning();
     return updated
       ? nationRowToVo(updated as unknown as Record<string, unknown>)
@@ -186,10 +214,12 @@ export const NationMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     if (mode === 'local') {
       const result = await (db as LocalDb).update(localNationsTable).set({ delYn: 'Y', delDt: now as string, }).where(and(eq(localNationsTable.prjNo, prjNo), eq(localNationsTable.ntnNo, ntnNo))).returning({ ntnNo: localNationsTable.ntnNo, });
       return result.length > 0;
     }
+
     const result = await (db as RemoteDb).update(remoteNationsTable).set({ delYn: 'Y', delDt: now as Date, }).where(and(eq(remoteNationsTable.prjNo, prjNo), eq(remoteNationsTable.ntnNo, ntnNo))).returning({ ntnNo: remoteNationsTable.ntnNo, });
     return result.length > 0;
   },

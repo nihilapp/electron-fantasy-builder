@@ -34,5 +34,7 @@ export const eventsTable = sqliteTable('events', {
   recOfficial: text('rec_official'),
   truthHid: text('truth_hid'),
   rmk: text('rmk'),
+  loreType: text('lore_type').default('EVENT'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsSqlite,
 });

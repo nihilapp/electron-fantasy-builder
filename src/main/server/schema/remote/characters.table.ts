@@ -21,5 +21,7 @@ export const charactersTable = pgTable('characters', {
   ntnNo: integer('ntn_no').references(() => nationsTable.ntnNo),
   orgNo: integer('org_no').references(() => organizationsTable.orgNo),
   orgRank: text('org_rank'),
+  loreType: text('lore_type').default('CHARACTER'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsPg,
 });

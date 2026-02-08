@@ -145,9 +145,12 @@ export const AbilityMapper = {
 
     const values = {
       abilityNm: (vo.abilityNm ?? '').toString().trim(),
-      abilityType: vo.abilityType ?? null,
-      abilityLcls: vo.abilityLcls ?? null,
+      abilityDomain: (vo.abilityDomain ?? '').toString().trim(),
+      abilitySource: (vo.abilitySource ?? '').toString().trim(),
+      abilityLineage: (vo.abilityLineage ?? '').toString().trim(),
+      abilityForm: (vo.abilityForm ?? '').toString().trim(),
       abilityExpln: vo.abilityExpln ?? null,
+      tags: vo.tags ?? null,
       trgtType: vo.trgtType ?? null,
       dmgType: vo.dmgType ?? null,
       statEffType: vo.statEffType ?? null,
@@ -192,9 +195,12 @@ export const AbilityMapper = {
 
     const values = {
       abilityNm: vo.abilityNm ?? undefined,
-      abilityType: vo.abilityType ?? undefined,
-      abilityLcls: vo.abilityLcls ?? undefined,
+      abilityDomain: vo.abilityDomain ?? undefined,
+      abilitySource: vo.abilitySource ?? undefined,
+      abilityLineage: vo.abilityLineage ?? undefined,
+      abilityForm: vo.abilityForm ?? undefined,
       abilityExpln: vo.abilityExpln ?? undefined,
+      tags: vo.tags ?? undefined,
       trgtType: vo.trgtType ?? undefined,
       dmgType: vo.dmgType ?? undefined,
       statEffType: vo.statEffType ?? undefined,

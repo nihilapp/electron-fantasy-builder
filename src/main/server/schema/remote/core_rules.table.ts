@@ -17,5 +17,7 @@ export const coreRulesTable = pgTable('core_rules', {
   narrAply: text('narr_aply'),
   linkDocs: text('link_docs'),
   rmk: text('rmk'),
+  loreType: text('lore_type').default('CORE_RULE'),
+  subLoreType: text('sub_lore_type'),
   ...commonColumnsPg,
 });

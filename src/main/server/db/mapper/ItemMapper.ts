@@ -32,35 +32,51 @@ export const ItemMapper = {
     const db = getDb();
     const mode = getDbMode();
     const { page, pageSize, searchKeyword, searchType, } = params;
+
     const createWhere = (table: ItemsTable) => {
       let where = and(eq(table.prjNo, prjNo), eq(table.delYn, 'N'))!;
+
       if (searchKeyword) {
         const keyword = `%${searchKeyword}%`;
+
         if (searchType === 'itemNm') where = and(where, like(table.itemNm, keyword))!;
         else if (searchType === 'logline') where = and(where, like(table.logline, keyword))!;
         else where = and(where, or(like(table.itemNm, keyword), like(table.logline, keyword)))!;
       }
+
       return where;
     };
+
     if (mode === 'local') {
       const table = localItemsTable;
       const dbLocal = db as LocalDb;
       const where = createWhere(table);
+
       const [ countRow, ] = await dbLocal.select({ count: count(), }).from(table).where(where);
       const totalCnt = Number(countRow?.count ?? 0);
+
       let query = dbLocal.select().from(table).where(where).orderBy(desc(table.itemNo)).$dynamic();
+
       if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
       const rows = await query;
+
       return { list: rows.map((row) => itemRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
     }
+
     const table = remoteItemsTable;
     const dbRemote = db as RemoteDb;
     const where = createWhere(table);
+
     const [ countRow, ] = await dbRemote.select({ count: count(), }).from(table).where(where);
     const totalCnt = Number(countRow?.count ?? 0);
+
     let query = dbRemote.select().from(table).where(where).orderBy(desc(table.itemNo)).$dynamic();
+
     if (page && pageSize) query = query.limit(pageSize).offset((page - 1) * pageSize);
+
     const rows = await query;
+
     return { list: rows.map((row) => itemRowToVo(row as unknown as Record<string, unknown>)), totalCnt, };
   },
 
@@ -72,12 +88,14 @@ export const ItemMapper = {
   async selectByNo(prjNo: number, itemNo: number): Promise<ItemVo | null> {
     const db = getDb();
     const mode = getDbMode();
+
     if (mode === 'local') {
       const [ row, ] = await (db as LocalDb).select().from(localItemsTable).where(and(eq(localItemsTable.prjNo, prjNo), eq(localItemsTable.itemNo, itemNo))).limit(1);
       return row
         ? itemRowToVo(row as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ row, ] = await (db as RemoteDb).select().from(remoteItemsTable).where(and(eq(remoteItemsTable.prjNo, prjNo), eq(remoteItemsTable.itemNo, itemNo))).limit(1);
     return row
       ? itemRowToVo(row as unknown as Record<string, unknown>)
@@ -95,6 +113,7 @@ export const ItemMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values = {
       prjNo,
       itemNm: (vo.itemNm ?? '').toString().trim(),
@@ -107,12 +126,16 @@ export const ItemMapper = {
       attrType: vo.attrType ?? null,
       dmgType: vo.dmgType ?? null,
       mainFunc: vo.mainFunc ?? null,
+      loreType: vo.loreType ?? 'ITEM',
+      subLoreType: vo.subLoreType ?? null,
     };
+
     if (mode === 'local') {
       const [ inserted, ] = await (db as LocalDb).insert(localItemsTable).values({ ...values, crtDt: now as string, updtDt: now as string, }).returning();
       if (!inserted) throw new Error('ItemMapper.insert: no row returned');
       return itemRowToVo(inserted as unknown as Record<string, unknown>);
     }
+
     const [ inserted, ] = await (db as RemoteDb).insert(remoteItemsTable).values({ ...values, crtDt: now as Date, updtDt: now as Date, }).returning();
     if (!inserted) throw new Error('ItemMapper.insert: no row returned');
     return itemRowToVo(inserted as unknown as Record<string, unknown>);
@@ -130,6 +153,7 @@ export const ItemMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     const values: Record<string, unknown> = {
       itemNm: vo.itemNm ?? undefined,
       clsMain: vo.clsMain ?? undefined,
@@ -141,14 +165,18 @@ export const ItemMapper = {
       attrType: vo.attrType ?? undefined,
       dmgType: vo.dmgType ?? undefined,
       mainFunc: vo.mainFunc ?? undefined,
+      loreType: vo.loreType ?? undefined,
+      subLoreType: vo.subLoreType ?? undefined,
       updtDt: now,
     };
+
     if (mode === 'local') {
       const [ updated, ] = await (db as LocalDb).update(localItemsTable).set(values).where(and(eq(localItemsTable.prjNo, prjNo), eq(localItemsTable.itemNo, itemNo))).returning();
       return updated
         ? itemRowToVo(updated as unknown as Record<string, unknown>)
         : null;
     }
+
     const [ updated, ] = await (db as RemoteDb).update(remoteItemsTable).set(values).where(and(eq(remoteItemsTable.prjNo, prjNo), eq(remoteItemsTable.itemNo, itemNo))).returning();
     return updated
       ? itemRowToVo(updated as unknown as Record<string, unknown>)
@@ -166,10 +194,12 @@ export const ItemMapper = {
     const now = mode === 'local'
       ? new Date().toISOString()
       : new Date();
+
     if (mode === 'local') {
       const result = await (db as LocalDb).update(localItemsTable).set({ delYn: 'Y', delDt: now as string, }).where(and(eq(localItemsTable.prjNo, prjNo), eq(localItemsTable.itemNo, itemNo))).returning({ itemNo: localItemsTable.itemNo, });
       return result.length > 0;
     }
+
     const result = await (db as RemoteDb).update(remoteItemsTable).set({ delYn: 'Y', delDt: now as Date, }).where(and(eq(remoteItemsTable.prjNo, prjNo), eq(remoteItemsTable.itemNo, itemNo))).returning({ itemNo: remoteItemsTable.itemNo, });
     return result.length > 0;
   },
