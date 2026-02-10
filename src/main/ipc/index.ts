@@ -1,10 +1,12 @@
 import {
   ipcGetAbility,
   ipcGetCoreRule,
+  ipcGetCreature,
   ipcGetHealth,
   ipcGetProject,
   ipcGetProjectAbility,
   ipcGetProjectTrait,
+  ipcGetSettingsSearch,
   ipcGetTrait
 } from '../api';
 
@@ -28,4 +30,6 @@ export function setupIpcHandlers() {
   ipcGetProjectTrait();
   ipcGetProjectAbility();
   ipcGetCoreRule();
+  ipcGetCreature();
+  ipcGetSettingsSearch();
 }

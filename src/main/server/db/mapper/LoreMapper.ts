@@ -41,7 +41,16 @@ export const LoreMapper = {
 
         if (searchType === 'loreNm') where = and(where, like(table.loreNm, keyword))!;
         else if (searchType === 'smry') where = and(where, like(table.smry, keyword))!;
-        else where = and(where, or(like(table.loreNm, keyword), like(table.smry, keyword)))!;
+        else {
+          where = and(
+            where,
+            or(
+              like(table.loreNm, keyword),
+              like(table.smry, keyword),
+              like(table.tags, keyword)
+            )
+          )!;
+        }
       }
 
       return where;

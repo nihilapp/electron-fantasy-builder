@@ -51,7 +51,11 @@ export const CharacterMapper = {
         else {
           where = and(
             where,
-            or(like(table.charNm, keyword), like(table.logline, keyword))
+            or(
+              like(table.charNm, keyword),
+              like(table.logline, keyword),
+              like(table.tags, keyword)
+            )
           )!;
         }
       }

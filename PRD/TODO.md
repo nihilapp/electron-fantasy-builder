@@ -7,6 +7,26 @@
 
 ## 중요 (기능 완성)
 
+### 🎯 진척도 현황 (2026-02-08 기준)
+
+| 카테고리 | 진척도 | 상태 |
+|---------|--------|------|
+| **기반 구조** | 95% | ✅ 거의 완료 |
+| **백엔드 API** | 90% | ✅ 대부분 구현됨 |
+| **프론트엔드 UI** | 30% | 🔄 일부만 구현됨 |
+| **설정 보호/즐겨찾기** | 0% | ❌ 설계만 완료 |
+| **인증/보안** | 0% | ❌ 미구현 |
+
+### ✅ 최근 완료 작업 (2026-02-08)
+- **005**: 설정 테이블 CRUD UI 및 통합 검색 (1차 - Creatures 완료, 나머지 7개 엔티티 남음)
+- **004**: 모든 설정 테이블에 lore_type 컬럼 추가 (완료)
+- **003**: ListMetaAndNameOnly 최적화 (완료)
+- **002**: Three 레이아웃 컴포넌트 개선 (완료)
+- **001**: CoreRuleDetailSidebarList 업데이트 (완료)
+
+### 🔄 진행 중인 작업
+- 나머지 7개 설정 엔티티 UI 구현 (Characters, Regions, Nations, Organizations, Items, Events, Lores)
+
 ### 0. ProjectDetailView 상세 구현 (`src/renderer/views/ProjectDetailView.vue`)
 
 프로젝트 상세 화면의 사이드바·메인 영역을 아래 **순서대로** 구현한다.
@@ -32,10 +52,10 @@
 
 #### 0-2. 카테고리별 메인 뷰 구현 (순서대로)
 - [ ] **1. 프로젝트 개요** (`overview`): 프로젝트 기본 정보 표시·수정 (이미 `project` 로드 있음). 요약 카드 또는 폼.
-- [ ] **2. 전체 설정** (`settings`): 프로젝트 메타·공통 설정 UI (필요 시 API/스키마 정의 후 연동).
+- [x] **2. 전체 설정** (`settings`): 통합 검색 API 및 UI 구현 완료. 카테고리 필터·키워드 검색 지원.
 - [ ] **3. 특성/능력 관리** (`traits-abilities`): 전역·프로젝트 특성/어빌리티 목록·검색·CRUD. `/traits`, `/abilities`, `/project-traits`, `/project-abilities`, `/search` API 연동. (필요 시 store/composable 정리.)
-- [ ] **4. 코어 설정** (`core-rules`): 코어 규칙 목록·상세·CRUD. `/core-rules?prjNo=` API 연동.
-- [ ] **5. 종족/생물** (`creatures`): 생물/종족 목록·상세·CRUD. `/creatures?prjNo=` API 연동. (필요 시 creature-trait-maps, creature-ability-maps 연동.)
+- [x] **4. 코어 설정** (`core-rules`): 코어 규칙 목록·상세·CRUD 완료. `/core-rules?prjNo=` API 연동.
+- [x] **5. 종족/생물** (`creatures`): 생물/종족 목록·상세·CRUD 완료. `/creatures?prjNo=` API 연동. (creature-trait-maps, creature-ability-maps 연동 포함.)
 - [ ] **6. 인물** (`characters`): 인물 목록·상세·CRUD. `/characters?prjNo=` API 연동. (필요 시 char-trait-maps, char-ability-maps 연동.)
 - [ ] **7. 지역** (`regions`): 지역 목록·상세·CRUD. `/regions?prjNo=` API 연동.
 - [ ] **8. 국가** (`nations`): 국가 목록·상세·CRUD. `/nations?prjNo=` API 연동.
@@ -58,9 +78,42 @@
 - [ ] **반응형**: 사이드바 260px 등 레이아웃이 작은 창에서도 동작하도록 조정 (필요 시 토글/접기).
 - [ ] **접근성**: 포커스·키보드 이동·ARIA 등 필요 시 보강.
 
+### 🎯 다음 우선순위 (2026-02-08 이후)
+
+1. **나머지 7개 설정 엔티티 UI 구현**
+   - Characters, Regions, Nations, Organizations, Items, Events, Lores
+   - Creatures와 동일 패턴 적용 (목록·상세·CRUD)
+
+2. **특성/어빌리티 관리 UI**
+   - 전역·프로젝트 특성/어빌리티 목록·검색·CRUD
+   - `/traits`, `/abilities`, `/project-traits`, `/project-abilities`, `/search` API 연동
+
+3. **설정 보호/즐겨찾기 기능**
+   - setting_protections, setting_favorites 테이블 구현
+   - 관련 API 및 UI 개발
+
+4. **앱 초기 로딩 화면**
+   - DB·Hono 초기화 동안 로딩 UI 표시
+   - Health API 또는 IPC로 준비 완료 감지
+
+5. **사용자 인증 시스템**
+   - JWT 토큰, 비밀번호 해싱
+   - 이메일 인증, 권한 관리
+
 ---
 
-### 1. 사용 현황 조회 기능
+### 1. 설정 보호/즐겨찾기 기능 구현
+- **상태**: 설계 문서 완료 (`DESIGN_SettingProtectionFavoritesAndDocLinks.md`)
+- **필요 작업**:
+  - [ ] `setting_protections` 테이블 DDL 및 Drizzle 스키마
+  - [ ] `setting_favorites` 테이블 DDL 및 Drizzle 스키마
+  - [ ] 보호/즐겨찾기 API (Mapper/Service/Controller)
+  - [ ] 프론트엔드 UI 컴포넌트 (SettingItemCard 토글 기능)
+  - [ ] 전체 설정 검색 결과에 즐겨찾기/보호 상태 표시
+
+---
+
+### 2. 사용 현황 조회 기능
 - **위치**: Trait/Ability Service (또는 전용 SearchService)
 - **상태**: 매핑 테이블(char_trait_maps, char_ability_maps, creature_trait_maps, creature_ability_maps) 구현 후 사용 현황 조회 로직 완성
 - **의존성**: Phase 6 (매핑 테이블 CRUD) 완료 후 작업
@@ -92,13 +145,83 @@
 
 ---
 
-## Phase별 미완료
+## Phase별 진행 상황
 
-- **Phase 2**: GlobalExceptionHandler, types 일부 보강
-- **Phase 3**: User/Auth Mapper·Service·Controller, JWT·bcrypt
-- **Phase 4**: Trait, Ability, ProjectTrait, ProjectAbility, 통합 검색 (**Projects 완료**)
-- **Phase 5~6**: 설정 엔티티 CRUD, 매핑 테이블 CRUD
-- **Phase 7~8**: 권한, 테스트, 문서화
+### ✅ 완료된 Phase
+- **Phase 1**: 환경 및 기반 (완료)
+- **Phase 2**: 공통 인프라 및 타입 (대부분 완료)
+- **Phase 4**: 전역 풀 및 프로젝트 도메인 (완료)
+
+### 🔄 진행 중인 Phase
+- **Phase 5**: 설정 엔티티 (Core Rules, Creatures 완료, 나머지 7개 진행 중)
+
+### ❌ 미완료 Phase
+- **Phase 3**: 사용자 인증 및 관리
+- **Phase 6**: 매핑 테이블 및 관계 (일부 완료, Relationships 미구현)
+- **Phase 7**: 권한 및 보안
+- **Phase 8**: 검증 및 마무리
+
+---
+
+## 📊 상세 진척도 분석 (2026-02-08)
+
+### 🏗️ 기반 구조 (95%)
+**완료된 항목:**
+- ✅ 프로젝트 초기 설정 및 의존성
+- ✅ Drizzle 스키마 (local/remote) - 9개 테이블 전체
+- ✅ 공통 컬럼 구조 (CommonEntity)
+- ✅ lore_type 컬럼 추가 (모든 설정 테이블)
+- ✅ API 응답 표준화 (ResponseType)
+- ✅ 전역 예외 핸들러
+
+**남은 작업:**
+- ⏳ 앱 초기 로딩 UI 구현
+
+### 🔧 백엔드 API (90%)
+**완료된 항목:**
+- ✅ 전역 특성/어빌리티 API
+- ✅ 프로젝트 관리 API
+- ✅ 설정 엔티티 CRUD API (전체 9개 테이블)
+- ✅ 매핑 테이블 API (char/creature trait/ability maps)
+- ✅ 통합 검색 API (/settings/search)
+
+**남은 작업:**
+- ⏳ 설정 보호/즐겨찾기 API
+- ❌ 사용자 인증 API
+
+### 🎨 프론트엔드 UI (30%)
+**완료된 항목:**
+- ✅ 프로젝트 목록/상세
+- ✅ 코어 설정 CRUD UI
+- ✅ 테마 시스템 (dark/light)
+- ✅ 공통 컴포넌트 (SettingItemCard)
+- ✅ 종족/생물(Creatures) CRUD UI
+- ✅ 전체 설정 통합 검색 화면
+
+**진행 중:**
+- 🔄 나머지 7개 설정 엔티티 UI (Characters, Regions, Nations, Organizations, Items, Events, Lores)
+
+**남은 작업:**
+- ⏳ 특성/어빌리티 관리 UI
+- ⏳ 프로젝트 개요 화면
+- ⏳ 앱 초기 로딩 화면
+
+### 🛡️ 설정 보호/즐겨찾기 (0%)
+**완료된 항목:**
+- ✅ 설계 문서 (DESIGN_SettingProtectionFavoritesAndDocLinks.md)
+
+**남은 작업:**
+- ❌ setting_protections 테이블
+- ❌ setting_favorites 테이블
+- ❌ 관련 API 및 UI
+
+### 🔐 인증/보안 (0%)
+**남은 작업:**
+- ❌ 사용자 도메인 구현
+- ❌ JWT 토큰 처리
+- ❌ 비밀번호 해싱
+- ❌ 권한 관리
+- ❌ 이메일 인증
 
 ---
 

@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import type { AbilityVo, CoreRuleVo, ProjectAbilityVo, ProjectTraitVo, ProjectVo, TraitVo } from '@app-types/vo.types';
+import type { AbilityVo, CoreRuleVo, CreatureVo, ProjectAbilityVo, ProjectTraitVo, ProjectVo, TraitVo } from '@app-types/vo.types';
 
 /**
  * @description 목록 조회 공통 파라미터 (페이징·검색). renderer electron.d.ts의 ListParams와 동일.
@@ -102,6 +102,22 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('api:delete-core-rule', { prjNo, coreNo, })
     ),
 
+    getCreatureList: (prjNo: number, params?: ListParams) => (
+      ipcRenderer.invoke('api:get-creature-list', { prjNo, params, })
+    ),
+    getCreature: (prjNo: number, creatureNo: number) => (
+      ipcRenderer.invoke('api:get-creature', { prjNo, creatureNo, })
+    ),
+    postCreature: (prjNo: number, body: Partial<CreatureVo>) => (
+      ipcRenderer.invoke('api:post-creature', { prjNo, body, })
+    ),
+    patchCreature: (prjNo: number, creatureNo: number, body: Partial<CreatureVo>) => (
+      ipcRenderer.invoke('api:patch-creature', { prjNo, creatureNo, body, })
+    ),
+    deleteCreature: (prjNo: number, creatureNo: number) => (
+      ipcRenderer.invoke('api:delete-creature', { prjNo, creatureNo, })
+    ),
+
     getProjectTraitList: (prjNo: number, params?: ListParams) => (
       ipcRenderer.invoke('api:get-project-trait-list', { prjNo, params, })
     ),
@@ -132,6 +148,10 @@ contextBridge.exposeInMainWorld('electron', {
     ),
     deleteProjectAbility: (prjNo: number, abilityNo: number) => (
       ipcRenderer.invoke('api:delete-project-ability', { prjNo, abilityNo, })
+    ),
+
+    getSettingsSearch: (prjNo: number, params?: { q?: string; categories?: string; page?: number; pageSize?: number }) => (
+      ipcRenderer.invoke('api:get-settings-search', { prjNo, params, })
     ),
   },
 });

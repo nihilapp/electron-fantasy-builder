@@ -4,8 +4,10 @@ import type {
   AbilityVo,
   CoreRuleListItemVo,
   CoreRuleVo,
+  CreatureVo,
   ProjectVo,
   TraitVo,
+  UnifiedSettingItemVo,
 } from '@app-types/vo.types';
 
 /**
@@ -103,6 +105,22 @@ interface ElectronAPI {
       Promise<ResponseType<{ deleted: boolean }>>
     );
 
+    getCreatureList: (prjNo: number, params?: ListParams) => (
+      Promise<ListResponseType<CreatureVo>>
+    );
+    getCreature: (prjNo: number, creatureNo: number) => (
+      Promise<ResponseType<CreatureVo | null>>
+    );
+    postCreature: (prjNo: number, body: Partial<CreatureVo>) => (
+      Promise<ResponseType<CreatureVo>>
+    );
+    patchCreature: (prjNo: number, creatureNo: number, body: Partial<CreatureVo>) => (
+      Promise<ResponseType<CreatureVo | null>>
+    );
+    deleteCreature: (prjNo: number, creatureNo: number) => (
+      Promise<ResponseType<{ deleted: boolean }>>
+    );
+
     getProjectTraitList: (prjNo: number, params?: ListParams) => (
       Promise<ListResponseType<ProjectTraitVo>>
     );
@@ -129,6 +147,10 @@ interface ElectronAPI {
     );
     deleteProjectAbility: (prjNo: number, abilityNo: number) => (
       Promise<ResponseType<{ deleted: boolean }>>
+    );
+
+    getSettingsSearch: (prjNo: number, params?: { q?: string; categories?: string; page?: number; pageSize?: number }) => (
+      Promise<ListResponseType<UnifiedSettingItemVo>>
     );
   };
 }

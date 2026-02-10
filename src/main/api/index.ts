@@ -51,4 +51,15 @@ export {
   ipcGetCoreRule
 } from './apiCoreRule';
 
+export {
+  apiDeleteCreature,
+  apiGetCreatureByNo,
+  apiGetCreatureList,
+  apiPatchCreature,
+  apiPostCreature,
+  ipcGetCreature
+} from './apiCreature';
+
 export { apiGetHealth, ipcGetHealth } from './apiHealth';
+
+export { apiGetSettingsSearch, ipcGetSettingsSearch } from './apiSettingsSearch';

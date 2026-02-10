@@ -51,7 +51,11 @@ export const CreatureMapper = {
         else {
           where = and(
             where,
-            or(like(table.creatureNm, keyword), like(table.creatureExpln, keyword))
+            or(
+              like(table.creatureNm, keyword),
+              like(table.creatureExpln, keyword),
+              like(table.tags, keyword)
+            )
           )!;
         }
       }

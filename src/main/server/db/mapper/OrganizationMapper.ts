@@ -41,7 +41,16 @@ export const OrganizationMapper = {
 
         if (searchType === 'orgNm') where = and(where, like(table.orgNm, keyword))!;
         else if (searchType === 'logline') where = and(where, like(table.logline, keyword))!;
-        else where = and(where, or(like(table.orgNm, keyword), like(table.logline, keyword)))!;
+        else {
+          where = and(
+            where,
+            or(
+              like(table.orgNm, keyword),
+              like(table.logline, keyword),
+              like(table.tags, keyword)
+            )
+          )!;
+        }
       }
 
       return where;

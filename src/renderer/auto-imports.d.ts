@@ -59,6 +59,7 @@ declare global {
   const unref: typeof import('vue').unref
   const useAttrs: typeof import('vue').useAttrs
   const useCoreRuleForm: typeof import('./composables/useCoreRuleForm').useCoreRuleForm
+  const useCreatureForm: typeof import('./composables/useCreatureForm').useCreatureForm
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
   const useId: typeof import('vue').useId
@@ -81,4 +82,7 @@ declare global {
   // @ts-ignore
   export type { CoreRuleFormState, UseCoreRuleFormArgs } from './composables/useCoreRuleForm'
   import('./composables/useCoreRuleForm')
+  // @ts-ignore
+  export type { CreatureFormState, UseCreatureFormArgs } from './composables/useCreatureForm'
+  import('./composables/useCreatureForm')
 }

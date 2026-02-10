@@ -41,7 +41,16 @@ export const RegionMapper = {
 
         if (searchType === 'regionNm') where = and(where, like(table.regionNm, keyword))!;
         else if (searchType === 'regionExpln') where = and(where, like(table.regionExpln, keyword))!;
-        else where = and(where, or(like(table.regionNm, keyword), like(table.regionExpln, keyword)))!;
+        else {
+          where = and(
+            where,
+            or(
+              like(table.regionNm, keyword),
+              like(table.regionExpln, keyword),
+              like(table.tags, keyword)
+            )
+          )!;
+        }
       }
 
       return where;

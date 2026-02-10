@@ -83,6 +83,8 @@ const projectLoadError = ref<string | null>(null);
 const ROUTES_WITH_DETAIL_LAYOUT = [
   'project-core-rule-detail',
   'project-core-rule-new',
+  'project-creature-detail',
+  'project-creature-new',
 ] as const;
 
 const isDetailLayoutRoute = computed(() => {

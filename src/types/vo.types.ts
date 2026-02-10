@@ -25,6 +25,7 @@ import type { projectSchema } from '../zod-schema/project.schema';
 import type { projectAbilitySchema } from '../zod-schema/projectAbility.schema';
 import type { projectTraitSchema } from '../zod-schema/projectTrait.schema';
 import type { regionSchema } from '../zod-schema/region.schema';
+import type { settingsSearchParamsSchema, unifiedSettingItemSchema } from '../zod-schema/settingsSearch.schema';
 import type { traitSchema } from '../zod-schema/trait.schema';
 
 export type SearchVo = z.infer<typeof searchSchema>;
@@ -85,3 +86,9 @@ export type CreatureTraitMapVo = z.infer<typeof creatureTraitMapSchema>;
 
 /** 종족-어빌리티 매핑 VO. creatureAbilityMapSchema와 동일. */
 export type CreatureAbilityMapVo = z.infer<typeof creatureAbilityMapSchema>;
+
+/** 통합 설정 검색 결과 한 항목 VO. GET /settings/search 응답 list 항목. */
+export type UnifiedSettingItemVo = z.infer<typeof unifiedSettingItemSchema>;
+
+/** 통합 설정 검색 쿼리 파라미터. */
+export type SettingsSearchParamsVo = z.infer<typeof settingsSearchParamsSchema>;

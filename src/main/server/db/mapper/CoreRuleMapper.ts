@@ -58,7 +58,11 @@ export const CoreRuleMapper = {
         else {
           where = and(
             where,
-            or(like(table.coreNm, keyword), like(table.defDesc, keyword))
+            or(
+              like(table.coreNm, keyword),
+              like(table.defDesc, keyword),
+              like(table.tags, keyword)
+            )
           )!;
         }
       }

@@ -20,6 +20,7 @@ import { ProjectController } from './ProjectController';
 import { ProjectTraitController } from './ProjectTraitController';
 import { RegionController } from './RegionController';
 import { SearchController } from './SearchController';
+import { SettingsSearchController } from './SettingsSearchController';
 import { TraitController } from './TraitController';
 
 /**
@@ -45,6 +46,7 @@ export function createControllerApp() {
   app.route('/organizations', OrganizationController);
   app.route('/events', EventController);
   app.route('/lores', LoreController);
+  app.route('/settings', SettingsSearchController);
   app.route('/char-trait-maps', CharTraitMapController);
   app.route('/char-ability-maps', CharAbilityMapController);
   app.route('/creature-trait-maps', CreatureTraitMapController);

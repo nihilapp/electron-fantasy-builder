@@ -41,7 +41,16 @@ export const ItemMapper = {
 
         if (searchType === 'itemNm') where = and(where, like(table.itemNm, keyword))!;
         else if (searchType === 'logline') where = and(where, like(table.logline, keyword))!;
-        else where = and(where, or(like(table.itemNm, keyword), like(table.logline, keyword)))!;
+        else {
+          where = and(
+            where,
+            or(
+              like(table.itemNm, keyword),
+              like(table.logline, keyword),
+              like(table.tags, keyword)
+            )
+          )!;
+        }
       }
 
       return where;

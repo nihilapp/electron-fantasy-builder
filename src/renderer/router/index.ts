@@ -4,8 +4,11 @@ import CreateProjectView from '~/views/CreateProjectView.vue';
 import MainView from '~/views/MainView.vue';
 import CoreRuleFormSection from '~/views/project-detail/core-rules/CoreRuleFormSection.vue';
 import CoreRulesSection from '~/views/project-detail/core-rules/CoreRulesSection.vue';
+import CreatureFormSection from '~/views/project-detail/creatures/CreatureFormSection.vue';
+import CreaturesSection from '~/views/project-detail/creatures/CreaturesSection.vue';
 import OverviewSection from '~/views/project-detail/OverviewSection.vue';
 import PlaceholderSection from '~/views/project-detail/PlaceholderSection.vue';
+import SettingsUnifiedView from '~/views/project-detail/settings/SettingsUnifiedView.vue';
 import TraitsAbilitiesSection from '~/views/project-detail/TraitsAbilitiesSection.vue';
 import ProjectDetailView from '~/views/ProjectDetailView.vue';
 import ProjectListView from '~/views/ProjectListView.vue';
@@ -44,8 +47,7 @@ const router = createRouter({
         {
           path: 'settings',
           name: 'project-settings',
-          component: PlaceholderSection,
-          props: { sectionLabel: '전체 설정', },
+          component: SettingsUnifiedView,
         },
         {
           path: 'traits-abilities',
@@ -71,8 +73,18 @@ const router = createRouter({
         {
           path: 'creatures',
           name: 'project-creatures',
-          component: PlaceholderSection,
-          props: { sectionLabel: '종족/생물', },
+          component: CreaturesSection,
+        },
+        {
+          path: 'creatures/new',
+          name: 'project-creature-new',
+          component: CreatureFormSection,
+        },
+        {
+          path: 'creatures/:creatureNo',
+          name: 'project-creature-detail',
+          component: CreatureFormSection,
+          props: true,
         },
         {
           path: 'characters',

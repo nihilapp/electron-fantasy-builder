@@ -41,7 +41,16 @@ export const NationMapper = {
 
         if (searchType === 'ntnNm') where = and(where, like(table.ntnNm, keyword))!;
         else if (searchType === 'logline') where = and(where, like(table.logline, keyword))!;
-        else where = and(where, or(like(table.ntnNm, keyword), like(table.logline, keyword)))!;
+        else {
+          where = and(
+            where,
+            or(
+              like(table.ntnNm, keyword),
+              like(table.logline, keyword),
+              like(table.tags, keyword)
+            )
+          )!;
+        }
       }
 
       return where;

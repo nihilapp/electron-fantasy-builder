@@ -41,7 +41,16 @@ export const EventMapper = {
 
         if (searchType === 'eventNm') where = and(where, like(table.eventNm, keyword))!;
         else if (searchType === 'smry') where = and(where, like(table.smry, keyword))!;
-        else where = and(where, or(like(table.eventNm, keyword), like(table.smry, keyword)))!;
+        else {
+          where = and(
+            where,
+            or(
+              like(table.eventNm, keyword),
+              like(table.smry, keyword),
+              like(table.tags, keyword)
+            )
+          )!;
+        }
       }
 
       return where;
