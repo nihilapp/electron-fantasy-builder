@@ -76,10 +76,10 @@ const { isLoaded, hasProjects, } = storeToRefs(projectStore);
         <div class="flex flex-col gap-2">
           <RouterLink
             v-if="hasProjects"
+            #default="{ navigate }"
             to="/project-list"
             class="w-full"
             custom
-            #default="{ navigate }"
           >
             <CommonButton
               type="button"
@@ -94,10 +94,10 @@ const { isLoaded, hasProjects, } = storeToRefs(projectStore);
             </CommonButton>
           </RouterLink>
           <RouterLink
+            #default="{ navigate }"
             to="/create-project"
             class="w-full"
             custom
-            #default="{ navigate }"
           >
             <CommonButton
               type="button"

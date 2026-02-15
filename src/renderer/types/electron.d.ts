@@ -2,10 +2,12 @@ import type { HealthDto } from '@app-types/dto.types';
 import type { ListResponseType, ResponseType } from '@app-types/response.types';
 import type {
   AbilityVo,
+  CharacterVo,
   CoreRuleListItemVo,
   CoreRuleVo,
   CreatureVo,
   ProjectVo,
+  RegionVo,
   TraitVo,
   UnifiedSettingItemVo,
 } from '@app-types/vo.types';
@@ -118,6 +120,36 @@ interface ElectronAPI {
       Promise<ResponseType<CreatureVo | null>>
     );
     deleteCreature: (prjNo: number, creatureNo: number) => (
+      Promise<ResponseType<{ deleted: boolean }>>
+    );
+    getCharacterList: (prjNo: number, params?: ListParams) => (
+      Promise<ListResponseType<CharacterVo>>
+    );
+    getCharacter: (prjNo: number, charNo: number) => (
+      Promise<ResponseType<CharacterVo | null>>
+    );
+    postCharacter: (prjNo: number, body: Partial<CharacterVo>) => (
+      Promise<ResponseType<CharacterVo>>
+    );
+    patchCharacter: (prjNo: number, charNo: number, body: Partial<CharacterVo>) => (
+      Promise<ResponseType<CharacterVo | null>>
+    );
+    deleteCharacter: (prjNo: number, charNo: number) => (
+      Promise<ResponseType<{ deleted: boolean }>>
+    );
+    getRegionList: (prjNo: number, params?: ListParams) => (
+      Promise<ListResponseType<RegionVo>>
+    );
+    getRegion: (prjNo: number, regionNo: number) => (
+      Promise<ResponseType<RegionVo | null>>
+    );
+    postRegion: (prjNo: number, body: Partial<RegionVo>) => (
+      Promise<ResponseType<RegionVo>>
+    );
+    patchRegion: (prjNo: number, regionNo: number, body: Partial<RegionVo>) => (
+      Promise<ResponseType<RegionVo | null>>
+    );
+    deleteRegion: (prjNo: number, regionNo: number) => (
       Promise<ResponseType<{ deleted: boolean }>>
     );
 

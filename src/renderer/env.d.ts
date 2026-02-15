@@ -3,6 +3,10 @@
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL?: string;
   // 다른 환경 변수들을 여기에 추가할 수 있습니다
+  readonly ACCESS_TOKEN_SECRET?: string;
+  readonly REFRESH_TOKEN_SECRET?: string;
+  readonly ACCESS_TOKEN_EXP?: string;
+  readonly REFRESH_TOKEN_EXP?: string;
 }
 
 interface ImportMeta {

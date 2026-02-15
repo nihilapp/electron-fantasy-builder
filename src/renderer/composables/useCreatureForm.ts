@@ -51,7 +51,9 @@ export function useCreatureForm(args: UseCreatureFormArgs) {
   async function loadItem() {
     if (isCreateMode.value) return;
 
-    const no = prjNo.value ?? (route.params.prjNo != null ? Number(route.params.prjNo) : null);
+    const no = prjNo.value ?? (route.params.prjNo != null
+      ? Number(route.params.prjNo)
+      : null);
     const creatureNo = creatureNoNum.value;
 
     if (no == null || !Number.isInteger(no) || creatureNo == null) {
@@ -91,7 +93,9 @@ export function useCreatureForm(args: UseCreatureFormArgs) {
     }
     catch (err) {
       item.value = null;
-      loadError.value = err instanceof Error ? err.message : '종족/생물을 불러오지 못했습니다.';
+      loadError.value = err instanceof Error
+        ? err.message
+        : '종족/생물을 불러오지 못했습니다.';
     }
   }
 
@@ -156,7 +160,9 @@ export function useCreatureForm(args: UseCreatureFormArgs) {
     catch (err) {
       errorMessage.value = err instanceof Error
         ? err.message
-        : (isCreateMode.value ? '등록에 실패했습니다.' : '저장에 실패했습니다.');
+        : (isCreateMode.value
+          ? '등록에 실패했습니다.'
+          : '저장에 실패했습니다.');
     }
     finally {
       isSubmitting.value = false;

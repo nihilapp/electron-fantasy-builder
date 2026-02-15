@@ -1,5 +1,7 @@
 import { execSync } from 'node:child_process';
 
+import 'dotenv/config';
+
 /** Windows: 터미널 로그 한글 깨짐 방지. 콘솔 코드페이지를 UTF-8(65001)로 설정. .bashrc의 LANG만으로는 Windows 콘솔 코드페이지가 바뀌지 않음. */
 if (process.platform === 'win32') {
   try {
@@ -12,9 +14,9 @@ if (process.platform === 'win32') {
 
 import { app } from 'electron';
 
+import { closeHonoServer, startHonoServer } from './hono/src';
+import { closeDb, initDbContext } from './hono/src/common/db/context';
 import { setupIpcHandlers } from './ipc';
-import { closeHonoServer, startHonoServer } from './server';
-import { closeDb, initDbContext } from './server/db';
 import {
   createMainWindow,
   handleAppActivate,

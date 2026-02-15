@@ -49,7 +49,9 @@ const deleteCreatureMutation = useDeleteCreature();
 const list = computed(() => listResponse.value?.data?.list ?? []);
 const listErrorMessage = computed(() => {
   const err = listError.value;
-  return err instanceof Error ? err.message : null;
+  return err instanceof Error
+    ? err.message
+    : null;
 });
 const deleteError = ref<string | null>(null);
 const errorMessage = computed(() => listErrorMessage.value ?? deleteError.value);
@@ -125,7 +127,9 @@ async function removeItem(item: CreatureVo) {
     deleteError.value = null;
   }
   catch (err) {
-    deleteError.value = err instanceof Error ? err.message : '삭제에 실패했습니다.';
+    deleteError.value = err instanceof Error
+      ? err.message
+      : '삭제에 실패했습니다.';
   }
 }
 

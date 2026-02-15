@@ -60,6 +60,24 @@ export {
   ipcGetCreature
 } from './apiCreature';
 
+export {
+  apiDeleteCharacter,
+  apiGetCharacterByNo,
+  apiGetCharacterList,
+  apiPatchCharacter,
+  apiPostCharacter,
+  ipcGetCharacter
+} from './apiCharacter';
+
+export {
+  apiDeleteRegion,
+  apiGetRegionByNo,
+  apiGetRegionList,
+  apiPatchRegion,
+  apiPostRegion,
+  ipcGetRegion
+} from './apiRegion';
+
 export { apiGetHealth, ipcGetHealth } from './apiHealth';
 
 export { apiGetSettingsSearch, ipcGetSettingsSearch } from './apiSettingsSearch';

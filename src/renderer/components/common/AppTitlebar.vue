@@ -4,6 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '~/utils/cn';
 
 import logoUrl from '../../assets/images/fantasy-builder-logo.png';
+import AuthStatus from '../auth/AuthStatus.vue';
 
 interface Props extends /* @vue-ignore */ VariantProps<typeof cssVariants> {
   title: string;
@@ -76,6 +77,9 @@ const onClickClose = () => {
     </h1>
 
     <div class="flex items-center gap-1 shrink-0">
+      <!-- Auth Status -->
+      <AuthStatus />
+
       <!-- Theme Toggle -->
       <ToggleTheme />
 

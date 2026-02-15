@@ -3,6 +3,7 @@ import { RouterView } from 'vue-router';
 
 import AppLoadingScreen from '~/components/common/AppLoadingScreen.vue';
 import AppTitleBar from '~/components/common/AppTitlebar.vue';
+import { useAuthStore } from '~/stores/authStore';
 import { useCommonStore } from '~/stores/commonStore';
 import { useProjectStore } from '~/stores/projectStore';
 
@@ -19,6 +20,9 @@ const { initTheme, } = commonStore;
 
 const projectStore = useProjectStore();
 const { getProjectList, } = projectStore;
+
+const authStore = useAuthStore();
+const { checkAuth, } = authStore;
 
 // ─────────────────────────────────────────────────────────────
 // STATES — ref, computed 등 반응형 변수
@@ -66,7 +70,10 @@ async function waitForAppReady() {
 
         appReady.value = true;
 
-        await getProjectList();
+        await Promise.all([
+          getProjectList(),
+          checkAuth(),
+        ]);
       }
 
       return;

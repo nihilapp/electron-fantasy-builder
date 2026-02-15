@@ -2,9 +2,9 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import type { UnifiedSettingItemVo } from '@app-types/vo.types';
+import { SETTING_CATEGORY_LABELS, type SettingCategoryCode } from '@zod-schema/settingsSearch.schema';
 import FormInput from '~/components/form/FormInput.vue';
 import { useGetSettingsSearch } from '~/composables/query/settings/useGetSettingsSearch';
-import { SETTING_CATEGORY_LABELS, type SettingCategoryCode } from '@zod-schema/settingsSearch.schema';
 import { cn } from '~/utils/cn';
 
 /** 전체 설정 통합 조회·검색. 모든 설정 테이블 항목을 한 목록에서 검색하고, 클릭 시 해당 상세로 이동. */
@@ -66,11 +66,13 @@ const totalCnt = computed(() => searchResponse.value?.data?.totalCnt ?? 0);
 const totalPage = computed(() => searchResponse.value?.data?.totalPage ?? 1);
 const errorMessage = computed(() => {
   const err = listError.value;
-  return err instanceof Error ? err.message : null;
+  return err instanceof Error
+    ? err.message
+    : null;
 });
 
 const categoryOptions = computed(() => {
-  const all = Object.entries(SETTING_CATEGORY_LABELS).map(([ code, label ]) => ({
+  const all = Object.entries(SETTING_CATEGORY_LABELS).map(([ code, label, ]) => ({
     value: code,
     label,
   }));
@@ -145,8 +147,8 @@ function onSearch() {
     <div class="flex flex-wrap items-center gap-2 mb-4">
       <FormInput
         id="settings-search-q"
-        label="검색"
         v-model="searchKeyword"
+        label="검색"
         placeholder="이름 또는 태그로 검색"
         class="min-w-48 max-w-xs"
         @keyup.enter="onSearch"

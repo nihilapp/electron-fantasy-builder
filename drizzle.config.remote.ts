@@ -33,7 +33,7 @@ function getRemoteDbUrl(): string {
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: './src/main/server/schema/remote/index.ts',
+  schema: './src/main/hono/src/common/db/schema/remote/index.ts',
   out: './src/drizzle/remote',
   dbCredentials: { url: getRemoteDbUrl(), },
 });

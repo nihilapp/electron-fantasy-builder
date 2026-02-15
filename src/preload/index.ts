@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import type { AbilityVo, CoreRuleVo, CreatureVo, ProjectAbilityVo, ProjectTraitVo, ProjectVo, TraitVo } from '@app-types/vo.types';
+import type { AbilityVo, CharacterVo, CoreRuleVo, CreatureVo, ProjectAbilityVo, ProjectTraitVo, ProjectVo, RegionVo, TraitVo } from '@app-types/vo.types';
 
 /**
  * @description 목록 조회 공통 파라미터 (페이징·검색). renderer electron.d.ts의 ListParams와 동일.
@@ -116,6 +116,38 @@ contextBridge.exposeInMainWorld('electron', {
     ),
     deleteCreature: (prjNo: number, creatureNo: number) => (
       ipcRenderer.invoke('api:delete-creature', { prjNo, creatureNo, })
+    ),
+
+    getCharacterList: (prjNo: number, params?: ListParams) => (
+      ipcRenderer.invoke('api:get-character-list', { prjNo, params, })
+    ),
+    getCharacter: (prjNo: number, charNo: number) => (
+      ipcRenderer.invoke('api:get-character', { prjNo, charNo, })
+    ),
+    postCharacter: (prjNo: number, body: Partial<CharacterVo>) => (
+      ipcRenderer.invoke('api:post-character', { prjNo, body, })
+    ),
+    patchCharacter: (prjNo: number, charNo: number, body: Partial<CharacterVo>) => (
+      ipcRenderer.invoke('api:patch-character', { prjNo, charNo, body, })
+    ),
+    deleteCharacter: (prjNo: number, charNo: number) => (
+      ipcRenderer.invoke('api:delete-character', { prjNo, charNo, })
+    ),
+
+    getRegionList: (prjNo: number, params?: ListParams) => (
+      ipcRenderer.invoke('api:get-region-list', { prjNo, params, })
+    ),
+    getRegion: (prjNo: number, regionNo: number) => (
+      ipcRenderer.invoke('api:get-region', { prjNo, regionNo, })
+    ),
+    postRegion: (prjNo: number, body: Partial<RegionVo>) => (
+      ipcRenderer.invoke('api:post-region', { prjNo, body, })
+    ),
+    patchRegion: (prjNo: number, regionNo: number, body: Partial<RegionVo>) => (
+      ipcRenderer.invoke('api:patch-region', { prjNo, regionNo, body, })
+    ),
+    deleteRegion: (prjNo: number, regionNo: number) => (
+      ipcRenderer.invoke('api:delete-region', { prjNo, regionNo, })
     ),
 
     getProjectTraitList: (prjNo: number, params?: ListParams) => (

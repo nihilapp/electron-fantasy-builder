@@ -1,6 +1,6 @@
 /**
  * DB 레이어 타입.
- * main/server/db 등에서 사용합니다.
+ * main/hono/db 등에서 사용합니다.
  */
 
 /** DB 모드: 로컬(SQLite) vs 원격(Postgres) */

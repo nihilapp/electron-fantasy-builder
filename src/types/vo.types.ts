@@ -7,6 +7,7 @@
 import { z } from 'zod';
 
 import type { searchSchema } from '@zod-schema/search.schema';
+import type { userSchema } from '@zod-schema/user.schema';
 
 import type { abilitySchema } from '../zod-schema/ability.schema';
 import type { charAbilityMapSchema } from '../zod-schema/charAbilityMap.schema';
@@ -92,3 +93,6 @@ export type UnifiedSettingItemVo = z.infer<typeof unifiedSettingItemSchema>;
 
 /** 통합 설정 검색 쿼리 파라미터. */
 export type SettingsSearchParamsVo = z.infer<typeof settingsSearchParamsSchema>;
+
+/** 사용자 VO. userSchema와 동일. */
+export type UserVo = z.infer<typeof userSchema>;

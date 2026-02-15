@@ -85,6 +85,10 @@ const ROUTES_WITH_DETAIL_LAYOUT = [
   'project-core-rule-new',
   'project-creature-detail',
   'project-creature-new',
+  'project-character-detail',
+  'project-character-new',
+  'project-region-detail',
+  'project-region-new',
 ] as const;
 
 const isDetailLayoutRoute = computed(() => {

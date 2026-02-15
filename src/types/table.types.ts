@@ -7,9 +7,8 @@
  * @see drizzle-orm table.d.ts — $inferSelect, $inferInsert, InferSelectModel, InferInsertModel
  */
 
+import { exampleTable } from '@main/hono/schema/local';
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-
-import { exampleTable } from '@main/server/schema/local';
 
 /** example 테이블 — GET(select) 결과 타입 */
 export type ExampleTableGet = InferSelectModel<typeof exampleTable>;

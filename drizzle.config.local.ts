@@ -7,7 +7,7 @@ import { defineConfig } from 'drizzle-kit';
  */
 export default defineConfig({
   dialect: 'sqlite',
-  schema: './src/main/server/schema/local/index.ts',
+  schema: './src/main/hono/src/common/db/schema/local/index.ts',
   out: './src/drizzle/local',
   dbCredentials: { url: 'file:./src/data/app.db', },
 });

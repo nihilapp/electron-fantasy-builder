@@ -95,7 +95,7 @@ const svgAttributes = computed(() => renderData.value?.attributes ?? {});
     v-if="renderData"
     :class="cn(cssVariants({}), props.class)"
     v-bind="svgAttributes"
-    v-html="svgBody"
     aria-hidden="true"
+    v-html="svgBody"
   />
 </template>

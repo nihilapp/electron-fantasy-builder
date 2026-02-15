@@ -58,6 +58,7 @@ declare global {
   const triggerRef: typeof import('vue').triggerRef
   const unref: typeof import('vue').unref
   const useAttrs: typeof import('vue').useAttrs
+  const useCharacterForm: typeof import('./composables/useCharacterForm').useCharacterForm
   const useCoreRuleForm: typeof import('./composables/useCoreRuleForm').useCoreRuleForm
   const useCreatureForm: typeof import('./composables/useCreatureForm').useCreatureForm
   const useCssModule: typeof import('vue').useCssModule
@@ -65,6 +66,7 @@ declare global {
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router').useLink
   const useModel: typeof import('vue').useModel
+  const useRegionForm: typeof import('./composables/useRegionForm').useRegionForm
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
   const useSlots: typeof import('vue').useSlots
@@ -80,9 +82,15 @@ declare global {
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
+  export type { CharacterFormState, UseCharacterFormArgs } from './composables/useCharacterForm'
+  import('./composables/useCharacterForm')
+  // @ts-ignore
   export type { CoreRuleFormState, UseCoreRuleFormArgs } from './composables/useCoreRuleForm'
   import('./composables/useCoreRuleForm')
   // @ts-ignore
   export type { CreatureFormState, UseCreatureFormArgs } from './composables/useCreatureForm'
   import('./composables/useCreatureForm')
+  // @ts-ignore
+  export type { RegionFormState, UseRegionFormArgs } from './composables/useRegionForm'
+  import('./composables/useRegionForm')
 }

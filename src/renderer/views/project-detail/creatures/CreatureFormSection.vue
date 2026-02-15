@@ -49,7 +49,9 @@ const creatureNoNum = computed(() => {
   const raw = route.params.creatureNo;
   if (raw == null || raw === '') return null;
   const n = Number(raw);
-  return Number.isInteger(n) ? n : null;
+  return Number.isInteger(n)
+    ? n
+    : null;
 });
 
 const {
@@ -86,7 +88,9 @@ const {
 const sidebarList = computed(() => sidebarListResponse.value?.data?.list ?? []);
 const sidebarItems = computed(() => {
   const no = prjNo.value;
-  const head = no != null ? [ { id: 'new' as number | string, label: '새로 추가', }, ] : [];
+  const head = no != null
+    ? [ { id: 'new' as number | string, label: '새로 추가', }, ]
+    : [];
   const rest = sidebarList.value.map((row: CreatureVo) => ({
     id: row.creatureNo ?? 0,
     label: row.creatureNm ?? '—',
@@ -95,17 +99,23 @@ const sidebarItems = computed(() => {
 });
 
 const sidebarSelectedId = computed(() => {
-  return isCreateMode.value ? 'new' : creatureNoNum.value;
+  return isCreateMode.value
+    ? 'new'
+    : creatureNoNum.value;
 });
 
 const sidebarListErrorMessage = computed(() => {
   const err = sidebarListError.value;
-  return err instanceof Error ? err.message : null;
+  return err instanceof Error
+    ? err.message
+    : null;
 });
 
 const routeToList = computed(() => {
   const no = prjNo.value;
-  return no == null ? null : { name: 'project-creatures', params: { prjNo: String(no), }, };
+  return no == null
+    ? null
+    : { name: 'project-creatures', params: { prjNo: String(no), }, };
 });
 
 function getToCreatureDetail(listItem: { id: number | string; label: string }) {

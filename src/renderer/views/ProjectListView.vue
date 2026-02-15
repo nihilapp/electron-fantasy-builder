@@ -223,9 +223,9 @@ onMounted(() => {
             <div class="mt-4 border-t border-border pt-3">
               <RouterLink
                 v-if="selectedProject.prjNo != null"
+                #default="{ navigate }"
                 :to="{ name: 'project-overview', params: { prjNo: String(selectedProject.prjNo) } }"
                 custom
-                #default="{ navigate }"
               >
                 <CommonButton
                   type="button"

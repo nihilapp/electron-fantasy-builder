@@ -4,17 +4,6 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 
 import js from '@eslint/js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-let autoImportGlobals = { };
-try {
-  const path = resolve(__dirname, 'src/renderer/.eslintrc-auto-import.json');
-  if (existsSync(path)) {
-    autoImportGlobals = JSON.parse(readFileSync(path, 'utf8')).globals ?? { };
-  }
-} catch {
-  // 오토 임포트 생성 전이면 무시
-}
 import stylistic from '@stylistic/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
@@ -24,10 +13,23 @@ import vueA11y from 'eslint-plugin-vuejs-accessibility';
 import tseslint from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+let autoImportGlobals = { };
+try {
+  const path = resolve(__dirname, 'src/renderer/.eslintrc-auto-import.json');
+  if (existsSync(path)) {
+    autoImportGlobals = JSON.parse(readFileSync(path, 'utf8')).globals ?? { };
+  }
+}
+catch {
+  // 오토 임포트 생성 전이면 무시
+}
+
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   // 기본 ESLint 설정
   js.configs.recommended,
+  ...vue.configs['flat/recommended'],
   ...tseslint.configs.recommended,
   stylistic.configs.customize({
     indent: 2,
@@ -98,6 +100,7 @@ export default [
       'no-underscore-dangle': 'off',
       'function-call-argument-newline': 'off',
       'function-paren-newline': 'off',
+      'no-useless-assignment': 'off',
 
       // stylistic 규칙
       '@stylistic/multiline-ternary': [ 'warn', 'always', ],
@@ -178,7 +181,11 @@ export default [
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
       ],
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-shadow': 'warn',
@@ -341,7 +348,14 @@ export default [
       'import-x/no-useless-path-segments': 'warn',
 
       // ===== TS(Vue 전용) =====
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       '@typescript-eslint/no-shadow': 'warn',
       '@typescript-eslint/no-use-before-define': [ 'warn', { functions: false, classes: true, variables: true, }, ],
 
@@ -429,17 +443,16 @@ export default [
       // v-slot 단축 문법 강제 (#slot)
       'vue/v-slot-style': [ 'error', 'shorthand', ],
 
+      // v-html 사용 허용 (SVG 아이콘 렌더링용 - Iconify 라이브러리에서 검증된 안전한 컨텐츠)
+      'vue/no-v-html': 'off',
+
       // ===== Vue a11y =====
       'vuejs-accessibility/alt-text': 'error',
       'vuejs-accessibility/anchor-has-content': 'warn',
       'vuejs-accessibility/aria-props': 'error',
       'vuejs-accessibility/aria-role': 'error',
       'vuejs-accessibility/heading-has-content': 'warn',
-      'vuejs-accessibility/label-has-for': [ 'warn', {
-        components: [ 'Label', ],
-        controlComponents: [ 'Input', ],
-        required: { every: [ 'id', ], },
-      }, ],
+      'vuejs-accessibility/label-has-for': 'off',
       'vuejs-accessibility/no-autofocus': 'warn',
       'vuejs-accessibility/tabindex-no-positive': 'warn',
     },

@@ -2,12 +2,16 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 import CreateProjectView from '~/views/CreateProjectView.vue';
 import MainView from '~/views/MainView.vue';
+import CharacterFormSection from '~/views/project-detail/characters/CharacterFormSection.vue';
+import CharactersSection from '~/views/project-detail/characters/CharactersSection.vue';
 import CoreRuleFormSection from '~/views/project-detail/core-rules/CoreRuleFormSection.vue';
 import CoreRulesSection from '~/views/project-detail/core-rules/CoreRulesSection.vue';
 import CreatureFormSection from '~/views/project-detail/creatures/CreatureFormSection.vue';
 import CreaturesSection from '~/views/project-detail/creatures/CreaturesSection.vue';
 import OverviewSection from '~/views/project-detail/OverviewSection.vue';
 import PlaceholderSection from '~/views/project-detail/PlaceholderSection.vue';
+import RegionFormSection from '~/views/project-detail/regions/RegionFormSection.vue';
+import RegionsSection from '~/views/project-detail/regions/RegionsSection.vue';
 import SettingsUnifiedView from '~/views/project-detail/settings/SettingsUnifiedView.vue';
 import TraitsAbilitiesSection from '~/views/project-detail/TraitsAbilitiesSection.vue';
 import ProjectDetailView from '~/views/ProjectDetailView.vue';
@@ -89,14 +93,34 @@ const router = createRouter({
         {
           path: 'characters',
           name: 'project-characters',
-          component: PlaceholderSection,
-          props: { sectionLabel: '인물', },
+          component: CharactersSection,
+        },
+        {
+          path: 'characters/new',
+          name: 'project-character-new',
+          component: CharacterFormSection,
+        },
+        {
+          path: 'characters/:charNo',
+          name: 'project-character-detail',
+          component: CharacterFormSection,
+          props: true,
         },
         {
           path: 'regions',
           name: 'project-regions',
-          component: PlaceholderSection,
-          props: { sectionLabel: '지역', },
+          component: RegionsSection,
+        },
+        {
+          path: 'regions/new',
+          name: 'project-region-new',
+          component: RegionFormSection,
+        },
+        {
+          path: 'regions/:regionNo',
+          name: 'project-region-detail',
+          component: RegionFormSection,
+          props: true,
         },
         {
           path: 'nations',
